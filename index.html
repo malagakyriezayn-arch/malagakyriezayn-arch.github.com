@@ -143,7 +143,8 @@
 
     .nav-icon:focus-visible,
     .archive-close:focus-visible,
-    .edition-card:focus-visible {
+    .edition-card:focus-visible,
+    .featured-button:focus-visible {
       outline: 2px solid white;
       outline-offset: 3px;
     }
@@ -154,18 +155,151 @@
       width: 100%;
       max-width: 1100px;
       margin: 0 auto;
-      padding: clamp(50px, 9vw, 100px) 22px;
+      padding: clamp(28px, 5vw, 55px) 22px 80px;
       text-align: center;
     }
 
-    main h1 {
+    /* NEW: FEATURED 2029 EDITION BANNER */
+
+    .featured-edition {
+      position: relative;
+      isolation: isolate;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      min-height: clamp(290px, 37vw, 410px);
+      margin: 0 auto 48px;
+      overflow: hidden;
+      text-align: left;
+      background-color: #211c45;
+      background-image:
+        url("images/2029-feature.png"),
+        linear-gradient(135deg, #39306f, #171827);
+      background-position: center, center;
+      background-repeat: no-repeat;
+      background-size: cover, cover;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 28px;
+      box-shadow: 0 20px 65px rgba(0, 0, 0, 0.24);
+    }
+
+    /* The purple color fades into the image instead of creating a divider. */
+
+    .featured-edition::before {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      content: "";
+      background: linear-gradient(
+        90deg,
+        #211c45 0%,
+        #211c45 25%,
+        rgba(33, 28, 69, 0.97) 36%,
+        rgba(33, 28, 69, 0.82) 46%,
+        rgba(33, 28, 69, 0.48) 59%,
+        rgba(33, 28, 69, 0.12) 75%,
+        rgba(33, 28, 69, 0) 100%
+      );
+      pointer-events: none;
+    }
+
+    .featured-content {
+      width: 62%;
+      max-width: 590px;
+      padding: clamp(25px, 5vw, 54px);
+    }
+
+    .featured-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 20px;
+      padding: 8px 12px;
+      color: rgba(255, 255, 255, 0.94);
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.19);
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .featured-label svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .featured-title {
+      margin: 0;
+      font-size: clamp(29px, 5vw, 54px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -1.8px;
+      text-wrap: balance;
+    }
+
+    .featured-city {
+      margin: 12px 0 0;
+      color: #d4c7ff;
+      font-size: clamp(17px, 2.5vw, 25px);
+      font-weight: 700;
+      letter-spacing: 3px;
+    }
+
+    .featured-description {
+      margin: 15px 0 25px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: clamp(12px, 1.5vw, 14px);
+      line-height: 1.8;
+    }
+
+    .featured-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 0 19px;
+      color: #211c45;
+      background: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .featured-button:hover {
+      background: #eee9ff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .featured-button svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.2s ease;
+    }
+
+    .featured-button:hover svg {
+      transform: translateX(3px);
+    }
+
+    /* EXISTING HOMEPAGE INTRODUCTION */
+
+    .home-intro h1 {
       margin: 0 0 18px;
       font-size: clamp(30px, 6vw, 58px);
       font-weight: 800;
       letter-spacing: -1.5px;
     }
 
-    main p {
+    .home-intro p {
       max-width: 650px;
       margin: 0 auto;
       color: var(--muted);
@@ -460,6 +594,61 @@
         height: 20px;
       }
 
+      /* NEW: MOBILE FEATURED BANNER */
+
+      main {
+        padding-top: 24px;
+      }
+
+      .featured-edition {
+        min-height: 330px;
+        margin-bottom: 38px;
+        border-radius: 23px;
+        background-position: center, center;
+      }
+
+      .featured-edition::before {
+        background: linear-gradient(
+          90deg,
+          rgba(33, 28, 69, 0.99) 0%,
+          rgba(33, 28, 69, 0.94) 28%,
+          rgba(33, 28, 69, 0.77) 48%,
+          rgba(33, 28, 69, 0.42) 69%,
+          rgba(33, 28, 69, 0.12) 100%
+        );
+      }
+
+      .featured-content {
+        width: 85%;
+        padding: 25px;
+      }
+
+      .featured-label {
+        margin-bottom: 17px;
+        padding: 7px 10px;
+        font-size: 9px;
+      }
+
+      .featured-title {
+        font-size: clamp(29px, 7vw, 42px);
+        letter-spacing: -1.2px;
+      }
+
+      .featured-city {
+        font-size: 19px;
+      }
+
+      .featured-description {
+        max-width: 270px;
+        font-size: 12px;
+      }
+
+      .featured-button {
+        min-height: 43px;
+        padding: 0 15px;
+        font-size: 11px;
+      }
+
       .edition-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
@@ -522,6 +711,32 @@
       .nav-icon svg {
         width: 18px;
         height: 18px;
+      }
+
+      /* NEW: SMALL PHONE BANNER */
+
+      .featured-edition {
+        min-height: 315px;
+        border-radius: 20px;
+      }
+
+      .featured-content {
+        width: 100%;
+        padding: 20px;
+      }
+
+      .featured-title {
+        font-size: 29px;
+      }
+
+      .featured-city {
+        font-size: 17px;
+        letter-spacing: 2px;
+      }
+
+      .featured-description {
+        max-width: 235px;
+        font-size: 11px;
       }
 
       .archive-overlay {
@@ -627,11 +842,123 @@
 
   <!-- HOMEPAGE -->
   <main>
-    <h1>Eurovision Rewind</h1>
-    <p>
-      Revisit the editions, discover the winning entries,
-      and explore the history of Eurovision Rewind.
-    </p>
+
+    <!-- NEW: FEATURED 2029 ZÜRICH BANNER -->
+    <section class="featured-edition" aria-labelledby="featured-title">
+
+      <div class="featured-content">
+
+        <span class="featured-label">
+          <i data-lucide="sparkles" aria-hidden="true"></i>
+          Upcoming Edition
+        </span>
+
+        <h1 class="featured-title" id="featured-title">
+          EUROVISION<br>REWIND 2029
+        </h1>
+
+        <p class="featured-city">ZÜRICH</p>
+
+        <p class="featured-description">
+          A new city, a new edition, and another chapter in the
+          Eurovision Rewind story.
+        </p>
+
+        <a class="featured-button" href="2029.html">
+          Discover the 2029 Edition
+          <i data-lucide="arrow-right" aria-hidden="true"></i>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- EXISTING HOMEPAGE INTRODUCTION -->
+    <section class="home-intro">
+      <h1>Eurovision Rewind</h1>
+      <p>
+        Revisit the editions, discover the winning entries,
+        and explore the history of Eurovision Rewind.
+      </p>
+    </section>
+
+  </main>
+
+  <!-- ARCHIVE OVERLAY -->
+  <div class="archive-overlay"
+       id="archive-overlay"
+       aria-hidden="true">
+
+    <section class="archive-modal"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="archive-title">
+
+      <div class="archive-heading">
+        <h2 id="archive-title">Edition Archive</h2>
+
+        <button class="archive-close"
+                id="archive-close"
+                
+type="button"
+                aria-label="Edition archive"
+                title="Edition archive"
+                aria-haspopup="dialog"
+                aria-controls="archive-overlay">
+          <i data-lucide="layout-grid"></i>
+        </button>
+
+        <a class="nav-icon"
+           href="settings.html"
+           aria-label="Settings"
+           title="Settings">
+          <i data-lucide="settings"></i>
+        </a>
+
+      </div>
+    </nav>
+  </header>
+
+  <!-- HOMEPAGE -->
+  <main>
+
+    <!-- FEATURED 2029 ZÜRICH BANNER -->
+    <section class="featured-edition" aria-labelledby="featured-title">
+
+      <div class="featured-content">
+
+        <span class="featured-label">
+          <i data-lucide="sparkles" aria-hidden="true"></i>
+          Upcoming Edition
+        </span>
+
+        <h1 class="featured-title" id="featured-title">
+          EUROVISION<br>REWIND 2029
+        </h1>
+
+        <p class="featured-city">ZÜRICH</p>
+
+        <p class="featured-description">
+          A new city, a new edition, and another chapter in the
+          Eurovision Rewind story.
+        </p>
+
+        <a class="featured-button" href="2029.html">
+          Discover the 2029 Edition
+          <i data-lucide="arrow-right" aria-hidden="true"></i>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- EXISTING HOMEPAGE INTRODUCTION -->
+    <section class="home-intro">
+      <h1>Eurovision Rewind</h1>
+      <p>
+        Revisit the editions, discover the winning entries,
+        and explore the history of Eurovision Rewind.
+      </p>
+    </section>
+
   </main>
 
   <!-- ARCHIVE OVERLAY -->
@@ -665,16 +992,6 @@
 
   <!-- WEBSITE JAVASCRIPT -->
   <script>
-    /*
-      EDITION SETTINGS
-
-      winnerFlag is the path to the flag image in your repository.
-      winnerImage is the path to the winner image.
-      page is the HTML page that opens when the card is clicked.
-
-      Leave winnerFlag empty if the winner's flag has not been added yet.
-    */
-
     const editions = [
       {
         year: 2026,
@@ -792,21 +1109,18 @@
         `;
       }).join("");
 
-      // Missing winner images leave the gradient background visible.
       grid.querySelectorAll(".edition-image").forEach(image => {
         image.addEventListener("error", () => {
           image.remove();
         }, { once: true });
       });
 
-      // Hide missing flag images without leaving broken-image icons.
       grid.querySelectorAll(".country-flag").forEach(image => {
         image.addEventListener("error", () => {
           image.remove();
         }, { once: true });
       });
 
-      // Initialize icons added to the archive cards.
       initializeIcons();
     }
 
@@ -848,10 +1162,11 @@
       }
     });
 
-    // Render the edition cards and initialize every Lucide icon.
     renderEditions();
     initializeIcons();
   </script>
 
 </body>
-</html>
+    </html>
+      "
+      
