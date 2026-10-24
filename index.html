@@ -5,11 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>My Website</title>
+  <title>Eurovision Rewind</title>
   <meta name="theme-color" content="#11131b">
-  <meta name="description" content="My personal website">
+  <meta name="description" content="Explore the Eurovision Rewind archive.">
 
-  <!-- Lucide icon library -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
@@ -38,8 +37,6 @@
       font-family: Arial, Helvetica, sans-serif;
       color: #ffffff;
       background-color: #11131b;
-
-      /* Gradient background */
       background-image:
         radial-gradient(
           ellipse at 10% 0%,
@@ -57,13 +54,17 @@
           #171827 50%,
           #101c27 100%
         );
-
       background-repeat: no-repeat;
       background-attachment: fixed;
       background-size: cover;
     }
 
-    /* HEADER POSITION */
+    body.archive-is-open {
+      overflow: hidden;
+    }
+
+    /* HEADER */
+
     .header-wrapper {
       display: flex;
       justify-content: center;
@@ -71,68 +72,48 @@
       padding: clamp(10px, 2vw, 24px);
     }
 
-    /* GLASS PILL HEADER */
     .pill-header {
       display: flex;
       align-items: center;
       gap: clamp(6px, 1.2vw, 18px);
-
       width: 100%;
       max-width: 1100px;
       min-width: 0;
-
       padding: clamp(7px, 1.2vw, 14px)
                clamp(10px, 2vw, 24px);
-
       background: var(--pill-bg);
       border: 1px solid var(--pill-border);
       border-radius: var(--pill-radius);
-
       -webkit-backdrop-filter: blur(var(--pill-blur));
       backdrop-filter: blur(var(--pill-blur));
-
       box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.15),
         inset 0 1px 0 rgba(255, 255, 255, 0.05);
-
-      transition:
-        background 0.25s ease,
-        border-color 0.25s ease;
     }
 
-    /* LOGO CONTAINER
-       Supports wide, square, circular, and tall logos. */
     .brand {
       display: flex;
       align-items: center;
       justify-content: center;
       flex: 0 1 auto;
-
       width: auto;
       max-width: clamp(60px, 15vw, 180px);
       height: clamp(34px, 3.5vw, 48px);
       min-width: 0;
-
       overflow: hidden;
-      border-radius: 0;
       text-decoration: none;
     }
 
-    /* LOGO IMAGE */
     .brand img {
       display: block;
-
       width: auto;
       height: auto;
-
       max-width: 100%;
       max-height: 100%;
-
       object-fit: contain;
       object-position: center;
     }
 
-    /* WEBSITE NAME */
     .brand-name {
       color: var(--icon-color);
       font-size: clamp(13px, 1.2vw, 17px);
@@ -141,7 +122,6 @@
       white-space: nowrap;
     }
 
-    /* NAVIGATION ICONS */
     .nav-icons {
       display: flex;
       align-items: center;
@@ -155,18 +135,16 @@
       align-items: center;
       justify-content: center;
       flex: 0 0 auto;
-
       width: clamp(34px, 3.5vw, 48px);
       height: clamp(34px, 3.5vw, 48px);
-
+      padding: 0;
       color: var(--icon-color);
       background: transparent;
+      border: 0;
       border-radius: 50%;
       text-decoration: none;
-
-      transition:
-        background 0.2s ease,
-        transform 0.2s ease;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
     }
 
     .nav-icon:hover {
@@ -182,15 +160,290 @@
       stroke-width: 1.8;
     }
 
-    /* KEYBOARD ACCESSIBILITY */
     .brand:focus-visible,
     .brand-name:focus-visible,
     .nav-icon:focus-visible {
-      outline: 2px solid var(--icon-color);
+      outline: 2px solid #ffffff;
       outline-offset: 3px;
     }
 
-    /* TABLETS AND SMALLER SCREENS */
+    /* HOME PAGE */
+
+    main {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: clamp(28px, 6vw, 80px)
+               clamp(16px, 4vw, 32px);
+      text-align: center;
+    }
+
+    main h1 {
+      margin-bottom: 16px;
+      font-size: clamp(28px, 5vw, 56px);
+    }
+
+    main p {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: clamp(14px, 2vw, 18px);
+      line-height: 1.7;
+    }
+
+    /* ARCHIVE BACKDROP */
+
+    .archive-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(7, 8, 17, 0.58);
+      -webkit-backdrop-filter: blur(0px);
+      backdrop-filter: blur(0px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition:
+        opacity 0.3s ease,
+        backdrop-filter 0.35s ease,
+        visibility 0.3s ease;
+    }
+
+    .archive-overlay.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(18px);
+    }
+
+    /* ARCHIVE WINDOW */
+
+    .archive-modal {
+      width: min(100%, 1000px);
+      max-height: min(850px, calc(100dvh - 48px));
+      overflow-y: auto;
+      padding: clamp(20px, 4vw, 36px);
+      background: rgba(21, 23, 38, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 30px;
+      box-shadow: 0 24px 100px rgba(0, 0, 0, 0.42);
+      transform: translateY(22px) scale(0.98);
+      opacity: 0;
+      transition:
+        transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+        opacity 0.3s ease;
+    }
+
+    .archive-overlay.open .archive-modal {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .archive-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .archive-heading h2 {
+      margin: 0;
+      font-size: clamp(23px, 4vw, 34px);
+      letter-spacing: -0.8px;
+    }
+
+    .archive-subtitle {
+      margin: 0 0 28px;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .archive-close {
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      color: white;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .archive-close:hover {
+      background: rgba(255, 255, 255, 0.17);
+      transform: rotate(90deg);
+    }
+
+    .archive-close svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* TRUE GRID OF ROUNDED SQUARES */
+
+    .edition-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(12px, 2.2vw, 22px);
+    }
+
+    .edition-card {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      min-width: 0;
+      overflow: hidden;
+      color: #ffffff;
+      background:
+        radial-gradient(
+          circle at 25% 15%,
+          rgba(124, 91, 210, 0.55),
+          transparent 55%
+        ),
+        linear-gradient(145deg, #292b48, #111722);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      text-decoration: none;
+      isolation: isolate;
+      opacity: 0;
+      transform: translateY(28px) scale(0.96);
+      transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    .archive-overlay.open .edition-card {
+      animation: tileAppear 0.55s cubic-bezier(0.2, 0.8, 0.2, 1)
+                 forwards;
+      animation-delay: calc(100ms + var(--tile-index, 0) * 90ms);
+    }
+
+    .edition-card:hover {
+      z-index: 2;
+      border-color: rgba(255, 255, 255, 0.55);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+      transform: translateY(-5px) scale(1.025);
+    }
+
+    .edition-card:focus-visible {
+      outline: 2px solid #ffffff;
+      outline-offset: 4px;
+    }
+
+    .edition-image {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: var(--image-position, 50% 50%);
+      transition: transform 0.45s ease;
+    }
+
+    .edition-card:hover .edition-image {
+      transform: scale(1.07);
+    }
+
+    .edition-card::after {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      content: "";
+      background: linear-gradient(
+        180deg,
+        rgba(8, 9, 20, 0.05) 5%,
+        rgba(8, 9, 20, 0.10) 30%,
+        rgba(8, 9, 20, 0.88) 100%
+      );
+    }
+
+    .edition-placeholder {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .edition-placeholder svg {
+      width: 38px;
+      height: 38px;
+      stroke-width: 1.4;
+    }
+
+    .edition-content {
+      position: absolute;
+      right: 14px;
+      bottom: 16px;
+      left: 14px;
+      text-align: left;
+    }
+
+    .edition-year {
+      display: block;
+      margin-bottom: 7px;
+      font-size: clamp(21px, 3vw, 30px);
+      font-weight: 800;
+      letter-spacing: -0.8px;
+    }
+
+    .edition-country {
+      display: block;
+      margin-bottom: 5px;
+      font-size: clamp(12px, 1.5vw, 15px);
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .edition-song {
+      display: block;
+      overflow: hidden;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: clamp(10px, 1.3vw, 13px);
+      line-height: 1.45;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .edition-slogan {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 5px 8px;
+      color: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.13);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    @keyframes tileAppear {
+      from {
+        opacity: 0;
+        transform: translateY(28px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* RESPONSIVE LAYOUT */
+
     @media (max-width: 700px) {
       .header-wrapper {
         padding: 12px;
@@ -224,9 +477,42 @@
         width: 19px;
         height: 19px;
       }
+
+      .archive-overlay {
+        padding: 14px;
+      }
+
+      .archive-modal {
+        max-height: calc(100dvh - 28px);
+        padding: 22px;
+        border-radius: 24px;
+      }
+
+      .edition-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .edition-card {
+        border-radius: 18px;
+      }
+
+      .edition-content {
+        right: 10px;
+        bottom: 12px;
+        left: 10px;
+      }
+
+      .edition-year {
+        font-size: 23px;
+      }
+
+      .edition-slogan {
+        margin-top: 7px;
+        font-size: 9px;
+      }
     }
 
-    /* MOBILE PHONES */
     @media (max-width: 420px) {
       .header-wrapper {
         padding: 10px;
@@ -265,9 +551,56 @@
         width: 18px;
         height: 18px;
       }
+
+      .archive-overlay {
+        padding: 8px;
+      }
+
+      .archive-modal {
+        max-height: calc(100dvh - 16px);
+        padding: 16px;
+        border-radius: 21px;
+      }
+
+      .archive-subtitle {
+        margin-bottom: 18px;
+        font-size: 12px;
+      }
+
+      .edition-grid {
+        gap: 9px;
+      }
+
+      .edition-card {
+        border-radius: 15px;
+      }
+
+      .edition-content {
+        right: 8px;
+        bottom: 9px;
+        left: 8px;
+      }
+
+      .edition-year {
+        margin-bottom: 4px;
+        font-size: 21px;
+      }
+
+      .edition-country {
+        margin-bottom: 3px;
+        font-size: 11px;
+      }
+
+      .edition-song {
+        font-size: 10px;
+      }
+
+      .edition-slogan {
+        padding: 4px 6px;
+        font-size: 8px;
+      }
     }
 
-    /* VERY SMALL PHONES */
     @media (max-width: 350px) {
       .header-wrapper {
         padding: 8px 6px;
@@ -295,9 +628,31 @@
         width: 16px;
         height: 16px;
       }
+
+      .archive-heading h2 {
+        font-size: 21px;
+      }
+
+      .edition-grid {
+        gap: 7px;
+      }
+
+      .edition-content {
+        right: 6px;
+        bottom: 7px;
+        left: 6px;
+      }
+
+      .edition-year {
+        font-size: 18px;
+      }
+
+      .edition-country,
+      .edition-song {
+        font-size: 9px;
+      }
     }
 
-    /* REDUCED MOTION ACCESSIBILITY */
     @media (prefers-reduced-motion: reduce) {
       *,
       *::before,
@@ -305,88 +660,53 @@
         scroll-behavior: auto !important;
         transition-duration: 0.01ms !important;
         animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
       }
-    }
-
-    /* MAIN PAGE CONTENT */
-    main {
-      width: 100%;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding:
-        clamp(28px, 6vw, 80px)
-        clamp(16px, 4vw, 32px);
-      text-align: center;
-    }
-
-    main h1 {
-      font-size: clamp(28px, 5vw, 56px);
-      margin-bottom: 16px;
-    }
-
-    main p {
-      color: rgba(255, 255, 255, 0.72);
-      font-size: clamp(14px, 2vw, 18px);
-      line-height: 1.7;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- WEBSITE HEADER -->
+  <!-- HEADER -->
   <header class="header-wrapper">
     <nav class="pill-header" aria-label="Main navigation">
 
-      <!-- REPLACE YOUR LOGO FILENAME HERE -->
       <a class="brand" href="index.html" aria-label="Home">
         <img
           src="IMG_20261024_195602.png"
-          alt="Website logo"
+          alt="Eurovision Rewind logo"
         >
       </a>
 
-      <!-- WEBSITE NAME -->
       <a class="brand-name" href="index.html">
-        My Website
+        Eurovision Rewind
       </a>
 
-      <!-- NAVIGATION ICONS -->
       <div class="nav-icons">
 
-        <a
-          class="nav-icon"
-          href="index.html"
-          aria-label="Home"
-          title="Home"
-        >
+        <a class="nav-icon" href="index.html"
+           aria-label="Home" title="Home">
           <i data-lucide="house"></i>
         </a>
 
-        <a
-          class="nav-icon"
-          href="about.html"
-          aria-label="About"
-          title="About"
-        >
+        <a class="nav-icon" href="about.html"
+           aria-label="About" title="About">
           <i data-lucide="circle-user-round"></i>
         </a>
 
-        <a
-          class="nav-icon"
-          href="projects.html"
-          aria-label="Projects"
-          title="Projects"
-        >
+        <!-- This button opens the archive -->
+        <button class="nav-icon" id="archive-open"
+                type="button"
+                aria-label="Edition archive"
+                title="Edition archive"
+                aria-haspopup="dialog"
+                aria-controls="archive-overlay">
           <i data-lucide="layout-grid"></i>
-        </a>
+        </button>
 
-        <a
-          class="nav-icon"
-          href="settings.html"
-          aria-label="Settings"
-          title="Settings"
-        >
+        <a class="nav-icon" href="settings.html"
+           aria-label="Settings" title="Settings">
           <i data-lucide="settings"></i>
         </a>
 
@@ -394,22 +714,179 @@
     </nav>
   </header>
 
-  <!-- MAIN CONTENT -->
+  <!-- HOME PAGE CONTENT -->
   <main>
-    <h1>Welcome to my website</h1>
-
+    <h1>Eurovision Rewind</h1>
     <p>
-      Customize this area with your own content,
-      projects, graphics, and interactive features.
+      Revisit the editions, discover the winning entries,
+      and explore the history of Eurovision Rewind.
     </p>
   </main>
 
-  <!-- LOAD ICONS -->
-  <script>
-    if (window.lucide) {
-      lucide.createIcons();
-    }
-  </script>
+  <!-- EDITION ARCHIVE OVERLAY -->
+  <div class="archive-overlay"
+       id="archive-overlay"
+       aria-hidden="true">
 
-</body>
-</html>
+    <section class="archive-modal"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="archive-title">
+
+      <div class="archive-heading">
+        <h2 id="archive-title">Edition Archive</h2>
+
+        <button class="archive-close"
+                id="archive-close"
+                type="button"
+                aria-label="Close edition archive">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <p class="archive-subtitle">
+        Select an edition to explore its results, entries, and history.
+      </p>
+
+      <!-- The rounded-square tiles are generated here -->
+      <div class="edition-grid" id="edition-grid"></div>
+
+    </section>
+  </div>
+
+  <script>
+    /*
+      EDITION DATA
+
+      To add an edition, copy one object and change its details.
+
+      winnerImage:
+        Image path relative to this index.html file.
+
+      imagePosition:
+        Controls which part of the image stays in focus.
+        Examples: "50% 50%", "50% 30%", "center top".
+
+      page:
+        The HTML page to open when the tile is clicked.
+
+      2027 and 2028 winner details below are placeholders.
+      Replace them when you have their actual winning entries.
+    */
+
+    const editions = [
+      {
+        year: 2026,
+        slogan: "Grand Ouverture",
+        flag: "🇭🇷",
+        winnerCountry: "Croatia",
+        winnerSong: "Rim Tim Tagi Dim",
+        winnerImage: "images/2026-winner.png",
+        imagePosition: "50% 35%",
+        page: "2026.html"
+      },
+      {
+        year: 2027,
+        slogan: "Feel Alive",
+        flag: "🏆",
+        winnerCountry: "Winner to be added",
+        winnerSong: "Winning entry to be added",
+        winnerImage: "images/2027-winner.png",
+        imagePosition: "50% 50%",
+        page: "2027.html"
+      },
+      {
+        year: 2028,
+        slogan: "Beyond Border",
+        flag: "🏆",
+        winnerCountry: "Winner to be added",
+        winnerSong: "Winning entry to be added",
+        winnerImage: "images/2028-winner.png",
+        imagePosition: "50% 50%",
+        page: "2028.html"
+      }
+    ];
+
+    const archiveOpen = document.getElementById("archive-open");
+    const archiveClose = document.getElementById("archive-close");
+    const archiveOverlay = document.getElementById("archive-overlay");
+    const editionGrid = document.getElementById("edition-grid");
+
+    let previouslyFocusedElement = null;
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[character]);
+    }
+
+    function renderEditions() {
+      editionGrid.innerHTML = editions.map((edition, index) => `
+        <a
+          class="edition-card"
+          href="${escapeHTML(edition.page)}"
+          style="
+            --tile-index: ${index};
+            --image-position: ${escapeHTML(edition.imagePosition || "50% 50%")};
+          "
+          aria-label="${escapeHTML(
+            edition.year + " Eurovision Rewind edition. " +
+            edition.winnerCountry + ". " + edition.winnerSong
+          )}"
+        >
+          <div class="edition-placeholder" aria-hidden="true">
+            <i data-lucide="trophy"></i>
+          </div>
+
+          <img
+            class="edition-image"
+            src="${escapeHTML(edition.winnerImage)}"
+            alt=""
+            loading="lazy"
+          >
+
+          <div class="edition-content">
+            <span class="edition-year">
+              ${escapeHTML(edition.year)}
+            </span>
+
+            <span class="edition-country">
+              ${escapeHTML(edition.flag)} ${escapeHTML(edition.winnerCountry)}
+            </span>
+
+            <span class="edition-song">
+              ${escapeHTML(edition.winnerSong)}
+            </span>
+
+            <span class="edition-slogan">
+              ${escapeHTML(edition.slogan)}
+            </span>
+          </div>
+        </a>
+      `).join("");
+
+      // If an image is missing, keep the tile usable and show its trophy.
+      editionGrid.querySelectorAll(".edition-image").forEach(image => {
+        image.addEventListener("error", () => {
+          image.remove();
+        }, { once: true });
+      });
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    function openArchive() {
+      previouslyFocusedElement = document.activeElement;
+
+      archiveOverlay.classList.add("open");
+      archiveOverlay.setAttribute("aria-hidden", "false");
+      document.body.classList.add("archive-is-open");
+
+      archiveClose.focus();
+    
