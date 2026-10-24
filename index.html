@@ -3,73 +3,104 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#11131b">
+
   <title>Eurovision Rewind</title>
+  <meta name="description" content="Explore the Eurovision Rewind archive and its editions.">
+
+  <!-- Montserrat font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Lucide icon library -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    * { box-sizing: border-box; }
+    :root {
+      --glass: rgba(255, 255, 255, 0.09);
+      --glass-border: rgba(255, 255, 255, 0.20);
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, 0.70);
+      --blur: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      scroll-behavior: smooth;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: Arial, Helvetica, sans-serif;
-      color: white;
+      min-height: 100dvh;
+      color: var(--text);
+      font-family: "Montserrat", sans-serif;
       background:
-        radial-gradient(ellipse at 10% 0%, #59428b88, transparent 45%),
-        radial-gradient(ellipse at 100% 35%, #19849f55, transparent 45%),
+        radial-gradient(ellipse at 10% 0%, rgba(105, 74, 190, 0.42), transparent 45%),
+        radial-gradient(ellipse at 100% 35%, rgba(25, 132, 160, 0.30), transparent 45%),
         linear-gradient(135deg, #11131b, #171827 55%, #101c27);
       background-attachment: fixed;
     }
 
-    body.modal-open { overflow: hidden; }
+    body.archive-is-open {
+      overflow: hidden;
+    }
 
-    button, a { -webkit-tap-highlight-color: transparent; }
+    button, a {
+      font: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-    /* Navigation */
+    /* NAVIGATION */
+
     .header-wrapper {
       display: flex;
       justify-content: center;
+      width: 100%;
       padding: 18px;
     }
 
     .pill-header {
-      width: 100%;
-      max-width: 1100px;
-      min-height: 64px;
       display: flex;
       align-items: center;
-      gap: 14px;
-      padding: 9px 18px;
-      border: 1px solid #ffffff35;
+      width: 100%;
+      max-width: 1100px;
+      min-height: 62px;
+      padding: 8px 16px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
       border-radius: 999px;
-      background: #ffffff12;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      box-shadow: 0 8px 32px #0002;
+      -webkit-backdrop-filter: blur(var(--blur));
+      backdrop-filter: blur(var(--blur));
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      max-width: 120px;
+      justify-content: center;
+      width: auto;
+      max-width: 125px;
       height: 42px;
       flex-shrink: 0;
+      text-decoration: none;
     }
 
     .brand img {
       display: block;
       max-width: 100%;
       max-height: 100%;
+      width: auto;
+      height: auto;
       object-fit: contain;
-    }
-
-    .brand-name {
-      color: white;
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 700;
-      white-space: nowrap;
     }
 
     .nav-icons {
@@ -80,23 +111,24 @@
     }
 
     .nav-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
       width: 44px;
       height: 44px;
       padding: 0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
       color: white;
       background: transparent;
       border: 0;
       border-radius: 50%;
       text-decoration: none;
       cursor: pointer;
-      transition: background .2s, transform .2s;
+      transition: background 0.2s ease, transform 0.2s ease;
     }
 
     .nav-icon:hover {
-      background: #ffffff20;
+      background: rgba(255, 255, 255, 0.15);
       transform: translateY(-2px);
     }
 
@@ -104,32 +136,45 @@
       display: block;
       width: 22px;
       height: 22px;
+      flex-shrink: 0;
       stroke: currentColor;
-      fill: none;
       stroke-width: 1.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
     }
 
-    /* Home page */
+    .nav-icon:focus-visible,
+    .archive-close:focus-visible,
+    .edition-card:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 3px;
+    }
+
+    /* HOMEPAGE */
+
     main {
-      max-width: 1000px;
+      width: 100%;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 80px 22px;
+      padding: clamp(50px, 9vw, 100px) 22px;
       text-align: center;
     }
 
     main h1 {
-      font-size: clamp(32px, 6vw, 58px);
-      margin-bottom: 14px;
+      margin: 0 0 18px;
+      font-size: clamp(30px, 6vw, 58px);
+      font-weight: 800;
+      letter-spacing: -1.5px;
     }
 
     main p {
-      color: #ffffffb8;
-      line-height: 1.7;
+      max-width: 650px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: clamp(13px, 2vw, 17px);
+      line-height: 1.8;
     }
 
-    /* Archive overlay */
+    /* ARCHIVE OVERLAY */
+
     .archive-overlay {
       position: fixed;
       inset: 0;
@@ -138,36 +183,41 @@
       align-items: center;
       justify-content: center;
       padding: 16px;
-      background: #08091499;
-      backdrop-filter: blur(0);
+      background: rgba(7, 8, 17, 0.55);
       -webkit-backdrop-filter: blur(0);
+      backdrop-filter: blur(0);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transition: opacity .3s, visibility .3s, backdrop-filter .3s;
+      transition:
+        opacity 0.3s ease,
+        visibility 0.3s ease,
+        backdrop-filter 0.3s ease;
     }
 
     .archive-overlay.open {
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
-      backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(18px);
     }
 
+    /* ARCHIVE MODAL */
+
     .archive-modal {
-      width: min(100%, 950px);
+      width: min(100%, 960px);
       max-height: calc(100vh - 32px);
       max-height: calc(100dvh - 32px);
       overflow-y: auto;
       padding: clamp(18px, 4vw, 34px);
-      background: #171827f5;
-      border: 1px solid #ffffff25;
-      border-radius: 26px;
-      box-shadow: 0 24px 100px #0007;
+      background: rgba(22, 24, 39, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 28px;
+      box-shadow: 0 24px 100px rgba(0, 0, 0, 0.40);
       opacity: 0;
-      transform: translateY(20px) scale(.98);
-      transition: transform .3s, opacity .3s;
+      transform: translateY(22px) scale(0.98);
+      transition: transform 0.3s ease, opacity 0.3s ease;
     }
 
     .archive-overlay.open .archive-modal {
@@ -179,90 +229,104 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
+      gap: 16px;
     }
 
     .archive-heading h2 {
       margin: 0;
-      font-size: clamp(24px, 4vw, 34px);
+      font-size: clamp(23px, 4vw, 34px);
+      font-weight: 800;
+      letter-spacing: -0.8px;
     }
 
     .archive-subtitle {
-      margin: 10px 0 24px;
-      color: #ffffffa8;
-      font-size: 14px;
-      line-height: 1.6;
+      margin: 10px 0 25px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
     }
 
     .archive-close {
-      flex-shrink: 0;
-      width: 42px;
-      height: 42px;
       display: grid;
       place-items: center;
+      flex: 0 0 auto;
+      width: 42px;
+      height: 42px;
+      padding: 0;
       color: white;
-      background: #ffffff12;
-      border: 1px solid #ffffff20;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
       border-radius: 50%;
       cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
     }
 
-    .archive-close:hover { background: #ffffff25; }
+    .archive-close:hover {
+      background: rgba(255, 255, 255, 0.17);
+      transform: rotate(90deg);
+    }
 
     .archive-close svg {
       width: 21px;
       height: 21px;
       stroke: currentColor;
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
     }
 
-    /* Edition cards */
+    /* EDITION GRID */
+
     .edition-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
+      gap: clamp(12px, 2vw, 20px);
     }
 
     .edition-card {
       position: relative;
       display: block;
-      aspect-ratio: 1;
+      width: 100%;
       min-width: 0;
+      aspect-ratio: 1 / 1;
       overflow: hidden;
       color: white;
       text-decoration: none;
-      border: 1px solid #ffffff25;
-      border-radius: 21px;
-      background: linear-gradient(145deg, #343653, #111722);
+      background:
+        radial-gradient(circle at 25% 15%, rgba(124, 91, 210, 0.45), transparent 55%),
+        linear-gradient(145deg, #292b48, #111722);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 22px;
       isolation: isolate;
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(24px) scale(0.97);
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
     }
 
     .archive-overlay.open .edition-card {
-      animation: appear .45s ease forwards;
-      animation-delay: calc(var(--i) * 80ms + 80ms);
+      animation: cardAppear 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      animation-delay: calc(80ms + var(--card-index, 0) * 80ms);
     }
 
-    @keyframes appear {
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes cardAppear {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
     .edition-card:hover {
-      border-color: #ffffff90;
+      border-color: rgba(255, 255, 255, 0.60);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.30);
     }
 
     .edition-image {
       position: absolute;
       inset: 0;
       z-index: -2;
+      display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: var(--position, center);
-      transition: transform .4s;
+      object-position: var(--image-position, center);
+      transition: transform 0.4s ease;
     }
 
     .edition-card:hover .edition-image {
@@ -276,29 +340,25 @@
       content: "";
       background: linear-gradient(
         to bottom,
-        #08091405 10%,
-        #08091420 35%,
-        #080914e8 100%
+        rgba(8, 9, 20, 0.03) 5%,
+        rgba(8, 9, 20, 0.18) 35%,
+        rgba(8, 9, 20, 0.91) 100%
       );
     }
 
-    .trophy-placeholder {
+    .edition-placeholder {
       position: absolute;
       inset: 0;
       z-index: -2;
       display: grid;
       place-items: center;
-      color: #ffffffa0;
+      color: rgba(255, 255, 255, 0.75);
     }
 
-    .trophy-placeholder svg {
+    .edition-placeholder svg {
       width: 42px;
       height: 42px;
       stroke: currentColor;
-      fill: none;
-      stroke-width: 1.4;
-      stroke-linecap: round;
-      stroke-linejoin: round;
     }
 
     .edition-content {
@@ -306,6 +366,7 @@
       right: 13px;
       bottom: 14px;
       left: 13px;
+      text-align: left;
     }
 
     .edition-year {
@@ -313,67 +374,172 @@
       margin-bottom: 6px;
       font-size: clamp(22px, 3vw, 30px);
       font-weight: 800;
+      letter-spacing: -0.8px;
     }
 
     .edition-country {
       display: block;
       margin-bottom: 4px;
-      font-size: 13px;
+      font-size: clamp(11px, 1.4vw, 14px);
       font-weight: 700;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     .edition-song {
-      display: block;
-      color: #ffffffc9;
-      font-size: 12px;
-      line-height: 1.4;
+      display: -webkit-box;
+      overflow: hidden;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: clamp(10px, 1.2vw, 12px);
+      line-height: 1.5;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
 
     .edition-slogan {
       display: inline-block;
       margin-top: 9px;
       padding: 5px 8px;
-      background: #ffffff20;
-      border: 1px solid #ffffff25;
+      color: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 999px;
-      font-size: 10px;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
     }
 
     @media (max-width: 700px) {
-      .header-wrapper { padding: 12px; }
-      .pill-header { gap: 7px; padding: 7px 10px; }
-      .brand { max-width: 76px; height: 35px; }
-      .brand-name { font-size: 12px; }
-      .nav-icons { gap: 1px; }
-      .nav-icon { width: 36px; height: 36px; }
-      .nav-icon svg { width: 19px; height: 19px; }
-      .edition-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-      .edition-card { border-radius: 16px; }
-      .edition-content { right: 9px; bottom: 10px; left: 9px; }
-      .edition-year { font-size: 23px; }
-      .edition-country { font-size: 11px; }
-      .edition-song { font-size: 10px; }
-      .edition-slogan { margin-top: 6px; font-size: 9px; }
+      .header-wrapper {
+        padding: 12px;
+      }
+
+      .pill-header {
+        min-height: 54px;
+        padding: 6px 10px;
+      }
+
+      .brand {
+        max-width: 90px;
+        height: 36px;
+      }
+
+      .nav-icons {
+        gap: 2px;
+      }
+
+      .nav-icon {
+        width: 38px;
+        height: 38px;
+      }
+
+      .nav-icon svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .edition-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .edition-card {
+        border-radius: 17px;
+      }
+
+      .edition-content {
+        right: 9px;
+        bottom: 10px;
+        left: 9px;
+      }
+
+      .edition-year {
+        font-size: 23px;
+      }
+
+      .edition-country {
+        font-size: 11px;
+      }
+
+      .edition-song {
+        font-size: 10px;
+      }
+
+      .edition-slogan {
+        margin-top: 6px;
+        padding: 4px 6px;
+        font-size: 8px;
+      }
     }
 
     @media (max-width: 380px) {
-      .pill-header { gap: 4px; padding: 6px; }
-      .brand { max-width: 54px; height: 30px; }
-      .brand-name { display: none; }
-      .nav-icons { flex: 1; justify-content: flex-end; }
-      .nav-icon { flex: 1; max-width: 42px; }
-      .edition-grid { gap: 8px; }
-      .edition-content { right: 7px; bottom: 8px; left: 7px; }
-      .edition-year { font-size: 19px; }
-      .edition-country, .edition-song { font-size: 9px; }
-      .edition-slogan { font-size: 8px; padding: 4px 6px; }
+      .pill-header {
+        padding: 5px 7px;
+      }
+
+      .brand {
+        max-width: 62px;
+        height: 31px;
+      }
+
+      .nav-icons {
+        gap: 0;
+      }
+
+      .nav-icon {
+        width: 35px;
+        height: 35px;
+      }
+
+      .nav-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .archive-overlay {
+        padding: 8px;
+      }
+
+      .archive-modal {
+        max-height: calc(100dvh - 16px);
+        padding: 15px;
+        border-radius: 21px;
+      }
+
+      .archive-subtitle {
+        margin-bottom: 18px;
+        font-size: 12px;
+      }
+
+      .edition-grid {
+        gap: 8px;
+      }
+
+      .edition-content {
+        right: 7px;
+        bottom: 8px;
+        left: 7px;
+      }
+
+      .edition-year {
+        font-size: 19px;
+      }
+
+      .edition-country,
+      .edition-song {
+        font-size: 9px;
+      }
+
+      .edition-slogan {
+        font-size: 8px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
-        animation-duration: .01ms !important;
-        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
+        transition-duration: 0.01ms !important;
       }
     }
   </style>
@@ -381,84 +547,93 @@
 
 <body>
 
+  <!-- NAVIGATION -->
   <header class="header-wrapper">
     <nav class="pill-header" aria-label="Main navigation">
 
       <a class="brand" href="index.html" aria-label="Home">
-        <img src="IMG_20261024_195602.png" alt="Eurovision Rewind">
+        <img src="IMG_20261024_195602.png" alt="Eurovision Rewind logo">
       </a>
-
-      <a class="brand-name" href="index.html">Eurovision Rewind</a>
 
       <div class="nav-icons">
 
         <a class="nav-icon" href="index.html" aria-label="Home" title="Home">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="m3 10 9-7 9 7"></path>
-            <path d="M5 9v12h14V9"></path>
-            <path d="M9 21v-7h6v7"></path>
-          </svg>
+          <i data-lucide="house"></i>
         </a>
 
         <a class="nav-icon" href="about.html" aria-label="About" title="About">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="8" r="4"></circle>
-            <path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
-          </svg>
+          <i data-lucide="circle-user-round"></i>
         </a>
 
-        <button class="nav-icon" id="archive-open" type="button"
-                aria-label="Edition archive" title="Edition archive">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-          </svg>
+        <button class="nav-icon"
+                id="archive-open"
+                type="button"
+                aria-label="Edition archive"
+                title="Edition archive"
+                aria-haspopup="dialog"
+                aria-controls="archive-overlay">
+          <i data-lucide="layout-grid"></i>
         </button>
 
-        <a class="nav-icon" href="settings.html"
-           aria-label="Settings" title="Settings">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.8 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.8-1l-1.7.7-1.4-2.4 1.4-1.1a8 8 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.7a8 8 0 0 1 1.8-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.8 1l1.7-.7 1.4 2.4-1.4 1.1a8 8 0 0 1 0 2Z" transform="translate(-1 -1) scale(1.08)"></path>
-          </svg>
+        <a class="nav-icon"
+           href="settings.html"
+           aria-label="Settings"
+           title="Settings">
+          <i data-lucide="settings"></i>
         </a>
 
       </div>
     </nav>
   </header>
 
+  <!-- HOMEPAGE -->
   <main>
     <h1>Eurovision Rewind</h1>
-    <p>Revisit the editions, discover the winning entries, and explore the archive.</p>
+    <p>
+      Revisit the editions, discover the winning entries,
+      and explore the history of Eurovision Rewind.
+    </p>
   </main>
 
-  <div class="archive-overlay" id="archive-overlay" aria-hidden="true">
-    <section class="archive-modal" role="dialog" aria-modal="true"
+  <!-- ARCHIVE OVERLAY -->
+  <div class="archive-overlay"
+       id="archive-overlay"
+       aria-hidden="true">
+
+    <section class="archive-modal"
+             role="dialog"
+             aria-modal="true"
              aria-labelledby="archive-title">
 
       <div class="archive-heading">
         <h2 id="archive-title">Edition Archive</h2>
 
-        <button class="archive-close" id="archive-close"
-                type="button" aria-label="Close archive">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="m18 6-12 12M6 6l12 12"></path>
-          </svg>
+        <button class="archive-close"
+                id="archive-close"
+                type="button"
+                aria-label="Close archive">
+          <i data-lucide="x"></i>
         </button>
       </div>
 
       <p class="archive-subtitle">
-        Choose an edition to explore its history and winning entry.
+        Select an edition to explore its results, entries, and history.
       </p>
 
       <div class="edition-grid" id="edition-grid"></div>
     </section>
   </div>
 
+  <!-- WEBSITE JAVASCRIPT -->
   <script>
-    // EDIT YOUR EDITION INFORMATION HERE.
+    /*
+      EDITION SETTINGS
+
+      winnerImage is the path to the image in your repository.
+      page is the HTML page that opens when the card is clicked.
+      Replace the 2027 and 2028 placeholder information when ready.
+    */
+
     const editions = [
       {
         year: 2026,
@@ -466,29 +641,29 @@
         flag: "🇭🇷",
         winnerCountry: "Croatia",
         winnerSong: "Rim Tim Tagi Dim",
-        winnerImage: "images (36).jpeg",
-        page: "2026.html",
-        imagePosition: "50% 35%"
+        winnerImage: "images/2026-winner.png",
+        imagePosition: "50% 35%",
+        page: "2026.html"
       },
       {
         year: 2027,
         slogan: "Feel Alive",
         flag: "🏆",
         winnerCountry: "Winner to be added",
-        winnerSong: "Winning song to be added",
+        winnerSong: "Winning entry to be added",
         winnerImage: "images/2027-winner.png",
-        page: "2027.html",
-        imagePosition: "center"
+        imagePosition: "center",
+        page: "2027.html"
       },
       {
         year: 2028,
         slogan: "Beyond Border",
         flag: "🏆",
         winnerCountry: "Winner to be added",
-        winnerSong: "Winning song to be added",
+        winnerSong: "Winning entry to be added",
         winnerImage: "images/2028-winner.png",
-        page: "2028.html",
-        imagePosition: "center"
+        imagePosition: "center",
+        page: "2028.html"
       }
     ];
 
@@ -499,80 +674,121 @@
 
     let previousFocus = null;
 
-    function safeText(value) {
-      return String(value).replace(/[&<>"']/g, char => ({
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, character => ({
         "&": "&amp;",
         "<": "&lt;",
         ">": "&gt;",
         '"': "&quot;",
         "'": "&#39;"
-      })[char]);
+      })[character]);
+    }
+
+    function initializeIcons() {
+      if (window.lucide && typeof window.lucide.createIcons === "function") {
+        window.lucide.createIcons();
+      } else {
+        console.error(
+          "Lucide failed to load. Check your internet connection or CDN access."
+        );
+      }
     }
 
     function renderEditions() {
       grid.innerHTML = editions.map((edition, index) => `
         <a
           class="edition-card"
-          href="${safeText(edition.page)}"
-          style="--i:${index};--position:${safeText(edition.imagePosition || "center")}"
+          href="${escapeHTML(edition.page)}"
+          style="--card-index:${index};--image-position:${escapeHTML(edition.imagePosition || "center")}"
+          aria-label="${escapeHTML(
+            edition.year + " edition, " +
+            edition.winnerCountry + ", " +
+            edition.winnerSong
+          )}"
         >
-          <div class="trophy-placeholder" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"></path>
-              <path d="M7 6H4v3a4 4 0 0 0 4 4M17 6h3v3a4 4 0 0 1-4 4"></path>
-            </svg>
+          <div class="edition-placeholder" aria-hidden="true">
+            <i data-lucide="trophy"></i>
           </div>
 
           <img
             class="edition-image"
-            src="${safeText(edition.winnerImage)}"
+            src="${escapeHTML(edition.winnerImage)}"
             alt=""
           >
 
           <div class="edition-content">
-            <span class="edition-year">${safeText(edition.year)}</span>
-            <span class="edition-country">${safeText(edition.flag)} ${safeText(edition.winnerCountry)}</span>
-            <span class="edition-song">${safeText(edition.winnerSong)}</span>
-            <span class="edition-slogan">${safeText(edition.slogan)}</span>
+            <span class="edition-year">
+              ${escapeHTML(edition.year)}
+            </span>
+
+            <span class="edition-country">
+              ${escapeHTML(edition.flag)}
+              ${escapeHTML(edition.winnerCountry)}
+            </span>
+
+            <span class="edition-song">
+              ${escapeHTML(edition.winnerSong)}
+            </span>
+
+            <span class="edition-slogan">
+              ${escapeHTML(edition.slogan)}
+            </span>
           </div>
         </a>
       `).join("");
 
-      grid.querySelectorAll(".edition-image").forEach(img => {
-        img.addEventListener("error", () => img.remove(), { once: true });
+      // Missing image files leave the gradient background visible.
+      grid.querySelectorAll(".edition-image").forEach(image => {
+        image.addEventListener("error", () => {
+          image.remove();
+        }, { once: true });
       });
+
+      // Initialize icons added to the archive cards.
+      initializeIcons();
     }
 
     function openArchive() {
       previousFocus = document.activeElement;
+
       overlay.classList.add("open");
       overlay.setAttribute("aria-hidden", "false");
-      document.body.classList.add("modal-open");
+      document.body.classList.add("archive-is-open");
+
       closeButton.focus();
     }
 
     function closeArchive() {
       overlay.classList.remove("open");
       overlay.setAttribute("aria-hidden", "true");
-      document.body.classList.remove("modal-open");
+      document.body.classList.remove("archive-is-open");
 
-      if (previousFocus) previousFocus.focus();
+      if (previousFocus) {
+        previousFocus.focus();
+      }
     }
 
     openButton.addEventListener("click", openArchive);
     closeButton.addEventListener("click", closeArchive);
 
     overlay.addEventListener("click", event => {
-      if (event.target === overlay) closeArchive();
-    });
-
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape" && overlay.classList.contains("open")) {
+      if (event.target === overlay) {
         closeArchive();
       }
     });
 
+    document.addEventListener("keydown", event => {
+      if (
+        event.key === "Escape" &&
+        overlay.classList.contains("open")
+      ) {
+        closeArchive();
+      }
+    });
+
+    // Render the edition cards and initialize every Lucide icon.
     renderEditions();
+    initializeIcons();
   </script>
 
 </body>
