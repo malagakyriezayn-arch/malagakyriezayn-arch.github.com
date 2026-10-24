@@ -3,27 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Gradient Site</title>
+    <title>My Typing Site</title>
     <style>
         body {
-            /* Ensures the background covers the whole mobile screen */
             margin: 0;
             min-height: 100vh; 
-            
-            /* Gradient: Starts at Deep Blue (#1a2a6c) and fades to Coral (#f4a261) */
-            background: linear-gradient(#1a2a6c, #f4a261);
-            
-            /* Optional: Centers text nicely on mobile */
+            background: linear-gradient(135deg, #1e1e2f, #111119); /* Dark modern gradient */
             display: flex;
             justify-content: center;
             align-items: center;
-            color: white;
-            font-family: sans-serif;
+            font-family: 'Courier New', Courier, monospace; /* Monospace font works best for typing */
+            overflow: hidden;
+        }
+
+        .typing-container {
+            display: inline-block;
+        }
+
+        h1 {
+            color: #00ffcc; /* Neon teal color */
+            font-size: 3rem;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 4px solid #00ffcc; /* The blinking cursor */
+            
+            /* Animations: typing effect happens once, cursor blinks forever */
+            animation: 
+                typing 3s steps(11, end) forwards,
+                blink 0.75s step-end infinite;
+        }
+
+        /* Adjust font size for mobile phones so it doesn't wrap */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+                border-right: 3px solid #00ffcc;
+            }
+        }
+
+        /* The Typing Effect: animates width from 0 to 100% */
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* The Cursor Blink Effect: toggles border color visibility */
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            50% { border-color: #00ffcc; }
         }
     </style>
 </head>
 <body>
-    <h1>Hello World</h1>
+
+    <div class="typing-container">
+        <h1>Hello World</h1>
+    </div>
+
 </body>
 </html>
 
