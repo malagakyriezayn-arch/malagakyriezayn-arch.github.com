@@ -63,4 +63,152 @@
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+    <style>
+        /* Base Reset & Background */
+        body {
+            margin: 0;
+            min-height: 100vh; 
+            background: linear-gradient(135deg, #1e1e2f, #111119);
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ------------------ HEADER STYLES ------------------ */
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Replaceable Logo Area */
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            height: 40px; /* Adjust height as needed */
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 8px 16px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        /* Button Hover/Active State */
+        .nav-btn:hover {
+            background: #00ffcc;
+            color: #111119;
+            border-color: #00ffcc;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        }
+
+        /* ------------------ MAIN HERO STYLES ------------------ */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 10vh; /* Adjusts typewriter placement slightly up from dead center */
+        }
+
+        .typing-container {
+            display: inline-block;
+        }
+
+        h1 {
+            color: #00ffcc;
+            font-size: 3rem;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 4px solid #00ffcc;
+            animation: 
+                typing 3s steps(11, end) forwards,
+                blink 0.75s step-end infinite;
+        }
+
+        /* Responsive adjustments for mobile screens */
+        @media (max-width: 600px) {
+            .site-header {
+                padding: 12px 4%;
+            }
+            .logo-img {
+                height: 32px;
+            }
+            .nav-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+                border-right: 3px solid #00ffcc;
+            }
+        }
+
+        /* Animations */
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            50% { border-color: #00ffcc; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Clear Website Heading Section -->
+    <header class="site-header">
+        <div class="logo-container">
+            <!-- REPLACE LOGO: Change the src URL below to your own hosted image link -->
+            <img class="logo-img" src="https://placeholder.com" alt="Website Logo">
+        </div>
+        
+        <nav class="nav-buttons">
+            <a href="#" class="nav-btn">About</a>
+            <a href="#" class="nav-btn">Work</a>
+        </nav>
+    </header>
+
+    <!-- Main Content Area with your Typewriter Text -->
+    <main class="main-content">
+        <div class="typing-container">
+            <h1>Hello World</h1>
+        </div>
+    </main>
+
+</body>
+</html>
+
 
