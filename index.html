@@ -9,6 +9,7 @@
   <meta name="theme-color" content="#11131b">
   <meta name="description" content="Explore the Eurovision Rewind archive.">
 
+  <!-- Lucide icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
@@ -144,7 +145,9 @@
       border-radius: 50%;
       text-decoration: none;
       cursor: pointer;
-      transition: background 0.2s ease, transform 0.2s ease;
+      transition:
+        background 0.2s ease,
+        transform 0.2s ease;
     }
 
     .nav-icon:hover {
@@ -173,8 +176,9 @@
       width: 100%;
       max-width: 1100px;
       margin: 0 auto;
-      padding: clamp(28px, 6vw, 80px)
-               clamp(16px, 4vw, 32px);
+      padding:
+        clamp(28px, 6vw, 80px)
+        clamp(16px, 4vw, 32px);
       text-align: center;
     }
 
@@ -189,7 +193,7 @@
       line-height: 1.7;
     }
 
-    /* ARCHIVE BACKDROP */
+    /* ARCHIVE OVERLAY */
 
     .archive-overlay {
       position: fixed;
@@ -200,8 +204,8 @@
       justify-content: center;
       padding: 24px;
       background: rgba(7, 8, 17, 0.58);
-      -webkit-backdrop-filter: blur(0px);
-      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0);
+      backdrop-filter: blur(0);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
@@ -226,7 +230,7 @@
       max-height: min(850px, calc(100dvh - 48px));
       overflow-y: auto;
       padding: clamp(20px, 4vw, 36px);
-      background: rgba(21, 23, 38, 0.88);
+      background: rgba(21, 23, 38, 0.92);
       border: 1px solid rgba(255, 255, 255, 0.16);
       border-radius: 30px;
       box-shadow: 0 24px 100px rgba(0, 0, 0, 0.42);
@@ -269,12 +273,14 @@
       place-items: center;
       width: 42px;
       height: 42px;
-      color: white;
+      color: #ffffff;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 50%;
       cursor: pointer;
-      transition: background 0.2s ease, transform 0.2s ease;
+      transition:
+        background 0.2s ease,
+        transform 0.2s ease;
     }
 
     .archive-close:hover {
@@ -287,7 +293,7 @@
       height: 20px;
     }
 
-    /* TRUE GRID OF ROUNDED SQUARES */
+    /* EDITION GRID */
 
     .edition-grid {
       display: grid;
@@ -324,7 +330,7 @@
 
     .archive-overlay.open .edition-card {
       animation: tileAppear 0.55s cubic-bezier(0.2, 0.8, 0.2, 1)
-                 forwards;
+        forwards;
       animation-delay: calc(100ms + var(--tile-index, 0) * 90ms);
     }
 
@@ -332,7 +338,6 @@
       z-index: 2;
       border-color: rgba(255, 255, 255, 0.55);
       box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
-      transform: translateY(-5px) scale(1.025);
     }
 
     .edition-card:focus-visible {
@@ -371,6 +376,7 @@
     .edition-placeholder {
       position: absolute;
       inset: 0;
+      z-index: -2;
       display: grid;
       place-items: center;
       color: rgba(255, 255, 255, 0.75);
@@ -407,13 +413,12 @@
     }
 
     .edition-song {
-      display: block;
+      display: -webkit-box;
       overflow: hidden;
       color: rgba(255, 255, 255, 0.75);
       font-size: clamp(10px, 1.3vw, 13px);
       line-height: 1.45;
       text-overflow: ellipsis;
-      display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
@@ -442,7 +447,7 @@
       }
     }
 
-    /* RESPONSIVE LAYOUT */
+    /* TABLETS */
 
     @media (max-width: 700px) {
       .header-wrapper {
@@ -512,6 +517,8 @@
         font-size: 9px;
       }
     }
+
+    /* MOBILE PHONES */
 
     @media (max-width: 420px) {
       .header-wrapper {
@@ -668,7 +675,7 @@
 
 <body>
 
-  <!-- HEADER -->
+  <!-- NAVIGATION -->
   <header class="header-wrapper">
     <nav class="pill-header" aria-label="Main navigation">
 
@@ -685,18 +692,22 @@
 
       <div class="nav-icons">
 
-        <a class="nav-icon" href="index.html"
-           aria-label="Home" title="Home">
+        <a class="nav-icon"
+           href="index.html"
+           aria-label="Home"
+           title="Home">
           <i data-lucide="house"></i>
         </a>
 
-        <a class="nav-icon" href="about.html"
-           aria-label="About" title="About">
+        <a class="nav-icon"
+           href="about.html"
+           aria-label="About"
+           title="About">
           <i data-lucide="circle-user-round"></i>
         </a>
 
-        <!-- This button opens the archive -->
-        <button class="nav-icon" id="archive-open"
+        <button class="nav-icon"
+                id="archive-open"
                 type="button"
                 aria-label="Edition archive"
                 title="Edition archive"
@@ -705,8 +716,10 @@
           <i data-lucide="layout-grid"></i>
         </button>
 
-        <a class="nav-icon" href="settings.html"
-           aria-label="Settings" title="Settings">
+        <a class="nav-icon"
+           href="settings.html"
+           aria-label="Settings"
+           title="Settings">
           <i data-lucide="settings"></i>
         </a>
 
@@ -714,7 +727,7 @@
     </nav>
   </header>
 
-  <!-- HOME PAGE CONTENT -->
+  <!-- HOME CONTENT -->
   <main>
     <h1>Eurovision Rewind</h1>
     <p>
@@ -723,7 +736,7 @@
     </p>
   </main>
 
-  <!-- EDITION ARCHIVE OVERLAY -->
+  <!-- EDITION ARCHIVE -->
   <div class="archive-overlay"
        id="archive-overlay"
        aria-hidden="true">
@@ -748,30 +761,23 @@
         Select an edition to explore its results, entries, and history.
       </p>
 
-      <!-- The rounded-square tiles are generated here -->
       <div class="edition-grid" id="edition-grid"></div>
 
     </section>
   </div>
 
+  <!-- JAVASCRIPT -->
   <script>
     /*
       EDITION DATA
 
-      To add an edition, copy one object and change its details.
+      Add or edit editions in this array.
 
-      winnerImage:
-        Image path relative to this index.html file.
+      winnerImage: path to the winner image.
+      imagePosition: image focus, e.g. "50% 30%".
+      page: HTML page opened when the tile is clicked.
 
-      imagePosition:
-        Controls which part of the image stays in focus.
-        Examples: "50% 50%", "50% 30%", "center top".
-
-      page:
-        The HTML page to open when the tile is clicked.
-
-      2027 and 2028 winner details below are placeholders.
-      Replace them when you have their actual winning entries.
+      2027 and 2028 winner information is placeholder content.
     */
 
     const editions = [
@@ -829,13 +835,11 @@
         <a
           class="edition-card"
           href="${escapeHTML(edition.page)}"
-          style="
-            --tile-index: ${index};
-            --image-position: ${escapeHTML(edition.imagePosition || "50% 50%")};
-          "
+          style="--tile-index:${index};--image-position:${escapeHTML(edition.imagePosition || "50% 50%")}"
           aria-label="${escapeHTML(
-            edition.year + " Eurovision Rewind edition. " +
-            edition.winnerCountry + ". " + edition.winnerSong
+            edition.year + " edition: " +
+            edition.winnerCountry + ", " +
+            edition.winnerSong
           )}"
         >
           <div class="edition-placeholder" aria-hidden="true">
@@ -855,7 +859,8 @@
             </span>
 
             <span class="edition-country">
-              ${escapeHTML(edition.flag)} ${escapeHTML(edition.winnerCountry)}
+              ${escapeHTML(edition.flag)}
+              ${escapeHTML(edition.winnerCountry)}
             </span>
 
             <span class="edition-song">
@@ -869,7 +874,6 @@
         </a>
       `).join("");
 
-      // If an image is missing, keep the tile usable and show its trophy.
       editionGrid.querySelectorAll(".edition-image").forEach(image => {
         image.addEventListener("error", () => {
           image.remove();
@@ -889,4 +893,49 @@
       document.body.classList.add("archive-is-open");
 
       archiveClose.focus();
-    
+    }
+
+    function closeArchive() {
+      archiveOverlay.classList.remove("open");
+      archiveOverlay.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("archive-is-open");
+
+      if (previouslyFocusedElement) {
+        previouslyFocusedElement.focus();
+      }
+    }
+
+    archiveOpen.addEventListener("click", openArchive);
+    archiveClose.addEventListener("click", closeArchive);
+
+    // Close when the backdrop itself is clicked.
+    archiveOverlay.addEventListener("click", event => {
+      if (event.target === archiveOverlay) {
+        closeArchive();
+      }
+    });
+
+    // Close with Escape.
+    document.addEventListener("keydown", event => {
+      if (
+        event.key === "Escape" &&
+        archiveOverlay.classList.contains("open")
+      ) {
+        closeArchive();
+      }
+    });
+
+    // Render archive cards, then initialize all Lucide icons.
+    renderEditions();
+
+    if (window.lucide) {
+      lucide.createIcons();
+    } else {
+      console.error(
+        "Lucide did not load. Check your internet connection."
+      );
+    }
+  </script>
+
+</body>
+</html>
