@@ -4,196 +4,462 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Website</title>
 
-  <!-- Icon library -->
+  <title>My Website</title>
+  <meta name="theme-color" content="#11131b">
+  <meta name="description" content="My personal website">
+
+  <!-- Lucide icon library -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
+    /* =========================
+       CUSTOMIZATION
+    ========================= */
+
     :root {
-      /* Customize the header here */
-      --pill-bg: rgba(255, 255, 255, 0.12);
-      --pill-border: rgba(255, 255, 255, 0.25);
+      --pill-bg: rgba(255, 255, 255, 0.10);
+      --pill-border: rgba(255, 255, 255, 0.22);
       --icon-color: #ffffff;
       --icon-hover: rgba(255, 255, 255, 0.16);
+      --pill-blur: 20px;
       --pill-radius: 999px;
-      --pill-blur: 18px;
     }
 
-    
-  
-/* Header wrapper adapts to the screen */
-.header-wrapper {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  padding: clamp(10px, 2vw, 24px);
-  box-sizing: border-box;
-}
+    /* =========================
+       GLOBAL STYLES
+    ========================= */
 
-/* Pill expands with the available screen width */
-.pill-header {
-  display: flex;
-  align-items: center;
-  gap: clamp(6px, 1.2vw, 18px);
+    * {
+      box-sizing: border-box;
+    }
 
-  width: 100%;
-  max-width: 1100px;
-  min-width: 0;
-  box-sizing: border-box;
+    html {
+      min-height: 100%;
+      scroll-behavior: smooth;
+    }
 
-  padding: clamp(7px, 1.2vw, 14px)
-           clamp(10px, 2vw, 24px);
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #ffffff;
 
-  background: var(--pill-bg);
-  border: 1px solid var(--pill-border);
-  border-radius: 999px;
+      /* Gradient background */
+      background-color: #11131b;
+      background-image:
+        radial-gradient(
+          ellipse at 10% 0%,
+          rgba(105, 74, 190, 0.45),
+          transparent 45%
+        ),
+        radial-gradient(
+          ellipse at 100% 35%,
+          rgba(25, 132, 160, 0.35),
+          transparent 45%
+        ),
+        linear-gradient(
+          135deg,
+          #11131b 0%,
+          #171827 50%,
+          #101c27 100%
+        );
 
-  -webkit-backdrop-filter: blur(var(--pill-blur));
-  backdrop-filter: blur(var(--pill-blur));
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+    }
 
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-}
+    /* =========================
+       HEADER POSITIONING
+    ========================= */
 
-/* Logo */
-.brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
+    .header-wrapper {
+      display: flex;
+      justify-content: center;
+      width: 100%;
 
-  width: clamp(34px, 3.5vw, 48px);
-  height: clamp(34px, 3.5vw, 48px);
+      padding: clamp(10px, 2vw, 24px);
+    }
 
-  border-radius: 50%;
-  overflow: hidden;
-}
+    /* =========================
+       GLASS PILL
+    ========================= */
 
-.brand img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
+    .pill-header {
+      display: flex;
+      align-items: center;
 
-/* Website name */
-.brand-name {
-  color: var(--icon-color);
-  font-size: clamp(13px, 1.2vw, 17px);
-  font-weight: 700;
-  text-decoration: none;
-  white-space: nowrap;
-}
+      gap: clamp(6px, 1.2vw, 18px);
 
-/* Navigation icons */
-.nav-icons {
-  display: flex;
-  align-items: center;
-  gap: clamp(3px, 0.8vw, 12px);
+      /* Expand with available screen width */
+      width: 100%;
+      max-width: 1100px;
+      min-width: 0;
 
-  margin-left: auto;
-  min-width: 0;
-}
+      padding:
+        clamp(7px, 1.2vw, 14px)
+        clamp(10px, 2vw, 24px);
 
-.nav-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      border-radius: var(--pill-radius);
 
-  width: clamp(34px, 3.5vw, 48px);
-  height: clamp(34px, 3.5vw, 48px);
+      -webkit-backdrop-filter: blur(var(--pill-blur));
+      backdrop-filter: blur(var(--pill-blur));
 
-  color: var(--icon-color);
-  background: transparent;
-  border-radius: 50%;
-  text-decoration: none;
-  transition: background 0.2s, transform 0.2s;
-}
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
 
-.nav-icon:hover {
-  background: var(--icon-hover);
-  transform: translateY(-2px);
-}
+      transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+    }
 
-.nav-icon svg {
-  width: clamp(17px, 1.8vw, 23px);
-  height: clamp(17px, 1.8vw, 23px);
-  stroke-width: 1.8;
-}
+    /* =========================
+       REPLACEABLE LOGO
+    ========================= */
 
-/* Medium screens and tablets */
-@media (max-width: 700px) {
-  .header-wrapper {
-    padding: 12px;
-  }
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-  .pill-header {
-    max-width: none;
-    gap: 8px;
-    padding: 8px 12px;
-  }
+      flex: 0 0 auto;
 
-  .brand {
-    width: 38px;
-    height: 38px;
-  }
+      width: clamp(34px, 3.5vw, 48px);
+      height: clamp(34px, 3.5vw, 48px);
 
-  .brand-name {
-    font-size: 14px;
-  }
+      border-radius: 50%;
+      overflow: hidden;
 
-  .nav-icons {
-    gap: 3px;
-  }
+      text-decoration: none;
+    }
 
-  .nav-icon {
-    width: 38px;
-    height: 38px;
-  }
+    .brand img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
 
-  .nav-icon svg {
-    width: 19px;
-    height: 19px;
-  }
-}
+    /* =========================
+       WEBSITE NAME
+    ========================= */
 
-/* Small phones */
-@media (max-width: 420px) {
-  .header-wrapper {
-    padding: 10px;
-  }
+    .brand-name {
+      color: var(--icon-color);
 
-  .pill-header {
-    width: 100%;
-    gap: 6px;
-    padding: 7px 9px;
-  }
+      font-size: clamp(13px, 1.2vw, 17px);
+      font-weight: 700;
 
-  .brand {
-    width: 34px;
-    height: 34px;
-  }
+      text-decoration: none;
+      white-space: nowrap;
+    }
 
-  .brand-name {
-    display: none;
-  }
+    /* =========================
+       NAVIGATION ICONS
+    ========================= */
 
-  .nav-icons {
-    flex: 1;
-    justify-content: flex-end;
-    gap: 2px;
-  }
+    .nav-icons {
+      display: flex;
+      align-items: center;
 
-  .nav-icon {
-    flex: 1 1 0;
-    min-width: 0;
-    max-width: 44px;
-    height: 34px;
-  }
+      gap: clamp(3px, 0.8vw, 12px);
 
-  .nav-icon svg {
-    width: 18px;
-    height: 18px;
-  }
-}
-    
+      margin-left: auto;
+      min-width: 0;
+    }
+
+    .nav-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      flex: 0 0 auto;
+
+      width: clamp(34px, 3.5vw, 48px);
+      height: clamp(34px, 3.5vw, 48px);
+
+      color: var(--icon-color);
+      background: transparent;
+
+      border-radius: 50%;
+      text-decoration: none;
+
+      transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .nav-icon:hover {
+      background: var(--icon-hover);
+      transform: translateY(-2px);
+    }
+
+    .nav-icon svg {
+      display: block;
+
+      width: clamp(17px, 1.8vw, 23px);
+      height: clamp(17px, 1.8vw, 23px);
+
+      flex-shrink: 0;
+      stroke-width: 1.8;
+    }
+
+    .brand:focus-visible,
+    .nav-icon:focus-visible {
+      outline: 2px solid var(--icon-color);
+      outline-offset: 3px;
+    }
+
+    /* =========================
+       TABLETS AND SMALL LAPTOPS
+    ========================= */
+
+    @media (max-width: 700px) {
+      .header-wrapper {
+        padding: 12px;
+      }
+
+      .pill-header {
+        max-width: none;
+        gap: 8px;
+        padding: 8px 12px;
+      }
+
+      .brand {
+        width: 38px;
+        height: 38px;
+      }
+
+      .brand-name {
+        font-size: 14px;
+      }
+
+      .nav-icons {
+        gap: 3px;
+      }
+
+      .nav-icon {
+        width: 38px;
+        height: 38px;
+      }
+
+      .nav-icon svg {
+        width: 19px;
+        height: 19px;
+      }
+    }
+
+    /* =========================
+       MOBILE PHONES
+    ========================= */
+
+    @media (max-width: 420px) {
+      .header-wrapper {
+        padding: 10px;
+      }
+
+      .pill-header {
+        width: 100%;
+        max-width: none;
+
+        gap: 6px;
+        padding: 7px 9px;
+      }
+
+      .brand {
+        width: 34px;
+        height: 34px;
+      }
+
+      /* Hide name to save mobile space */
+      .brand-name {
+        display: none;
+      }
+
+      .nav-icons {
+        flex: 1;
+        justify-content: flex-end;
+        gap: 2px;
+      }
+
+      .nav-icon {
+        flex: 1 1 0;
+        min-width: 0;
+        max-width: 44px;
+        height: 34px;
+      }
+
+      .nav-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    /* =========================
+       VERY NARROW PHONES
+    ========================= */
+
+    @media (max-width: 350px) {
+      .header-wrapper {
+        padding: 8px 6px;
+      }
+
+      .pill-header {
+        gap: 2px;
+        padding: 5px;
+      }
+
+      .brand {
+        width: 30px;
+        height: 30px;
+      }
+
+      .nav-icons {
+        gap: 0;
+      }
+
+      .nav-icon {
+        height: 30px;
+      }
+
+      .nav-icon svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    /* Reduce animation for accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
+
+    /* =========================
+       PAGE CONTENT
+    ========================= */
+
+    main {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+
+      padding: clamp(28px, 6vw, 80px)
+               clamp(16px, 4vw, 32px);
+
+      text-align: center;
+    }
+
+    main h1 {
+      font-size: clamp(28px, 5vw, 56px);
+      margin-bottom: 16px;
+    }
+
+    main p {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: clamp(14px, 2vw, 18px);
+      line-height: 1.7;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       WEBSITE HEADER
+  ========================= -->
+
+  <header class="header-wrapper">
+    <nav class="pill-header" aria-label="Main navigation">
+
+      <!-- REPLACE LOGO IMAGE PATH HERE -->
+      <a
+        class="brand"
+        href="index.html"
+        aria-label="Home"
+      >
+        <img
+          src="Untitled41_20261024094922.png"
+          alt="Website logo"
+        >
+      </a>
+
+      <!-- CHANGE OR REMOVE WEBSITE NAME -->
+      <a class="brand-name" href="index.html">
+        My Website
+      </a>
+
+      <!-- NAVIGATION ICONS -->
+      <div class="nav-icons">
+
+        <a
+          class="nav-icon"
+          href="index.html"
+          aria-label="Home"
+          title="Home"
+        >
+          <i data-lucide="house"></i>
+        </a>
+
+        <a
+          class="nav-icon"
+          href="about.html"
+          aria-label="About"
+          title="About"
+        >
+          <i data-lucide="circle-user-round"></i>
+        </a>
+
+        <a
+          class="nav-icon"
+          href="projects.html"
+          aria-label="Projects"
+          title="Projects"
+        >
+          <i data-lucide="layout-grid"></i>
+        </a>
+
+        <a
+          class="nav-icon"
+          href="settings.html"
+          aria-label="Settings"
+          title="Settings"
+        >
+          <i data-lucide="settings"></i>
+        </a>
+
+      </div>
+    </nav>
+  </header>
+
+  <!-- =========================
+       MAIN WEBSITE CONTENT
+  ========================= -->
+
+  <main>
+    <h1>Welcome to my website</h1>
+
+    <p>
+      Customize this area with your own content,
+      projects, graphics, and interactive features.
+    </p>
+  </main>
+
+  <!-- Render navigation icons -->
+  <script>
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  </script>
+
+</body>
+</html>
