@@ -1,214 +1,212 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Typing Site</title>
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh; 
-            background: linear-gradient(135deg, #1e1e2f, #111119); /* Dark modern gradient */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Courier New', Courier, monospace; /* Monospace font works best for typing */
-            overflow: hidden;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Website</title>
 
-        .typing-container {
-            display: inline-block;
-        }
+  <!-- Icon library -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-        h1 {
-            color: #00ffcc; /* Neon teal color */
-            font-size: 3rem;
-            margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            border-right: 4px solid #00ffcc; /* The blinking cursor */
-            
-            /* Animations: typing effect happens once, cursor blinks forever */
-            animation: 
-                typing 3s steps(11, end) forwards,
-                blink 0.75s step-end infinite;
-        }
+  <style>
+    :root {
+      /* Customize the header here */
+      --pill-bg: rgba(255, 255, 255, 0.12);
+      --pill-border: rgba(255, 255, 255, 0.25);
+      --icon-color: #ffffff;
+      --icon-hover: rgba(255, 255, 255, 0.16);
+      --pill-radius: 999px;
+      --pill-blur: 18px;
+    }
 
-        /* Adjust font size for mobile phones so it doesn't wrap */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 1.8rem;
-                border-right: 3px solid #00ffcc;
-            }
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        /* The Typing Effect: animates width from 0 to 100% */
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: white;
+      background: #11131b;
+      background-image:
+        radial-gradient(at top left, #39345b, transparent 50%),
+        radial-gradient(at bottom right, #183d4b, transparent 50%);
+    }
 
-        /* The Cursor Blink Effect: toggles border color visibility */
-        @keyframes blink {
-            from, to { border-color: transparent; }
-            50% { border-color: #00ffcc; }
-        }
-    </style>
+    /* Header placement */
+    .header-wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    /* Rounded transparent rectangle */
+    .pill-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      min-height: 64px;
+
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      border-radius: var(--pill-radius);
+
+      -webkit-backdrop-filter: blur(var(--pill-blur));
+      backdrop-filter: blur(var(--pill-blur));
+
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      max-width: 100%;
+    }
+
+    /* Replaceable logo */
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      overflow: hidden;
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* Optional text beside the logo */
+    .brand-name {
+      color: var(--icon-color);
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      color: var(--icon-color);
+      background: transparent;
+      border-radius: 50%;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .nav-icon:hover {
+      background: var(--icon-hover);
+      transform: translateY(-2px);
+    }
+
+    .nav-icon svg {
+      width: 21px;
+      height: 21px;
+      stroke-width: 1.8;
+    }
+
+    .nav-icon:focus-visible,
+    .brand:focus-visible {
+      outline: 2px solid var(--icon-color);
+      outline-offset: 3px;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 480px) {
+      .pill-header {
+        gap: 4px;
+        padding: 6px 8px;
+      }
+
+      .brand {
+        width: 38px;
+        height: 38px;
+      }
+
+      .nav-icon {
+        width: 38px;
+        height: 38px;
+      }
+
+      .nav-icons {
+        gap: 1px;
+      }
+
+      .brand-name {
+        display: none;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-    <div class="typing-container">
-        <h1>Hello World</h1>
-    </div>
+  <header class="header-wrapper">
+    <nav class="pill-header" aria-label="Main navigation">
+
+      <!-- LOGO: Replace the image URL below -->
+      <a class="brand" href="index.html" aria-label="Home">
+        <img
+          src="assets/logo.png"
+          alt="Website logo"
+        >
+      </a>
+
+      <!-- OPTIONAL WEBSITE NAME: Remove this if unnecessary -->
+      <a class="brand-name" href="index.html">
+        My Website
+      </a>
+
+      <!-- NAVIGATION ICONS: Copy a link to add another icon -->
+      <div class="nav-icons">
+
+        <a class="nav-icon" href="index.html"
+           aria-label="Home" title="Home">
+          <i data-lucide="house"></i>
+        </a>
+
+        <a class="nav-icon" href="about.html"
+           aria-label="About" title="About">
+          <i data-lucide="circle-user-round"></i>
+        </a>
+
+        <a class="nav-icon" href="projects.html"
+           aria-label="Projects" title="Projects">
+          <i data-lucide="layout-grid"></i>
+        </a>
+
+        <a class="nav-icon" href="settings.html"
+           aria-label="Settings" title="Settings">
+          <i data-lucide="settings"></i>
+        </a>
+
+      </div>
+    </nav>
+  </header>
+
+  <main style="padding: 48px 20px; text-align: center;">
+    <h1>Welcome to my website</h1>
+    <p>Your content goes here.</p>
+  </main>
+
+  <script>
+    // Render all replaceable icons
+    lucide.createIcons();
+  </script>
 
 </body>
 </html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Website</title>
-    <style>
-        /* Base Reset & Background */
-        body {
-            margin: 0;
-            min-height: 100vh; 
-            background: linear-gradient(135deg, #1e1e2f, #111119);
-            font-family: 'Courier New', Courier, monospace;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* ------------------ HEADER STYLES ------------------ */
-        .site-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px); /* Frosted glass effect */
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Replaceable Logo Area */
-        .logo-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo-img {
-            height: 40px; /* Adjust height as needed */
-            width: auto;
-            object-fit: contain;
-        }
-
-        /* Navigation Buttons */
-        .nav-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .nav-btn {
-            background: transparent;
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 8px 16px;
-            font-family: inherit;
-            font-size: 0.9rem;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        /* Button Hover/Active State */
-        .nav-btn:hover {
-            background: #00ffcc;
-            color: #111119;
-            border-color: #00ffcc;
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-        }
-
-        /* ------------------ MAIN HERO STYLES ------------------ */
-        .main-content {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding-bottom: 10vh; /* Adjusts typewriter placement slightly up from dead center */
-        }
-
-        .typing-container {
-            display: inline-block;
-        }
-
-        h1 {
-            color: #00ffcc;
-            font-size: 3rem;
-            margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            border-right: 4px solid #00ffcc;
-            animation: 
-                typing 3s steps(11, end) forwards,
-                blink 0.75s step-end infinite;
-        }
-
-        /* Responsive adjustments for mobile screens */
-        @media (max-width: 600px) {
-            .site-header {
-                padding: 12px 4%;
-            }
-            .logo-img {
-                height: 32px;
-            }
-            .nav-btn {
-                padding: 6px 12px;
-                font-size: 0.8rem;
-            }
-            h1 {
-                font-size: 1.8rem;
-                border-right: 3px solid #00ffcc;
-            }
-        }
-
-        /* Animations */
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        @keyframes blink {
-            from, to { border-color: transparent; }
-            50% { border-color: #00ffcc; }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Clear Website Heading Section -->
-    <header class="site-header">
-        <div class="logo-container">
-            <!-- REPLACE LOGO: Change the src URL below to your own hosted image link -->
-            <img class="logo-img" src="https://placeholder.com" alt="Website Logo">
-        </div>
-        
-        <nav class="nav-buttons">
-            <a href="#" class="nav-btn">About</a>
-            <a href="#" class="nav-btn">Work</a>
-        </nav>
-    </header>
-
-    <!-- Main Content Area with your Typewriter Text -->
-    <main class="main-content">
-        <div class="typing-container">
-            <h1>Hello World</h1>
-        </div>
-    </main>
-
-</body>
-</html>
-
-
