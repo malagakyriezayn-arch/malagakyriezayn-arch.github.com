@@ -7,14 +7,15 @@
 
   <title>Eurovision Rewind</title>
   <meta name="description" content="Explore the Eurovision Rewind archive and its editions.">
+  <link rel="icon" href="images/logo.png">
 
   <!-- Montserrat font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Lucide icon library -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/lucide@0.460.0"></script>
 
   <style>
     :root {
@@ -60,6 +61,10 @@
       background-attachment: fixed;
     }
 
+    @media (hover: none) {
+      body { background-attachment: scroll; }
+    }
+
     body.archive-is-open {
       overflow: hidden;
     }
@@ -76,152 +81,94 @@
 
     /* HOMEPAGE-MATCHING NAVIGATION */
 
-.header-wrapper {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  padding: 18px;
-}
+    .header-wrapper {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      padding: 18px;
+    }
 
-.pill-header {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  max-width: 1100px;
-  min-height: 62px;
-  padding: 8px 16px;
-  background: var(--glass, rgba(255, 255, 255, 0.09));
-  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.20));
-  border-radius: 999px;
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
-}
+    .pill-header {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      max-width: 1100px;
+      min-height: 62px;
+      padding: 8px 16px;
+      background: var(--glass, rgba(255, 255, 255, 0.09));
+      border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.20));
+      border-radius: 999px;
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
 
-.brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: auto;
-  max-width: 125px;
-  height: 42px;
-  flex-shrink: 0;
-  text-decoration: none;
-}
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      max-width: 125px;
+      height: 42px;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
 
-.brand img {
-  display: block;
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-}
+    .brand img {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
 
-.nav-icons {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-left: auto;
-}
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-left: auto;
+    }
 
-.nav-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  color: white;
-  background: transparent;
-  border: 0;
-  border-radius: 50%;
-  text-decoration: none;
-  cursor: pointer;
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease;
-}
+    .nav-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      color: white;
+      background: transparent;
+      border: 0;
+      border-radius: 50%;
+      text-decoration: none;
+      cursor: pointer;
+      transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+    }
 
-.nav-icon:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-}
+    .nav-icon:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
 
-.nav-icon svg {
-  display: block;
-  width: 22px;
-  height: 22px;
-  flex-shrink: 0;
-  stroke: currentColor;
-  stroke-width: 1.8;
-}
+    .nav-icon svg {
+      display: block;
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+      stroke: currentColor;
+      stroke-width: 1.8;
+    }
 
-.nav-icon:focus-visible {
-  outline: 2px solid white;
-  outline-offset: 3px;
-}
-
-/* MOBILE NAVIGATION */
-
-@media (max-width: 700px) {
-  .header-wrapper {
-    padding: 12px;
-  }
-
-  .pill-header {
-    min-height: 54px;
-    padding: 6px 10px;
-  }
-
-  .brand {
-    max-width: 90px;
-    height: 36px;
-  }
-
-  .nav-icons {
-    gap: 2px;
-  }
-
-  .nav-icon {
-    width: 38px;
-    height: 38px;
-  }
-
-  .nav-icon svg {
-    width: 20px;
-    height: 20px;
-  }
-}
-
-/* SMALL PHONES */
-
-@media (max-width: 380px) {
-  .pill-header {
-    padding: 5px 7px;
-  }
-
-  .brand {
-    max-width: 62px;
-    height: 31px;
-  }
-
-  .nav-icons {
-    gap: 0;
-  }
-
-  .nav-icon {
-    width: 35px;
-    height: 35px;
-  }
-
-  .nav-icon svg {
-    width: 18px;
-    height: 18px;
-  }
+    .nav-icon:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 3px;
+    }
 
     /* =========================
        HOMEPAGE
@@ -305,37 +252,42 @@
       max-width: 590px;
       padding: clamp(25px, 5vw, 54px);
     }
+
     .featured-venue {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 18px 0;
-}
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 18px 0;
+    }
 
-.featured-heart-flag {
-  width: 26px;
-  height: 26px;
-  object-fit: contain;
-  flex-shrink: 0;
-}
+    .featured-heart-flag {
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
 
-.featured-venue-details {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-width: max-content;
-}
+    .featured-venue-details {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
 
-.featured-venue-label {
-  white-space: nowrap;
-  flex-shrink: 0;
-}
+    .featured-venue-label {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
 
-.featured-venue-city {
-  font-size: 14px;
-  font-weight: 600;
-  color: #ffffff;
-        }
+    .featured-venue-city {
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 600;
+    }
 
     .featured-label {
       display: inline-flex;
@@ -351,7 +303,7 @@
       border: 1px solid rgba(255, 255, 255, 0.19);
       border-radius: 999px;
 
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 700;
       letter-spacing: 1.2px;
       text-transform: uppercase;
@@ -388,7 +340,7 @@
 
       color: rgba(255, 255, 255, 0.78);
 
-      font-size: clamp(12px, 1.5vw, 14px);
+      font-size: clamp(13px, 1.5vw, 15px);
       line-height: 1.8;
     }
 
@@ -407,7 +359,7 @@
       border: 1px solid rgba(255, 255, 255, 0.8);
       border-radius: 999px;
 
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
       text-decoration: none;
 
@@ -687,6 +639,12 @@
         0 12px 35px rgba(0, 0, 0, 0.30);
     }
 
+    .edition-card:focus-visible,
+    .archive-close:focus-visible {
+      outline: 2px solid #ffffff;
+      outline-offset: 3px;
+    }
+
     .edition-image {
       position: absolute;
       inset: 0;
@@ -816,7 +774,7 @@
 
       color: rgba(255, 255, 255, 0.78);
 
-      font-size: clamp(10px, 1.2vw, 12px);
+      font-size: clamp(11px, 1.2vw, 13px);
 
       line-height: 1.5;
 
@@ -838,7 +796,7 @@
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 999px;
 
-      font-size: 9px;
+      font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.2px;
     }
@@ -914,7 +872,7 @@
       .featured-label {
         margin-bottom: 17px;
         padding: 7px 10px;
-        font-size: 9px;
+        font-size: 11px;
       }
 
       .featured-title {
@@ -928,13 +886,13 @@
 
       .featured-description {
         max-width: 270px;
-        font-size: 12px;
+        font-size: 13px;
       }
 
       .featured-button {
         min-height: 43px;
         padding: 0 15px;
-        font-size: 11px;
+        font-size: 12px;
       }
 
       /* ARCHIVE GRID */
@@ -961,7 +919,7 @@
       }
 
       .edition-country {
-        font-size: 11px;
+        font-size: 12px;
       }
 
       .country-flag {
@@ -971,13 +929,13 @@
       }
 
       .edition-song {
-        font-size: 10px;
+        font-size: 11px;
       }
 
       .edition-slogan {
         margin-top: 6px;
         padding: 4px 6px;
-        font-size: 8px;
+        font-size: 10px;
       }
     }
 
@@ -1031,7 +989,7 @@
 
       .featured-description {
         max-width: 235px;
-        font-size: 11px;
+        font-size: 12px;
       }
 
       .archive-overlay {
@@ -1065,7 +1023,7 @@
 
       .edition-country,
       .edition-song {
-        font-size: 9px;
+        font-size: 10px;
       }
 
       .country-flag {
@@ -1079,7 +1037,7 @@
       }
 
       .edition-slogan {
-        font-size: 8px;
+        font-size: 10px;
       }
     }
 
@@ -1114,7 +1072,7 @@
 
     <a class="brand" href="index.html" aria-label="Home">
       <img
-        src="IMG_20261024_195602.png"
+        src="images/logo.png"
         alt="Eurovision Rewind logo"
       >
     </a>
@@ -1126,6 +1084,7 @@
         class="nav-icon"
         href="index.html"
         aria-label="Home"
+        aria-current="page"
         title="Home"
       >
         <i data-lucide="house"></i>
@@ -1143,8 +1102,11 @@
 
       <!-- EDITION ARCHIVE -->
       <a
+        id="archive-open"
         class="nav-icon"
         href="index.html"
+        aria-haspopup="dialog"
+        aria-controls="archive-overlay"
         aria-label="Edition archive"
         title="Edition archive"
       >
@@ -1195,13 +1157,13 @@
 
         </span>
 
-        <h1
+        <h2
           class="featured-title"
           id="featured-title"
         >
           EUROVISION<br>
           REWIND 2029
-        </h1>
+        </h2>
 
         <p class="featured-city">
           ZÜRICH
@@ -1214,8 +1176,8 @@
   >
 
   <div class="featured-venue-details">
-    <span class="featured-venue-label">HOST CITY</span>
-    <span class="featured-venue-city">Zürich, Switzerland</span>
+    <span class="featured-venue-label">Host country</span>
+    <span class="featured-venue-city">Switzerland</span>
   </div>
         </div>
 
@@ -1410,7 +1372,7 @@
 
                   <img
                     class="edition-image"
-                    src="${escapeHTML(edition.image)}"
+                    src="${escapeHTML(encodeURI(edition.image))}"
                     alt="${escapeHTML(edition.year)} Eurovision Rewind edition"
                     loading="lazy"
                   >
@@ -1450,7 +1412,7 @@
 
                             <img
                               class="country-flag"
-                              src="${escapeHTML(edition.flag)}"
+                              src="${escapeHTML(encodeURI(edition.flag))}"
                               alt=""
                             >
 
@@ -1556,7 +1518,13 @@
 
     archiveOpen.addEventListener(
       "click",
-      openArchive
+      (event) => {
+
+        event.preventDefault();
+
+        openArchive();
+
+      }
     );
 
     archiveClose.addEventListener(
@@ -1589,12 +1557,36 @@
       "keydown",
       (event) => {
 
-        if (
-          event.key === "Escape" &&
-          archiveOverlay.classList.contains("open")
-        ) {
+        if (!archiveOverlay.classList.contains("open")) return;
+
+        if (event.key === "Escape") {
 
           closeArchive();
+          return;
+
+        }
+
+        /* Keep keyboard focus inside the dialog */
+
+        if (event.key === "Tab") {
+
+          const focusable =
+            archiveOverlay.querySelectorAll("a[href], button");
+
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+
+          if (event.shiftKey && document.activeElement === first) {
+
+            event.preventDefault();
+            last.focus();
+
+          } else if (!event.shiftKey && document.activeElement === last) {
+
+            event.preventDefault();
+            first.focus();
+
+          }
 
         }
 
@@ -1622,10 +1614,5 @@
     initializeIcons();
 
   </script>
-<script>
-  if (window.lucide) {
-    window.lucide.createIcons();
-  }
-</script>
 </body>
-  </html>
+</html>
