@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,12 +6,15 @@
   <meta name="theme-color" content="#171329">
 
   <title>Eurovision Rewind 2029 | Zürich</title>
+  <meta name="description" content="Eurovision Rewind 2029 in Zürich, Switzerland: edition overview, participating countries, running order and results.">
+  <link rel="icon" href="images/logo.png">
+  <noscript><style>.reveal { opacity: 1; transform: none; }</style></noscript>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/lucide@0.460.0"></script>
 
   <style>
     :root {
@@ -33,7 +35,7 @@
 
     html {
       scroll-behavior: smooth;
-      scroll-padding-top: 110px;
+      scroll-padding-top: 24px;
     }
 
     body {
@@ -46,6 +48,10 @@
         radial-gradient(ellipse at 100% 35%, rgba(52, 166, 175, .13), transparent 38%),
         linear-gradient(145deg, #171329, #101522 65%, #171329);
       background-attachment: fixed;
+    }
+
+    @media (hover: none) {
+      body { background-attachment: scroll; }
     }
 
     a {
@@ -188,7 +194,7 @@
       border-radius: 999px;
       background: rgba(255,255,255,.08);
       color: #e0d9ff;
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 700;
       letter-spacing: 1.3px;
       text-transform: uppercase;
@@ -225,7 +231,7 @@
       gap: 8px;
       margin-top: 15px;
       color: #e1deef;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 600;
     }
 
@@ -236,10 +242,10 @@
     }
 
     .hero-description {
-      max-width: 390px;
+      max-width: 440px;
       margin-top: 18px;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 14px;
       line-height: 1.9;
     }
 
@@ -258,7 +264,7 @@
       min-height: 44px;
       padding: 0 17px;
       border-radius: 999px;
-      font-size: 10px;
+      font-size: 13px;
       font-weight: 700;
       transition: transform .25s ease, background .25s ease;
     }
@@ -268,7 +274,7 @@
     }
 
     .button-primary {
-      background: linear-gradient(135deg, #8975f4, #5947b4);
+      background: linear-gradient(135deg, #6f5bd9, #4d3da6);
       box-shadow: 0 8px 25px rgba(99,78,203,.25);
     }
 
@@ -310,7 +316,7 @@
       border-radius: 999px;
       background: rgba(255,255,255,.08);
       color: #eeeaff;
-      font-size: 9px;
+      font-size: 11px;
       font-weight: 600;
       white-space: nowrap;
       backdrop-filter: blur(15px);
@@ -332,7 +338,6 @@
 
     .section {
       padding-top: 75px;
-      scroll-margin-top: 100px;
     }
 
     .section-heading {
@@ -344,7 +349,7 @@
     .section-kicker {
       margin-bottom: 10px;
       color: var(--teal);
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 800;
       letter-spacing: 2px;
       text-transform: uppercase;
@@ -360,7 +365,7 @@
       max-width: 530px;
       margin: 12px auto 0;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 14px;
       line-height: 1.9;
     }
 
@@ -414,23 +419,18 @@
 
     .glass-card h3 {
       margin-bottom: 9px;
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 800;
     }
 
     .glass-card p {
       color: var(--muted);
-      font-size: 11px;
+      font-size: 13px;
       line-height: 1.85;
     }
 
     .overview-card {
       text-align: center;
-    }
-
-    .overview-card .card-icon {
-      margin-left: auto;
-      margin-right: auto;
     }
 
     .status {
@@ -443,7 +443,7 @@
       border-radius: 999px;
       background: rgba(101,213,208,.08);
       color: var(--teal);
-      font-size: 9px;
+      font-size: 11px;
       font-weight: 700;
     }
 
@@ -464,11 +464,6 @@
 
     .feature-card {
       text-align: center;
-    }
-
-    .feature-card .card-icon {
-      margin-left: auto;
-      margin-right: auto;
     }
 
     /* SCROLL REVEAL */
@@ -497,7 +492,7 @@
       padding: 28px 0 35px;
       border-top: 1px solid rgba(255,255,255,.09);
       color: #aaa5c0;
-      font-size: 10px;
+      font-size: 12px;
     }
 
     .footer-inner {
@@ -535,6 +530,13 @@
 
       .card-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .flag-caption {
+        max-width: 125px;
+        justify-content: center;
+        white-space: normal;
+        text-align: center;
       }
     }
 
@@ -596,12 +598,12 @@
         position: relative;
         z-index: 2;
         width: 100%;
-        padding: 26px 22px;
+        padding: 26px 22px 78px;
       }
 
       .eyebrow {
         margin-bottom: 21px;
-        font-size: 9px;
+        font-size: 11px;
       }
 
       .hero h1 {
@@ -617,13 +619,13 @@
 
       .hero-venue {
         margin-top: 12px;
-        font-size: 11px;
+        font-size: 13px;
       }
 
       .hero-description {
-        max-width: 275px;
+        max-width: 300px;
         margin-top: 15px;
-        font-size: 11px;
+        font-size: 13px;
       }
 
       .hero-actions {
@@ -634,7 +636,7 @@
       .button {
         min-height: 41px;
         padding: 0 12px;
-        font-size: 9px;
+        font-size: 12px;
       }
 
       .hero-flag-wrap {
@@ -652,7 +654,9 @@
 
       .flag-caption {
         padding: 7px 9px;
-        font-size: 8px;
+        font-size: 10px;
+        max-width: none;
+        white-space: nowrap;
       }
 
       .section {
@@ -668,7 +672,7 @@
       }
 
       .section-heading p {
-        font-size: 11px;
+        font-size: 13px;
       }
 
       .card-grid {
@@ -689,15 +693,15 @@
       }
 
       .glass-card h3 {
-        font-size: 11px;
+        font-size: 13px;
       }
 
       .glass-card p {
-        font-size: 10px;
+        font-size: 12px;
       }
 
       .status {
-        font-size: 8px;
+        font-size: 10px;
         white-space: normal;
       }
 
@@ -762,8 +766,10 @@
       <a class="brand" href="index.html" aria-label="Eurovision Rewind home">
         <img
           class="brand-logo"
-          src="IMG_20261024_195602.png"
+          src="images/logo.png"
           alt="Eurovision Rewind logo"
+          width="43"
+          height="43"
         >
       </a>
 
@@ -822,8 +828,8 @@
         <p class="hero-city">ZÜRICH</p>
 
         <div class="hero-venue">
-          <i data-lucide="map-pin"></i>
-          <span>Zürich, Switzerland</span>
+          <i data-lucide="building-2"></i>
+          <span>Venue to be announced</span>
         </div>
 
         <p class="hero-description">
@@ -851,6 +857,7 @@
           class="hero-heart-flag"
           src="images/2029-heart-flag.png"
           alt="Switzerland heart flag"
+          decoding="async"
         >
 
         <span class="flag-caption">
@@ -915,7 +922,7 @@
         <article class="glass-card overview-card reveal"
                  style="--delay: 100ms">
           <div class="card-icon">
-            <i data-lucide="mic-2"></i>
+            <i data-lucide="mic-vocal"></i>
           </div>
           <h3>Presenters</h3>
           <p>To be announced</p>
@@ -969,7 +976,7 @@
           <div class="card-icon">
             <i data-lucide="music-2"></i>
           </div>
-          <h3>Entries & Songs</h3>
+          <h3>Entries &amp; Songs</h3>
           <p>
             Discover the artists, entries, and music
             videos of the contest.
@@ -989,7 +996,7 @@
 
       <div class="section-heading reveal">
         <p class="section-kicker">Follow the competition</p>
-        <h2>Shows & Results</h2>
+        <h2>Shows &amp; Results</h2>
         <p>
           Follow the running order, performances,
           voting, and final results.
@@ -1019,7 +1026,7 @@
           <div class="card-icon">
             <i data-lucide="trophy"></i>
           </div>
-          <h3>Voting & Results</h3>
+          <h3>Voting &amp; Results</h3>
           <p>
             Explore the jury scores, public votes,
             final rankings, and winning entry.
@@ -1081,38 +1088,48 @@
     }
 
     // Highlight the navigation item for the current section.
-    const navLinks = document.querySelectorAll(
-      '.nav-pill a[href^="#"]'
-    );
+    const navLinks = document.querySelectorAll('.nav-pill a[href^="#"]');
+    const sections = Array.from(document.querySelectorAll("main section[id]"));
 
-    const sections = document.querySelectorAll(
-      "main section[id]"
-    );
+    function updateNav() {
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 2;
+      const line = window.innerHeight * 0.3;
+      let current = sections[0].id;
 
-    if ("IntersectionObserver" in window) {
-      const navObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
+      if (atBottom) {
+        current = sections[sections.length - 1].id;
+      } else {
+        sections.forEach((section) => {
+          if (section.getBoundingClientRect().top <= line) {
+            current = section.id;
+          }
+        });
+      }
 
-            navLinks.forEach((link) => {
-              link.classList.toggle(
-                "active",
-                link.getAttribute("href") === "#" + entry.target.id
-              );
-            });
-          });
-        },
-        {
-          rootMargin: "-20% 0px -65% 0px",
-          threshold: 0
-        }
-      );
+      // The hero has no nav link of its own, so it maps to Overview.
+      if (current === "top") current = "overview";
 
-      sections.forEach((section) => {
-        navObserver.observe(section);
+      navLinks.forEach((link) => {
+        const isActive = link.getAttribute("href") === "#" + current;
+        link.classList.toggle("active", isActive);
+        if (isActive) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
       });
     }
+
+    let navTicking = false;
+    window.addEventListener("scroll", () => {
+      if (navTicking) return;
+      navTicking = true;
+      requestAnimationFrame(() => {
+        updateNav();
+        navTicking = false;
+      });
+    }, { passive: true });
+    window.addEventListener("resize", updateNav);
+    updateNav();
   </script>
 
 </body>
