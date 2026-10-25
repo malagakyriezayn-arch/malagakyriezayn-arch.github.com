@@ -248,6 +248,38 @@
       max-width: 590px;
       padding: clamp(25px, 5vw, 54px);
     }
+    .featured-venue {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.featured-heart-flag {
+  width: 66px;
+  height: 66px;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 12px rgba(0, 0, 0, 0.3));
+}
+
+.featured-venue-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.featured-venue-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #c9b9ff;
+}
+
+.featured-venue-city {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+        }
 
     .featured-label {
       display: inline-flex;
@@ -1126,6 +1158,18 @@
         <p class="featured-city">
           ZÜRICH
         </p>
+        <div class="featured-venue">
+  <img
+    class="featured-heart-flag"
+    src="images/2029-heart-flag.png"
+    alt="Switzerland heart flag"
+  >
+
+  <div class="featured-venue-details">
+    <span class="featured-venue-label">HOST CITY</span>
+    <span class="featured-venue-city">Zürich, Switzerland</span>
+  </div>
+        </div>
 
         <p class="featured-description">
           A new city, a new edition, and another chapter
