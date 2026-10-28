@@ -6,6 +6,6 @@ window.STATUS_CONFIG = {
   sheetCsvUrl: "https://docs.google.com/spreadsheets/d/e/YOUR-SHEET-ID/pub?output=csv",
 
   // OPTION B - Firebase (used by admin.html). Ignored when sheetCsvUrl is filled in.
-  dbUrl: "https://YOUR-PROJECT-default-rtdb.firebaseio.com",
-  apiKey: "YOUR-WEB-API-KEY"
+  dbUrl: "https://eurovision-rewind-default-rtdb.asia-southeast1.firebasedatabase.app",
+  apiKey: "AIzaSyCM4IK5oxAkZABIRSqov3aLyHivZk0cu6c"
 };
