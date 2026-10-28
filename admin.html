@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Status admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --lavender: #c9bdff;
+      --teal: #65d5d0;
+      --muted: #c2bfd6;
+      --border: rgba(255, 255, 255, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100dvh;
+      margin: 0;
+      padding: 28px 16px 60px;
+      color: #fff;
+      font-family: "Montserrat", sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(121, 102, 223, 0.28), transparent 38%),
+        radial-gradient(circle at 92% 12%, rgba(101, 213, 208, 0.14), transparent 34%),
+        linear-gradient(135deg, #11131b, #171827 55%, #101c27);
+      background-attachment: fixed;
+    }
+
+    .admin {
+      width: min(680px, 100%);
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    .intro {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .row {
+      margin-bottom: 14px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.075);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+    }
+
+    .row-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .row h2 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    /* Switch */
+    .switch {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .switch input {
+      position: absolute;
+      opacity: 0;
+    }
+
+    .track {
+      position: relative;
+      width: 46px;
+      height: 26px;
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+      transition: background 0.2s ease;
+    }
+
+    .track::after {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      content: "";
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s ease;
+    }
+
+    .switch input:checked + .track { background: #6f5bd9; }
+    .switch input:checked + .track::after { transform: translateX(20px); }
+    .switch input:focus-visible + .track { outline: 2px solid var(--lavender); outline-offset: 3px; }
+
+    .state { min-width: 78px; color: var(--teal); }
+    .is-open .state { color: var(--lavender); }
+
+    /* Fields */
+    .fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .field.wide { grid-column: 1 / -1; }
+
+    label span {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px 12px;
+      color: #fff;
+      font: 600 14px "Montserrat", sans-serif;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    input[type="text"]:focus-visible,
+    input[type="password"]:focus-visible {
+      outline: 2px solid var(--lavender);
+      outline-offset: 1px;
+    }
+
+    .warn {
+      display: none;
+      margin: 10px 0 0;
+      color: #ffd28a;
+      font-size: 12px;
+    }
+
+    .row.needs-link .warn { display: block; }
+
+    /* Actions */
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      padding: 12px 18px;
+      color: #fff;
+      font: 700 13px "Montserrat", sans-serif;
+      background: linear-gradient(135deg, #6f5bd9, #4d3da6);
+      border: 1px solid transparent;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .btn.ghost {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--border);
+    }
+
+    .btn:focus-visible { outline: 2px solid var(--lavender); outline-offset: 3px; }
+
+    .note {
+      min-height: 20px;
+      margin: 14px 0 0;
+      color: var(--teal);
+      font-size: 13px;
+    }
+
+    .steps {
+      margin: 26px 0 0;
+      padding: 16px 18px 16px 34px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    [hidden] { display: none !important; }
+
+    .bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .btn.small { padding: 8px 14px; font-size: 12px; }
+
+    .banner {
+      margin: 0 0 16px;
+      padding: 14px 16px;
+      color: #ffd28a;
+      font-size: 13px;
+      line-height: 1.7;
+      background: rgba(255, 210, 138, 0.08);
+      border: 1px solid rgba(255, 210, 138, 0.3);
+      border-radius: 12px;
+    }
+
+    .error { color: #ff9b9b; }
+
+    @media (max-width: 520px) {
+      .fields { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="admin">
+    <h1>Status admin</h1>
+    <p class="intro">
+      Switch a card between <strong>Coming soon</strong> and <strong>Open</strong>.
+      Each change saves instantly and goes live on the site automatically.
+    </p>
+
+    <p class="banner" id="setup" hidden>
+      Not connected yet. Fill in <code>status-config.js</code> with your Firebase
+      details, then reload this page.
+    </p>
+
+    <form class="row" id="login" hidden>
+      <div class="fields">
+        <label class="field wide">
+          <span>Email</span>
+          <input type="text" id="email" autocomplete="username" inputmode="email">
+        </label>
+        <label class="field wide">
+          <span>Password</span>
+          <input type="password" id="password" autocomplete="current-password">
+        </label>
+      </div>
+      <div class="actions">
+        <button class="btn" type="submit">Sign in</button>
+      </div>
+    </form>
+
+    <div id="panel" hidden>
+      <div class="bar">
+        <span id="who"></span>
+        <button class="btn ghost small" id="signout" type="button">Sign out</button>
+      </div>
+      <div id="rows"></div>
+    </div>
+
+    <p class="note" id="note" role="status"></p>
+  </main>
+
+  <script src="status-config.js"></script>
+  <script>
+    // Cards listed here must match the data-status-key values on the page.
+    const TITLES = {
+      "countries": "Country Profiles",
+      "entries": "Entries & Songs",
+      "running-order": "Running Order",
+      "voting": "Voting & Results"
+    };
+
+    const DEFAULTS = {
+      "countries":     { open: false, href: "countries.html",     soonText: "Coming soon", openText: "Open" },
+      "entries":       { open: false, href: "entries.html",       soonText: "Coming soon", openText: "Open" },
+      "running-order": { open: false, href: "running-order.html", soonText: "Coming soon", openText: "Open" },
+      "voting":        { open: false, href: "results.html",       soonText: "Available after the contest", openText: "Open" }
+    };
+
+    const CFG = window.STATUS_CONFIG || {};
+    const configured =
+      CFG.dbUrl && CFG.apiKey && !/YOUR-/.test(CFG.dbUrl + CFG.apiKey);
+
+    const DB_URL = (CFG.dbUrl || "").replace(/\/$/, "") + "/status.json";
+    const SIGN_IN_URL =
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + CFG.apiKey;
+    const REFRESH_URL =
+      "https://securetoken.googleapis.com/v1/token?key=" + CFG.apiKey;
+    const SESSION_KEY = "statusAdminSession";
+
+    let state = JSON.parse(JSON.stringify(DEFAULTS));
+    let session = null;
+
+    try {
+      session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+    } catch (error) {
+      session = null;
+    }
+
+    const $ = (id) => document.getElementById(id);
+    const rowsEl = $("rows");
+
+    function say(message, isError) {
+      $("note").textContent = message;
+      $("note").classList.toggle("error", Boolean(isError));
+    }
+
+    /* ---------- Sign in ---------- */
+
+    function saveSession(data) {
+      session = data;
+      localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    }
+
+    function signOut() {
+      session = null;
+      localStorage.removeItem(SESSION_KEY);
+      $("panel").hidden = true;
+      $("login").hidden = false;
+      say("");
+    }
+
+    async function signIn(email, password) {
+      const response = await fetch(SIGN_IN_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, returnSecureToken: true })
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error("Wrong email or password.");
+      }
+
+      saveSession({
+        email: data.email,
+        idToken: data.idToken,
+        refreshToken: data.refreshToken,
+        expiresAt: Date.now() + Number(data.expiresIn) * 1000
+      });
+    }
+
+    async function getToken() {
+      if (!session) throw new Error("Please sign in again.");
+
+      if (session.expiresAt - Date.now() > 60000) {
+        return session.idToken;
+      }
+
+      const response = await fetch(REFRESH_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "grant_type=refresh_token&refresh_token=" +
+              encodeURIComponent(session.refreshToken)
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        signOut();
+        throw new Error("Your session ended. Please sign in again.");
+      }
+
+      saveSession({
+        ...session,
+        idToken: data.id_token,
+        refreshToken: data.refresh_token,
+        expiresAt: Date.now() + Number(data.expires_in) * 1000
+      });
+
+      return session.idToken;
+    }
+
+    /* ---------- Save ---------- */
+
+    async function save() {
+      say("Saving...");
+
+      try {
+        const token = await getToken();
+        const response = await fetch(
+          DB_URL + "?auth=" + encodeURIComponent(token),
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(state)
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            response.status === 401
+              ? "Not allowed. Check the database rules and your email."
+              : "Could not save (error " + response.status + ")."
+          );
+        }
+
+        say("Saved. The site updates within about 15 seconds.");
+      } catch (error) {
+        say(error.message || "Could not save.", true);
+      }
+    }
+
+    /* ---------- Cards ---------- */
+
+    function field(key, prop, label, wide) {
+      return `
+        <label class="field${wide ? " wide" : ""}">
+          <span>${label}</span>
+          <input type="text" data-key="${key}" data-prop="${prop}" value="">
+        </label>`;
+    }
+
+    function render() {
+      rowsEl.innerHTML = Object.keys(TITLES).map((key) => `
+        <section class="row" data-row="${key}">
+          <div class="row-top">
+            <h2></h2>
+            <label class="switch">
+              <span class="state"></span>
+              <input type="checkbox" role="switch" data-key="${key}" data-prop="open">
+              <span class="track"></span>
+            </label>
+          </div>
+          <div class="fields">
+            ${field(key, "href", "Link (page or full URL)", true)}
+            ${field(key, "soonText", "Text when closed")}
+            ${field(key, "openText", "Text when open")}
+          </div>
+          <p class="warn">Add a link, otherwise this card will stay closed on the site.</p>
+        </section>`).join("");
+
+      Object.keys(TITLES).forEach((key) => {
+        const row = rowsEl.querySelector(`[data-row="${key}"]`);
+        row.querySelector("h2").textContent = TITLES[key];
+
+        row.querySelectorAll("input[type=text]").forEach((input) => {
+          input.value = state[key][input.dataset.prop] || "";
+        });
+
+        row.querySelector("input[type=checkbox]").checked = state[key].open;
+        refreshRow(key);
+      });
+    }
+
+    function refreshRow(key) {
+      const row = rowsEl.querySelector(`[data-row="${key}"]`);
+      const item = state[key];
+      row.classList.toggle("is-open", item.open);
+      row.classList.toggle("needs-link", item.open && !item.href.trim());
+      row.querySelector(".state").textContent = item.open ? "Open" : "Coming soon";
+    }
+
+    // Typing updates the screen; leaving a field or flipping a switch saves.
+    rowsEl.addEventListener("input", (event) => {
+      const { key, prop } = event.target.dataset;
+      if (!key) return;
+
+      state[key][prop] =
+        prop === "open" ? event.target.checked : event.target.value;
+
+      refreshRow(key);
+    });
+
+    rowsEl.addEventListener("change", (event) => {
+      if (event.target.dataset.key) save();
+    });
+
+    function merge(data) {
+      Object.keys(TITLES).forEach((key) => {
+        if (data && data[key]) {
+          state[key] = { ...DEFAULTS[key], ...data[key] };
+        }
+      });
+      render();
+    }
+
+    function showPanel() {
+      $("login").hidden = true;
+      $("panel").hidden = false;
+      $("who").textContent = "Signed in as " + (session.email || "admin");
+    }
+
+    /* ---------- Start ---------- */
+
+    $("login").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      say("Signing in...");
+
+      try {
+        await signIn($("email").value.trim(), $("password").value);
+        $("password").value = "";
+        say("");
+        showPanel();
+      } catch (error) {
+        say(error.message, true);
+      }
+    });
+
+    $("signout").addEventListener("click", signOut);
+
+    async function init() {
+      render();
+
+      if (!configured) {
+        $("setup").hidden = false;
+        return;
+      }
+
+      // Start from what is live right now.
+      try {
+        const response = await fetch(DB_URL, { cache: "no-store" });
+        if (response.ok) merge(await response.json());
+      } catch (error) {
+        say("Could not read the live settings.", true);
+      }
+
+      if (session) {
+        showPanel();
+      } else {
+        $("login").hidden = false;
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
