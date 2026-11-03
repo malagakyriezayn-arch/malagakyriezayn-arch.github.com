@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#171329">
+
+  <title>Voting matrix | Eurovision Rewind</title>
+  <meta name="description" content="Who gave points to whom in every Eurovision Rewind edition.">
+  <link rel="icon" href="images/logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@0.460.0"></script>
+
+  <style>
+    :root {
+      --white: #ffffff;
+      --border: rgba(255, 255, 255, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 24px;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: "Montserrat", sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(ellipse at 10% 0%, rgba(112, 83, 213, .25), transparent 40%),
+        radial-gradient(ellipse at 100% 35%, rgba(52, 166, 175, .13), transparent 38%),
+        linear-gradient(145deg, #171329, #101522 65%, #171329);
+      background-attachment: fixed;
+    }
+
+    @media (hover: none) {
+      body { background-attachment: scroll; }
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    /* NAVIGATION */
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 13px 5%;
+      background: rgba(19, 17, 39, .72);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+
+    .navbar {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .brand-logo {
+      width: 43px;
+      height: 43px;
+      object-fit: contain;
+    }
+
+    .nav-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.075);
+      box-shadow: 0 8px 30px rgba(0,0,0,.16);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      color: #d0ccdf;
+      font-size: 11px;
+      font-weight: 600;
+      transition: .25s ease;
+    }
+
+    .nav-link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .nav-link:hover {
+      color: white;
+      background: rgba(255,255,255,.09);
+    }
+
+    .nav-link.active {
+      color: white;
+      background: linear-gradient(135deg, #806be8, #5545ae);
+      box-shadow: 0 4px 18px rgba(103,81,210,.25);
+    }
+
+    .nav-home {
+      width: 40px;
+      padding: 0;
+    }
+
+    /* MAIN (empty - add your content here) */
+
+    main {
+      width: min(1180px, 94%);
+      margin: 0 auto;
+      padding: 30px 0 80px;
+    }
+
+    /* =========================
+       CUSTOM FONT
+       Put the font files in a "fonts" folder next to this page.
+    ========================= */
+
+    @font-face {
+      font-family: "ResultsFont";
+      src: url("fonts/Neulis-Light.otf") format("opentype");
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "ResultsFont";
+      src: url("fonts/Neulis-Regular.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "ResultsFont";
+      src: url("fonts/Neulis-Medium.otf") format("opentype");
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "ResultsFont";
+      src: url("fonts/Neulis-MediumItalic.otf") format("opentype");
+      font-weight: 500;
+      font-style: italic;
+      font-display: swap;
+    }
+
+    :root {
+      --artist-font: "ResultsFont", "Neulis", "Montserrat", sans-serif;
+      --muted: rgba(255, 255, 255, 0.7);
+      --line: rgba(255, 255, 255, 0.16);
+      --rank-bg: #7b2c8a;
+      --name-bg: #913e9f;
+      --board-bg: #571f64;
+    }
+
+    [hidden] { display: none !important; }
+
+    a:focus-visible,
+    button:focus-visible,
+    select:focus-visible {
+      outline: 2px solid #c9bdff;
+      outline-offset: 3px;
+    }
+
+    .page-head { margin-bottom: 22px; text-align: center; }
+
+    .page-head h1 {
+      color: #fff;
+      font-family: var(--artist-font);
+      font-size: clamp(36px, 7.5vw, 62px);
+      font-weight: 500;
+      letter-spacing: -1px;
+      line-height: 1.05;
+    }
+
+    .page-head p {
+      max-width: 580px;
+      margin: 12px auto 0;
+      color: var(--muted);
+      font-family: var(--artist-font);
+      font-size: clamp(14px, 2vw, 17px);
+      line-height: 1.7;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 5px 12px;
+      color: #ffd28a;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(255, 210, 138, 0.1);
+      border: 1px solid rgba(255, 210, 138, 0.3);
+      border-radius: 999px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .chips a,
+    .chips button {
+      min-width: 74px;
+      padding: 9px 18px;
+      color: #c2bfd6;
+      font: 700 13px "Montserrat", sans-serif;
+      letter-spacing: 0.6px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .chips a:hover,
+    .chips button:hover { color: #fff; background: rgba(255, 255, 255, 0.13); }
+
+    .chips .active {
+      color: #fff;
+      background: linear-gradient(135deg, #6f5bd9, #4d3da6);
+      border-color: transparent;
+    }
+
+    .empty {
+      padding: 40px 18px;
+      color: var(--muted);
+      font-family: var(--artist-font);
+      font-size: 17px;
+      text-align: center;
+    }
+
+    .heart-img {
+      flex: none;
+      width: 34px;
+      height: auto;
+      aspect-ratio: 10 / 9;
+      object-fit: contain;
+    }
+
+    select.pick {
+      padding: 10px 14px;
+      color: #fff;
+      font: 600 13px "Montserrat", sans-serif;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+    }
+
+    select.pick option { color: #000; }
+
+    /* =========================
+       VOTING MATRIX
+    ========================= */
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .seg { display: flex; gap: 6px; }
+
+    .seg button {
+      padding: 9px 16px;
+      color: #c2bfd6;
+      font: 700 12px "Montserrat", sans-serif;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .seg button.active {
+      color: #fff;
+      background: linear-gradient(135deg, #6f5bd9, #4d3da6);
+      border-color: transparent;
+    }
+
+    .matrix-wrap {
+      max-height: 78vh;
+      overflow: auto;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+
+    table.matrix {
+      border-collapse: separate;
+      border-spacing: 2px;
+      font-family: var(--artist-font);
+    }
+
+    .matrix th, .matrix td { text-align: center; }
+
+    .matrix thead th {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      padding: 6px 2px 4px;
+      background: #1b1830;
+    }
+
+    .matrix tbody th, .matrix tfoot th {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      padding: 3px 12px 3px 6px;
+      text-align: left;
+      white-space: nowrap;
+      background: #1b1830;
+    }
+
+    .matrix thead th:first-child { left: 0; z-index: 4; min-width: 150px; color: var(--muted); font-size: 11px; font-weight: 500; text-align: left; padding-left: 10px; }
+
+    .matrix tfoot th, .matrix tfoot td {
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
+      background: #1b1830;
+    }
+
+    .matrix tfoot th { z-index: 4; }
+
+    .matrix a.who {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .matrix a.who:hover { text-decoration: underline; }
+    .matrix .heart-img { width: 28px; }
+
+    .matrix a.col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 38px;
+      color: #fff;
+    }
+
+    .matrix a.col span {
+      max-height: 86px;
+      overflow: hidden;
+      font-size: 11px;
+      font-weight: 500;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      white-space: nowrap;
+    }
+
+    .matrix .tag {
+      margin-left: 4px;
+      padding: 1px 6px;
+      color: #ffd28a;
+      font-size: 10px;
+      border: 1px solid rgba(255, 210, 138, 0.4);
+      border-radius: 999px;
+    }
+
+    .matrix td {
+      min-width: 38px;
+      height: 38px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 7px;
+    }
+
+    .matrix td.self {
+      color: rgba(255, 255, 255, 0.25);
+      background: repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 4px, transparent 4px 8px);
+    }
+
+    .matrix td.has {
+      background: color-mix(in srgb, #a855f7 calc(var(--v) * 100%), rgba(255, 255, 255, 0.05));
+    }
+
+    .matrix td.top { color: #1b1830; font-weight: 700; background: #ffcf4a; }
+
+    .matrix tfoot td { font-weight: 700; }
+
+    .matrix th.hl, .matrix td.hl { outline: 2px solid rgba(255, 255, 255, 0.55); outline-offset: -2px; }
+    .matrix thead th.hl, .matrix tbody th.hl { background: #2b2552; }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 16px;
+      color: var(--muted);
+      font-family: var(--artist-font);
+      font-size: 13px;
+    }
+
+    .legend i {
+      display: inline-block;
+      width: 30px;
+      height: 22px;
+      color: #fff;
+      font-size: 12px;
+      font-style: normal;
+      line-height: 22px;
+      text-align: center;
+      background: color-mix(in srgb, #a855f7 calc(var(--v) * 100%), rgba(255, 255, 255, 0.05));
+      border-radius: 6px;
+    }
+
+    .legend i.top { color: #1b1830; font-weight: 700; background: #ffcf4a; }
+
+    .subnav { margin-top: 18px; text-align: center; font-size: 13px; }
+    .subnav a { margin: 0 8px; color: #d4c7ff; text-decoration: underline; text-underline-offset: 3px; }
+
+    /* MOBILE */
+
+    @media (max-width: 560px) {
+      .site-header {
+        padding: 10px 12px;
+      }
+
+      .navbar {
+        gap: 8px;
+      }
+
+      .brand-logo {
+        width: 35px;
+        height: 35px;
+      }
+
+      .nav-pill {
+        gap: 2px;
+        padding: 4px;
+      }
+
+      .nav-link {
+        min-height: 35px;
+        padding: 0 9px;
+        font-size: 0;
+      }
+
+      .nav-home {
+        width: 35px;
+      }
+
+      main {
+        width: 92%;
+        padding-top: 22px;
+        padding-bottom: 60px;
+      }
+    }
+
+    @media (max-width: 350px) {
+      .brand-logo {
+        width: 29px;
+        height: 29px;
+      }
+
+      .nav-link {
+        padding: 0 7px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *, *::before, *::after {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <header class="site-header">
+    <nav class="navbar" aria-label="Main navigation">
+
+      <a class="brand" href="index.html" aria-label="Eurovision Rewind home">
+        <img
+          class="brand-logo"
+          src="images/logo.png"
+          alt="Eurovision Rewind logo"
+          width="43"
+          height="43"
+        >
+      </a>
+
+      <div class="nav-pill">
+
+        <a class="nav-link nav-home"
+           href="index.html"
+           aria-label="Home"
+           title="Home">
+          <i data-lucide="house"></i>
+        </a>
+
+        <a class="nav-link"
+           href="2029.html#overview"
+           aria-label="Overview"
+           title="Overview">
+          <i data-lucide="layout-grid"></i>
+        </a>
+
+        <a class="nav-link"
+           href="2029.html#countries"
+           aria-label="Countries"
+           title="Countries">
+          <i data-lucide="flag"></i>
+        </a>
+
+        <a class="nav-link"
+           href="results.html#2029"
+           aria-label="Results"
+           title="Results">
+          <i data-lucide="trophy"></i>
+        </a>
+
+        <a class="nav-link"
+           href="artists.html"
+           aria-label="Artists"
+           title="Artists">
+          <i data-lucide="mic-vocal"></i>
+        </a>
+
+        <a class="nav-link"
+           href="participants.html"
+           aria-label="Participants"
+           title="Participants">
+          <i data-lucide="users"></i>
+        </a>
+
+        <a class="nav-link active"
+           href="matrix.html"
+           aria-label="Voting matrix"
+           title="Voting matrix"
+           aria-current="page">
+          <i data-lucide="grid-3x3"></i>
+        </a>
+
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-head">
+      <h1>Voting matrix</h1>
+      <p>Who gave points to whom. Tap a heart to open that country's page.</p>
+      <span class="badge" id="badge" hidden>Sample data - it disappears when you publish real votes</span>
+    </section>
+
+    <nav class="chips" id="years" aria-label="Choose an edition"></nav>
+
+    <div class="controls">
+      <select class="pick" id="show" aria-label="Show"></select>
+      <div class="seg" id="groups" role="group" aria-label="Type of points"></div>
+    </div>
+
+    <div class="matrix-wrap" id="wrap">
+      <table class="matrix" id="matrix"></table>
+    </div>
+
+    <p class="empty" id="empty" hidden></p>
+
+    <div class="legend" id="legend" aria-hidden="true"></div>
+
+    <p class="subnav">
+      <a href="results.html">Results</a>
+      <a href="participants.html">Participants</a>
+      <a href="country.html">All countries</a>
+    </p>
+  </main>
+
+  <script src="status-config.js"></script>
+  <script src="site-common.js"></script>
+  <script>
+    (function () {
+      const $ = (id) => document.getElementById(id);
+
+      let results = {};
+      let usingSample = false;
+      let year = 0;
+      let showName = "Grand Final";
+      let group = "total";
+
+      function readData() {
+        results = RW.normalizeResults(RW.cached("results"));
+
+        const hasRows = Object.values(results).some(
+          (edition) => edition.grand.length || edition.rounds.some((round) => round.rows.length));
+
+        usingSample = !hasRows;
+        if (usingSample) results = RW.normalizeResults(RW.sampleResults());
+      }
+
+      const showsOf = (y) => {
+        const edition = results[y];
+        if (!edition) return [];
+        return [{ name: "Grand Final", rows: edition.grand }, ...edition.rounds]
+          .filter((show) => show.rows.length);
+      };
+
+      const link = (name) => "country.html?c=" + encodeURIComponent(RW.slug(name));
+
+      function pickDefaults() {
+        const [hashYear, hashShow] = location.hash.replace("#", "").split("/");
+        const years = RW.editions(results, {}).map((edition) => edition.year);
+        const withVotes = years.filter((y) => showsOf(y).length);
+
+        year = years.includes(Number(hashYear)) ? Number(hashYear) : (withVotes[withVotes.length - 1] || years[years.length - 1]);
+
+        const shows = showsOf(year);
+        const wanted = decodeURIComponent(hashShow || "");
+        const match = shows.find((show) => RW.slug(show.name) === wanted || show.name === wanted);
+        showName = match ? match.name : (shows.find((show) => show.name === "Grand Final") || shows[0] || { name: "Grand Final" }).name;
+      }
+
+      function setHash() {
+        history.replaceState(null, "", location.pathname + "#" + year +
+          (showName === "Grand Final" ? "" : "/" + RW.slug(showName)));
+      }
+
+      function renderControls(shows, groups) {
+        const years = RW.editions(results, {});
+        $("years").innerHTML = "";
+        years.forEach((edition) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = edition.year;
+          button.classList.toggle("active", edition.year === year);
+          button.addEventListener("click", () => {
+            year = edition.year;
+            const next = showsOf(year);
+            showName = (next.find((show) => show.name === "Grand Final") || next[0] || { name: "Grand Final" }).name;
+            setHash();
+            render();
+          });
+          $("years").append(button);
+        });
+
+        $("show").innerHTML = "";
+        shows.forEach((show) => $("show").append(new Option(show.name, show.name)));
+        $("show").value = showName;
+        $("show").hidden = shows.length < 2;
+
+        $("groups").innerHTML = "";
+        const options = groups.length > 1
+          ? [{ key: "total", label: "Total" }, ...groups]
+          : groups.map((item) => ({ key: item.key, label: item.label }));
+
+        if (!options.some((item) => item.key === group)) group = options.length ? options[0].key : "total";
+
+        options.forEach((item) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = item.label;
+          button.classList.toggle("active", item.key === group);
+          button.addEventListener("click", () => { group = item.key; render(); });
+          $("groups").append(button);
+        });
+        $("groups").hidden = options.length < 2;
+      }
+
+      function who(name, rows, withName, extra) {
+        const anchor = document.createElement("a");
+        anchor.href = link(name);
+        anchor.className = "who";
+        anchor.title = name;
+        const row = rows.find((item) => RW.same(item.country, name));
+        anchor.append(RW.heartImg(name, "heart-img", row && row.heart));
+
+        if (withName) {
+          const label = document.createElement("span");
+          label.textContent = name;
+          anchor.append(label);
+          if (extra) {
+            const tag = document.createElement("span");
+            tag.className = "tag";
+            tag.textContent = extra;
+            anchor.append(tag);
+          }
+        }
+        return anchor;
+      }
+
+      function render() {
+        const shows = showsOf(year);
+        const show = shows.find((item) => item.name === showName) || shows[0];
+        const rows = show ? show.rows : [];
+        const groups = RW.groupsWithVotes(rows);
+
+        renderControls(shows, groups);
+        $("badge").hidden = !usingSample;
+        $("matrix").innerHTML = "";
+
+        if (!show || !groups.length) {
+          $("wrap").hidden = true;
+          $("legend").hidden = true;
+          $("empty").hidden = false;
+          $("empty").textContent = "The votes for this edition haven't been published yet.";
+          return;
+        }
+
+        $("wrap").hidden = false;
+        $("legend").hidden = false;
+        $("empty").hidden = true;
+
+        const receivers = rows.filter((row) => !row.voterOnly);
+        const givers = receivers.concat(rows.filter((row) => row.voterOnly));
+        const max = group === "total" ? 12 * groups.length : 12;
+        const table = $("matrix");
+
+        // Header: one heart per receiving country
+        const head = table.createTHead().insertRow();
+        const corner = document.createElement("th");
+        corner.textContent = "Gave ↓ / got →";
+        head.append(corner);
+
+        receivers.forEach((receiver) => {
+          const th = document.createElement("th");
+          const anchor = document.createElement("a");
+          anchor.href = link(receiver.country);
+          anchor.className = "col";
+          anchor.title = receiver.country;
+          anchor.append(RW.heartImg(receiver.country, "heart-img", receiver.heart));
+          const label = document.createElement("span");
+          label.textContent = receiver.country;
+          anchor.append(label);
+          th.append(anchor);
+          head.append(th);
+        });
+
+        // Body: one row per voting country
+        const body = table.createTBody();
+        const totals = receivers.map(() => 0);
+
+        givers.forEach((giver) => {
+          const tr = body.insertRow();
+          const th = document.createElement("th");
+          th.scope = "row";
+          th.append(who(giver.country, rows, true, giver.voterOnly ? "voter" : ""));
+          tr.append(th);
+
+          receivers.forEach((receiver, column) => {
+            const td = tr.insertCell();
+
+            if (RW.same(giver.country, receiver.country)) {
+              td.className = "self";
+              td.textContent = "–";
+              return;
+            }
+
+            const points = RW.pointsFor(giver, receiver.country, group);
+            if (!points) return;
+
+            totals[column] += points;
+            td.textContent = points;
+            td.className = "has" + (points === max ? " top" : "");
+            td.style.setProperty("--v", Math.max(0.2, points / max).toFixed(2));
+            td.title = giver.country + " → " + receiver.country + ": " + points + " points";
+          });
+        });
+
+        // Footer: totals worked out from the votes
+        const foot = table.createTFoot().insertRow();
+        const label = document.createElement("th");
+        label.textContent = "Total";
+        foot.append(label);
+        totals.forEach((total) => { foot.insertCell().textContent = total || ""; });
+
+        // Highlight the row and column under the finger or mouse
+        let marked = [];
+        table.onmouseover = (event) => {
+          const cell = event.target.closest("td");
+          marked.forEach((element) => element.classList.remove("hl"));
+          marked = [];
+          if (!cell) return;
+
+          const rowHeader = cell.parentElement.firstElementChild;
+          const columnHeader = head.children[cell.cellIndex];
+          marked = [rowHeader, columnHeader, cell];
+          marked.forEach((element) => element.classList.add("hl"));
+        };
+        table.onmouseleave = () => { marked.forEach((element) => element.classList.remove("hl")); marked = []; };
+
+        // Legend
+        const steps = group === "total" ? [2, 6, 12, 18, 24].filter((value) => value <= max) : [1, 3, 5, 8, 10, 12];
+        $("legend").innerHTML = "Points: ";
+        steps.forEach((value) => {
+          const box = document.createElement("i");
+          box.textContent = value;
+          box.style.setProperty("--v", Math.max(0.2, value / max).toFixed(2));
+          if (value === max) box.className = "top";
+          $("legend").append(box);
+        });
+
+        if (window.lucide) window.lucide.createIcons();
+      }
+
+      $("show").addEventListener("change", () => { showName = $("show").value; setHash(); render(); });
+      window.addEventListener("hashchange", () => { pickDefaults(); render(); });
+
+      readData();
+      pickDefaults();
+      render();
+
+      RW.load("hearts").then(render);
+      RW.load("results").then(() => { readData(); pickDefaults(); render(); });
+    })();
+
+    if (window.lucide) window.lucide.createIcons();
+  </script>
+
+</body>
+</html>
