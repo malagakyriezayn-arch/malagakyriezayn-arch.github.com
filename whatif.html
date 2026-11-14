@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#171329">
+
+  <title>What if? | Eurovision Rewind</title>
+  <meta name="description" content="Change how the points count and watch the Eurovision Rewind scoreboard re-order.">
+  <link rel="icon" href="images/logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@0.460.0"></script>
+
+  <style>
+    :root {
+      --white: #ffffff;
+      --border: rgba(255, 255, 255, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 24px;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: "Montserrat", sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(ellipse at 10% 0%, rgba(112, 83, 213, .25), transparent 40%),
+        radial-gradient(ellipse at 100% 35%, rgba(52, 166, 175, .13), transparent 38%),
+        linear-gradient(145deg, #171329, #101522 65%, #171329);
+      background-attachment: fixed;
+    }
+
+    @media (hover: none) {
+      body { background-attachment: scroll; }
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    /* NAVIGATION */
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 13px 5%;
+      background: rgba(19, 17, 39, .72);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+
+    .navbar {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .brand-logo {
+      width: 43px;
+      height: 43px;
+      object-fit: contain;
+    }
+
+    .nav-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.075);
+      box-shadow: 0 8px 30px rgba(0,0,0,.16);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      color: #d0ccdf;
+      font-size: 11px;
+      font-weight: 600;
+      transition: .25s ease;
+    }
+
+    .nav-link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .nav-link:hover {
+      color: white;
+      background: rgba(255,255,255,.09);
+    }
+
+    .nav-link.active {
+      color: white;
+      background: linear-gradient(135deg, #806be8, #5545ae);
+      box-shadow: 0 4px 18px rgba(103,81,210,.25);
+    }
+
+    .nav-home {
+      width: 40px;
+      padding: 0;
+    }
+
+    /* MAIN (empty - add your content here) */
+
+    main {
+      width: min(1180px, 94%);
+      margin: 0 auto;
+      padding: 30px 0 80px;
+    }
+
+    /* =========================
+       CUSTOM FONT
+       Put the font files in a "fonts" folder next to this page.
+    ========================= */
+
+    @font-face {
+      font-family: "ResultsFont";
+      src: url("fonts/Neulis-Light.otf") format("opentype");
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "ResultsFont";
+      src: url("fonts/Neulis-Regular.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "ResultsFont";
+      src: url("fonts/Neulis-Medium.otf") format("opentype");
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "ResultsFont";
+      src: url("fonts/Neulis-MediumItalic.otf") format("opentype");
+      font-weight: 500;
+      font-style: italic;
+      font-display: swap;
+    }
+
+    :root {
+      --artist-font: "ResultsFont", "Neulis", "Montserrat", sans-serif;
+      --muted: rgba(255, 255, 255, 0.7);
+      --line: rgba(255, 255, 255, 0.16);
+      --rank-bg: #7b2c8a;
+      --name-bg: #913e9f;
+      --board-bg: #571f64;
+    }
+
+    [hidden] { display: none !important; }
+
+    a:focus-visible,
+    button:focus-visible,
+    select:focus-visible {
+      outline: 2px solid #c9bdff;
+      outline-offset: 3px;
+    }
+
+    .page-head { margin-bottom: 22px; text-align: center; }
+
+    .page-head h1 {
+      color: #fff;
+      font-family: var(--artist-font);
+      font-size: clamp(36px, 7.5vw, 62px);
+      font-weight: 500;
+      letter-spacing: -1px;
+      line-height: 1.05;
+    }
+
+    .page-head p {
+      max-width: 580px;
+      margin: 12px auto 0;
+      color: var(--muted);
+      font-family: var(--artist-font);
+      font-size: clamp(14px, 2vw, 17px);
+      line-height: 1.7;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 5px 12px;
+      color: #ffd28a;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(255, 210, 138, 0.1);
+      border: 1px solid rgba(255, 210, 138, 0.3);
+      border-radius: 999px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .chips a,
+    .chips button {
+      min-width: 74px;
+      padding: 9px 18px;
+      color: #c2bfd6;
+      font: 700 13px "Montserrat", sans-serif;
+      letter-spacing: 0.6px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .chips a:hover,
+    .chips button:hover { color: #fff; background: rgba(255, 255, 255, 0.13); }
+
+    .chips .active {
+      color: #fff;
+      background: linear-gradient(135deg, #6f5bd9, #4d3da6);
+      border-color: transparent;
+    }
+
+    .empty {
+      padding: 40px 18px;
+      color: var(--muted);
+      font-family: var(--artist-font);
+      font-size: 17px;
+      text-align: center;
+    }
+
+    .heart-img {
+      flex: none;
+      width: 34px;
+      height: auto;
+      aspect-ratio: 10 / 9;
+      object-fit: contain;
+    }
+
+    select.pick {
+      padding: 10px 14px;
+      color: #fff;
+      font: 600 13px "Montserrat", sans-serif;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+    }
+
+    select.pick option { color: #000; }
+
+    /* =========================
+       WHAT IF? SIMULATOR
+    ========================= */
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .seg { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+
+    .seg button {
+      padding: 9px 16px;
+      color: #c2bfd6;
+      font: 700 12px "Montserrat", sans-serif;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .seg button.active {
+      color: #fff;
+      background: linear-gradient(135deg, #6f5bd9, #4d3da6);
+      border-color: transparent;
+    }
+
+    .panel {
+      margin-bottom: 20px;
+      padding: 18px 20px;
+      font-family: var(--artist-font);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+    }
+
+    .mix { margin-bottom: 14px; }
+
+    .mix-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .mix-top b { font-weight: 500; }
+    .mix-top .j { color: #c9b8ff; }
+    .mix-top .t { color: #ffcf8a; }
+
+    input[type="range"].mixer {
+      width: 100%;
+      height: 10px;
+      appearance: none;
+      -webkit-appearance: none;
+      background: linear-gradient(90deg, #a78bfa var(--p, 50%), #ffcf8a var(--p, 50%));
+      border-radius: 999px;
+      outline: none;
+    }
+
+    input[type="range"].mixer::-webkit-slider-thumb {
+      width: 26px;
+      height: 26px;
+      appearance: none;
+      -webkit-appearance: none;
+      background: #fff;
+      border: 3px solid #4d3da6;
+      border-radius: 50%;
+      cursor: grab;
+    }
+
+    input[type="range"].mixer::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      background: #fff;
+      border: 3px solid #4d3da6;
+      border-radius: 50%;
+      cursor: grab;
+    }
+
+    input[type="range"].mixer:disabled { opacity: 0.4; }
+    .mix .note { margin-top: 6px; color: var(--muted); font-size: 12px; }
+
+    .options { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; }
+    .options label { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
+
+    .stepper { display: inline-flex; align-items: center; gap: 8px; }
+
+    .stepper button, .mini {
+      padding: 6px 12px;
+      color: #fff;
+      font: 700 13px "Montserrat", sans-serif;
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .stepper output { min-width: 24px; color: #fff; font-size: 16px; text-align: center; }
+
+    details.voters { margin-top: 14px; }
+    details.voters summary { color: #d4c7ff; font-size: 13px; font-weight: 500; letter-spacing: 1px; cursor: pointer; }
+
+    .chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+
+    .voter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px 4px 6px;
+      color: #fff;
+      font: 500 13px var(--artist-font);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: opacity 0.2s ease, background 0.2s ease;
+    }
+
+    .voter .heart-img { width: 22px; }
+    .voter.off { opacity: 0.35; text-decoration: line-through; }
+    .voter small { color: #ffd28a; font-size: 10px; }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+
+    .sim-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) { .sim-layout { grid-template-columns: 1fr; } }
+
+    /* The scoreboard: rows glide to their new places */
+    #board { position: relative; }
+
+    .srow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      height: 54px;
+      color: #fff;
+      font-family: var(--artist-font);
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.6s cubic-bezier(.3, .8, .25, 1);
+      animation: fade 0.5s ease backwards;
+      animation-delay: calc(var(--i, 0) * 30ms);
+    }
+
+    @keyframes fade { from { opacity: 0; } }
+
+    .srow .rk, .srow .sc {
+      display: flex;
+      flex: none;
+      align-items: center;
+      justify-content: center;
+      background: var(--rank-bg);
+    }
+
+    .srow .rk { width: 54px; font-size: 20px; }
+    .srow .sc { width: 82px; font-size: 20px; }
+
+    .srow .nm {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      padding: 0 12px;
+      background: var(--name-bg);
+      transition: background 0.3s ease;
+    }
+
+    .srow .heart-img { width: 36px; }
+    .srow .tx { flex: 1; min-width: 0; line-height: 1.15; }
+    .srow .t { display: block; overflow: hidden; font-size: 17px; text-overflow: ellipsis; white-space: nowrap; }
+    .srow small { display: block; color: rgba(255, 255, 255, 0.78); font-size: 12px; font-weight: 400; }
+
+    .chg { flex: none; font-family: "Montserrat", sans-serif; font-size: 11px; font-weight: 700; }
+    .chg.up { color: #7dffb0; }
+    .chg.down { color: #ff9b9b; }
+
+    .srow.win .rk { background: #e0a920; color: #1b1830; }
+    .srow.win .sc { background: #e0a920; color: #1b1830; }
+    .srow.out { opacity: 0.45; }
+    .srow.picked .nm { background: #a550b6; }
+    .srow:hover .nm { background: #a24eb2; }
+
+    .qline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 0;
+      border-top: 2px dashed #7dffb0;
+      transition: top 0.4s ease;
+      pointer-events: none;
+    }
+
+    .qline span {
+      position: absolute;
+      right: 0;
+      top: -20px;
+      color: #7dffb0;
+      font: 700 10px "Montserrat", sans-serif;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .card {
+      margin-bottom: 14px;
+      padding: 16px 18px;
+      font-family: var(--artist-font);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+    }
+
+    .card h2 {
+      margin-bottom: 10px;
+      color: #d4c7ff;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .card.alert { border-color: rgba(255, 207, 74, 0.55); background: rgba(255, 207, 74, 0.08); }
+
+    .winner { display: flex; align-items: center; gap: 12px; }
+    .winner .heart-img { width: 52px; }
+    .winner b { display: block; font-size: 24px; font-weight: 500; line-height: 1.1; }
+    .winner small { color: var(--muted); font-size: 13px; }
+
+    .kv { display: flex; justify-content: space-between; gap: 10px; margin-top: 8px; color: var(--muted); font-size: 14px; }
+    .kv b { color: #fff; font-weight: 500; text-align: right; }
+    .kv .heart-img { width: 20px; vertical-align: middle; }
+
+    .support { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 14px; }
+    .support .heart-img { width: 24px; }
+    .support span:nth-child(2) { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .foot { margin-top: 18px; color: var(--muted); font-family: var(--artist-font); font-size: 12px; line-height: 1.6; text-align: center; }
+    .subnav { margin-top: 18px; text-align: center; font-size: 13px; }
+    .subnav a { margin: 0 8px; color: #d4c7ff; text-decoration: underline; text-underline-offset: 3px; }
+
+    /* MOBILE */
+
+    @media (max-width: 560px) {
+      .site-header {
+        padding: 10px 12px;
+      }
+
+      .navbar {
+        gap: 8px;
+      }
+
+      .brand-logo {
+        width: 35px;
+        height: 35px;
+      }
+
+      .nav-pill {
+        gap: 2px;
+        padding: 4px;
+      }
+
+      .nav-link {
+        min-height: 35px;
+        padding: 0 9px;
+        font-size: 0;
+      }
+
+      .nav-home {
+        width: 35px;
+      }
+
+      main {
+        width: 92%;
+        padding-top: 22px;
+        padding-bottom: 60px;
+      }
+    }
+
+    @media (max-width: 350px) {
+      .brand-logo {
+        width: 29px;
+        height: 29px;
+      }
+
+      .nav-link {
+        padding: 0 7px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *, *::before, *::after {
+        transition: none !important;
+      }
+    }
+  
+    /* Many pages, one navigation bar: on small screens the icons scroll sideways */
+    @media (max-width: 700px) {
+      .navbar { min-width: 0; }
+
+      .nav-pill {
+        min-width: 0;
+        max-width: calc(100vw - 96px);
+        overflow-x: auto;
+        scroll-snap-type: x proximity;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .nav-pill::-webkit-scrollbar { display: none; }
+      .nav-link { flex: none; scroll-snap-align: center; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <header class="site-header">
+    <nav class="navbar" aria-label="Main navigation">
+
+      <a class="brand" href="index.html" aria-label="Eurovision Rewind home">
+        <img
+          class="brand-logo"
+          src="images/logo.png"
+          alt="Eurovision Rewind logo"
+          width="43"
+          height="43"
+        >
+      </a>
+
+      <div class="nav-pill">
+
+        <a class="nav-link nav-home"
+           href="index.html"
+           aria-label="Home"
+           title="Home">
+          <i data-lucide="house"></i>
+        </a>
+
+        <a class="nav-link"
+           href="2029.html#overview"
+           aria-label="Overview"
+           title="Overview">
+          <i data-lucide="layout-grid"></i>
+        </a>
+
+        <a class="nav-link"
+           href="2029.html#countries"
+           aria-label="Countries"
+           title="Countries">
+          <i data-lucide="flag"></i>
+        </a>
+
+        <a class="nav-link"
+           href="results.html#2029"
+           aria-label="Results"
+           title="Results">
+          <i data-lucide="trophy"></i>
+        </a>
+
+        <a class="nav-link"
+           href="artists.html"
+           aria-label="Artists"
+           title="Artists">
+          <i data-lucide="mic-vocal"></i>
+        </a>
+
+        <a class="nav-link"
+           href="participants.html"
+           aria-label="Participants"
+           title="Participants">
+          <i data-lucide="users"></i>
+        </a>
+
+        <a class="nav-link"
+           href="matrix.html"
+           aria-label="Voting matrix"
+           title="Voting matrix">
+          <i data-lucide="grid-3x3"></i>
+        </a>
+
+        <a class="nav-link"
+           href="records.html"
+           aria-label="Records and hall of fame"
+           title="Records and hall of fame">
+          <i data-lucide="award"></i>
+        </a>
+
+        <a class="nav-link"
+           href="blocs.html"
+           aria-label="Voting blocs"
+           title="Voting blocs">
+          <i data-lucide="network"></i>
+        </a>
+
+        <a class="nav-link active"
+           href="whatif.html"
+           aria-label="What if?"
+           title="What if?"
+           aria-current="page">
+          <i data-lucide="sliders-horizontal"></i>
+        </a>
+
+        <a class="nav-link"
+           href="voting.html"
+           aria-label="Jury and televote panel"
+           title="Jury and televote panel">
+          <i data-lucide="vote"></i>
+        </a>
+
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-head">
+      <h1>What if?</h1>
+      <p>Change how the points count and watch the scoreboard re-order itself. Try a different jury and televote mix, a different points scale, or leave a country out of the voting.</p>
+      <span class="badge" id="badge" hidden>Sample data - it disappears when you publish real votes</span>
+    </section>
+
+    <nav class="chips" id="years" aria-label="Choose an edition"></nav>
+
+    <div class="controls-row">
+      <select class="pick" id="show" aria-label="Show"></select>
+      <div class="seg" id="presets" role="group" aria-label="Quick settings"></div>
+    </div>
+
+    <section class="panel" id="panel">
+      <div class="mix">
+        <div class="mix-top">
+          <span class="j"><b id="jLabel">Jury 50%</b></span>
+          <span class="t"><b id="tLabel">Televote 50%</b></span>
+        </div>
+        <input class="mixer" id="mixer" type="range" min="0" max="100" step="5" value="50" aria-label="Share of the jury in the total">
+        <p class="note" id="mixNote"></p>
+      </div>
+
+      <div class="options">
+        <label>Points scale
+          <select class="pick" id="scale"></select>
+        </label>
+        <label id="qWrap" hidden>Qualifiers
+          <span class="stepper">
+            <button type="button" id="qDown" aria-label="One fewer qualifier">−</button>
+            <output id="qOut">10</output>
+            <button type="button" id="qUp" aria-label="One more qualifier">+</button>
+          </span>
+        </label>
+      </div>
+
+      <details class="voters" id="votersBox">
+        <summary id="votersSummary">Who votes</summary>
+        <div class="chip-row" id="voters"></div>
+        <div class="actions">
+          <button type="button" class="mini" id="votersAll">Everyone</button>
+          <button type="button" class="mini" id="votersNoExtra">Without extra voters</button>
+          <button type="button" class="mini" id="votersNone">No one</button>
+        </div>
+      </details>
+
+      <div class="actions">
+        <button type="button" class="mini" id="reset">Reset</button>
+        <button type="button" class="mini" id="copy">Copy link to this scenario</button>
+      </div>
+    </section>
+
+    <p class="empty" id="empty" hidden></p>
+
+    <div class="sim-layout" id="layout">
+      <div id="boardWrap"><div id="board" role="list"></div></div>
+      <aside id="side" aria-live="polite"></aside>
+    </div>
+
+    <p class="foot">Scores are counted again from the published votes, so they can differ slightly from the official points. Tap a country to see where its points came from.</p>
+
+    <p class="subnav">
+      <a href="results.html">Results</a>
+      <a href="matrix.html">Voting matrix</a>
+      <a href="blocs.html">Voting blocs</a>
+      <a href="records.html">Records</a>
+    </p>
+  </main>
+
+  <script src="status-config.js"></script>
+  <script>
+
+
+/* Shows a message on the page instead of leaving it blank if something goes wrong. */
+window.addEventListener("error", function (event) {
+  var main = document.querySelector("main");
+  if (!main || main.dataset.errorShown) return;
+  main.dataset.errorShown = "1";
+  var note = document.createElement("p");
+  note.className = "empty";
+  note.textContent = "Something went wrong while loading this page: " + event.message;
+  main.prepend(note);
+});
+
+/* =========================================================
+   Eurovision Rewind - shared helpers
+   Used by participants.html, matrix.html and country.html
+   (and, if present, by artists.html and results.html for heart flags).
+
+   Keep this file in the same folder as the pages, next to status-config.js.
+========================================================= */
+
+(function () {
+  "use strict";
+
+  const CFG = window.STATUS_CONFIG || {};
+  const configured = Boolean(CFG.dbUrl && CFG.apiKey && !/YOUR-/.test(CFG.dbUrl + CFG.apiKey));
+  const BASE = (CFG.dbUrl || "").replace(/\/$/, "");
+
+  /* ---------- Heart flags ----------
+     Every country is shown by a heart image. The file is found from the country name:
+       "North Macedonia" -> images/hearts/north-macedonia.png
+     A different file can be set for any country with participants.html?add (Hearts tab). */
+
+  const HEART_FOLDER = "images/hearts/";
+  const HEART_EXT = ".png";
+
+  const VOTE_GROUPS = [
+    { key: "jury", label: "Jury" },
+    { key: "tele", label: "Televote" }
+  ];
+  const VOTE_POINTS = [12, 10, 8, 7, 6, 5, 4, 3, 2, 1];
+
+  // Editions that always exist. More can be added with results.html?data.
+  const EDITIONS_BASE = [
+    { year: 2026, city: "Vienna, Austria" },
+    { year: 2027, city: "Zagreb, Croatia" },
+    { year: 2028, city: "Yerevan, Armenia" },
+    { year: 2029, city: "Zürich, Switzerland" }
+  ];
+
+  const listOf = (value) => Array.isArray(value) ? value : Object.values(value || {});
+
+  const same = (a, b) =>
+    String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
+
+  function slug(name) {
+    return String(name || "")
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase().replace(/&/g, "and")
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  }
+
+  function safeImage(value) {
+    const text = String(value || "").trim();
+    if (!text) return "";
+    if (/^data:image\/(png|jpe?g|webp|gif|svg\+xml)[;,]/i.test(text)) return text;
+    if (/^https?:\/\//i.test(text)) return text;
+    if (/^[a-z][a-z0-9+.-]*:/i.test(text)) return "";
+    return text;
+  }
+
+  const imageSrc = (value) => {
+    const safe = safeImage(value);
+    return /^data:/i.test(safe) ? safe : encodeURI(safe).replace(/%25([0-9A-F]{2})/g, "%$1");
+  };
+
+  /* ---------- Loading data (cached in the browser, refreshed from the database) ---------- */
+
+  const NODES = {
+    hearts: "hearts",
+    results: "results-data",
+    participants: "participants",
+    artists: "artists"
+  };
+
+  const store = {};
+
+  function cached(name) {
+    if (name in store) return store[name];
+    try {
+      store[name] = JSON.parse(localStorage.getItem("rw:" + name) || "null");
+    } catch (error) {
+      store[name] = null;
+    }
+    return store[name];
+  }
+
+  function keep(name, data) {
+    store[name] = data;
+    try {
+      if (data && Object.keys(data).length) localStorage.setItem("rw:" + name, JSON.stringify(data));
+      else localStorage.removeItem("rw:" + name);
+    } catch (error) { /* storage full or blocked */ }
+  }
+
+  function load(name) {
+    if (!configured) return Promise.resolve(cached(name));
+
+    return fetch(BASE + "/" + NODES[name] + ".json", { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => { keep(name, data); return data; })
+      .catch(() => cached(name));
+  }
+
+  /* ---------- Heart lookups ---------- */
+
+  // Preview a set of heart replacements without saving it in the browser.
+  const setHearts = (map) => { store.hearts = map; };
+
+  const heartMap = () => {
+    const raw = cached("hearts");
+    return raw && typeof raw === "object" ? raw : {};
+  };
+
+  // override (a row's own heart) -> the replacement set for this country -> images/hearts/<country>.png
+  function heartPath(country, override) {
+    return safeImage(override) || safeImage(heartMap()[slug(country)]) || HEART_FOLDER + slug(country) + HEART_EXT;
+  }
+
+  // A missing image keeps its space but stays invisible.
+  function heartImg(country, className, override) {
+    const image = document.createElement("img");
+    image.className = className || "heart-img";
+    image.src = imageSrc(heartPath(country, override));
+    image.alt = "";
+    image.decoding = "async";
+    image.addEventListener("error", () => { image.style.visibility = "hidden"; });
+    return image;
+  }
+
+  /* ---------- Results and votes ---------- */
+
+  function cleanVotes(votes) {
+    if (!votes) return undefined;
+    const out = {};
+
+    VOTE_GROUPS.forEach(({ key }) => {
+      const raw = votes[key];
+      if (!raw) return;
+      const list = listOf(raw);
+      const names = VOTE_POINTS.map((_, i) => String(list[i] || "").trim());
+      if (names.some(Boolean)) out[key] = names;
+    });
+
+    return Object.keys(out).length ? out : undefined;
+  }
+
+  function normRow(item) {
+    return {
+      country: String(item.country),
+      points: item.points,
+      ...(item.heart ? { heart: String(item.heart) } : {}),
+      ...(item.voterOnly ? { voterOnly: true } : {}),
+      ...(cleanVotes(item.votes) ? { votes: cleanVotes(item.votes) } : {})
+    };
+  }
+
+  // { 2028: { city, grand: [rows], rounds: [{ name, rows }] } }
+  function normalizeResults(data) {
+    const out = {};
+
+    Object.keys(data || {}).forEach((year) => {
+      if (!Number.isInteger(Number(year))) return;
+      const value = data[year];
+      const rows = (list) => listOf(list).filter((item) => item && item.country).map(normRow);
+
+      out[year] = {
+        city: value && !Array.isArray(value) && value.city ? String(value.city) : "",
+        grand: Array.isArray(value) ? rows(value) : rows(value && value.grand),
+        rounds: Array.isArray(value) ? [] : listOf(value && value.rounds)
+          .filter((round) => round && round.name)
+          .map((round) => ({ name: String(round.name), rows: rows(round.rows) }))
+      };
+    });
+
+    return out;
+  }
+
+  // Points one country gave another. group: "jury", "tele" or "total" (all groups added together).
+  function pointsFor(giver, receiver, group) {
+    const keys = group === "total" ? VOTE_GROUPS.map((item) => item.key) : [group];
+    let sum = 0;
+
+    keys.forEach((key) => {
+      const list = (giver.votes && giver.votes[key]) || [];
+      const position = list.findIndex((name) => same(name, receiver));
+      if (position >= 0) sum += VOTE_POINTS[position];
+    });
+
+    return sum;
+  }
+
+  const groupsWithVotes = (rows) =>
+    VOTE_GROUPS.filter(({ key }) => rows.some((row) => row.votes && row.votes[key]));
+
+  /* ---------- Editions ---------- */
+
+  // Every year that has a name, results or participants.
+  function editions(results, participants) {
+    const map = new Map(EDITIONS_BASE.map((edition) => [edition.year, edition.city]));
+
+    Object.keys(results || {}).forEach((year) => {
+      const city = results[year].city;
+      if (city) map.set(Number(year), city);
+      else if (!map.has(Number(year))) map.set(Number(year), "");
+    });
+
+    Object.keys(participants || {}).forEach((year) => {
+      if (Number.isInteger(Number(year)) && !map.has(Number(year))) map.set(Number(year), "");
+    });
+
+    return [...map.entries()].map(([year, city]) => ({ year, city })).sort((a, b) => a.year - b.year);
+  }
+
+  /* ---------- Participants ---------- */
+
+  function normEntry(item) {
+    const number = (value) => (Number.isFinite(Number(value)) && value !== "" && value !== null ? Number(value) : 0);
+
+    return {
+      country: String(item.country || "").trim().slice(0, 60),
+      artist: String(item.artist || "").trim().slice(0, 80),
+      song: String(item.song || "").trim().slice(0, 100),
+      semi: String(item.semi || "").trim().slice(0, 40),
+      inFinal: item.inFinal === undefined ? true : Boolean(item.inFinal),
+      semiOrder: number(item.semiOrder),
+      finalOrder: number(item.finalOrder)
+    };
+  }
+
+  // { 2029: [entries] }
+  function normalizeParticipants(data) {
+    const out = {};
+
+    Object.keys(data || {}).forEach((year) => {
+      if (!Number.isInteger(Number(year))) return;
+      const value = data[year];
+      const list = listOf(Array.isArray(value) ? value : value && value.entries)
+        .filter((item) => item && item.country)
+        .map(normEntry);
+      if (list.length) out[year] = list;
+    });
+
+    return out;
+  }
+
+  /* ---------- Demo data (shown only until you publish real results) ---------- */
+
+  const SAMPLE = [
+    ["France", 248], ["Ukraine", 177], ["Georgia", 176], ["Armenia", 175],
+    ["Spain", 152], ["Albania", 145], ["North Macedonia", 141], ["Poland", 139],
+    ["Netherlands", 93], ["Malta", 92], ["Italy", 73], ["Portugal", 73],
+    ["Croatia", 70], ["Azerbaijan", 66], ["Cyprus", 50], ["Montenegro", 49]
+  ];
+
+  function sampleResults() {
+    const names = SAMPLE.map(([name]) => name);
+    const hash = (text) => [...text].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+
+    const pick = (name, index, seed) => names
+      .filter((other) => other !== name)
+      .map((other) => [other, (hash(other) * (index + 3) + seed * 7) % 97])
+      .sort((a, b) => a[1] - b[1])
+      .slice(0, 10)
+      .map(([other]) => other);
+
+    const rows = SAMPLE.map(([country, points], index) =>
+      normRow({ country, points, votes: { jury: pick(country, index, 1), tele: pick(country, index, 5) } }));
+
+    return { 2028: { city: "Yerevan, Armenia", grand: rows, rounds: [], sample: true } };
+  }
+
+  function sampleParticipants() {
+    return {
+      2028: SAMPLE.map(([country], index) => normEntry({
+        country,
+        artist: "Artist",
+        song: "Song Title",
+        semi: index < 8 ? "Semi-final 1" : "Semi-final 2",
+        inFinal: true,
+        semiOrder: (index % 8) + 1,
+        finalOrder: index + 1
+      }))
+    };
+  }
+
+  /* ---------- Admin sign-in (the same login as the other editors) ---------- */
+
+  const SESSION_KEY = "statusAdminSession";
+  let session = null;
+
+  try { session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null"); } catch (error) { session = null; }
+
+  function saveSession(next) {
+    session = next;
+    if (next) localStorage.setItem(SESSION_KEY, JSON.stringify(next));
+    else localStorage.removeItem(SESSION_KEY);
+  }
+
+  async function signIn(email, password) {
+    const response = await fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + CFG.apiKey,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, returnSecureToken: true })
+      }
+    );
+    const data = await response.json();
+    if (!response.ok) throw new Error("Wrong email or password.");
+
+    saveSession({
+      email: data.email,
+      idToken: data.idToken,
+      refreshToken: data.refreshToken,
+      expiresAt: Date.now() + Number(data.expiresIn) * 1000
+    });
+  }
+
+  async function getToken() {
+    if (!session) throw new Error("Sign in first.");
+    if (session.expiresAt - Date.now() > 60000) return session.idToken;
+
+    const response = await fetch(
+      "https://securetoken.googleapis.com/v1/token?key=" + CFG.apiKey,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "grant_type=refresh_token&refresh_token=" + encodeURIComponent(session.refreshToken)
+      }
+    );
+    const data = await response.json();
+
+    if (!response.ok) {
+      saveSession(null);
+      throw new Error("Your session ended. Please sign in again.");
+    }
+
+    saveSession({
+      ...session,
+      idToken: data.id_token,
+      refreshToken: data.refresh_token,
+      expiresAt: Date.now() + Number(data.expires_in) * 1000
+    });
+
+    return session.idToken;
+  }
+
+  // Writes a whole node ("participants", "hearts") to the database.
+  async function publish(name, payload) {
+    const token = await getToken();
+    const response = await fetch(BASE + "/" + NODES[name] + ".json?auth=" + encodeURIComponent(token), {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      let detail = "";
+      try { detail = (await response.json()).error || ""; } catch (error) { detail = ""; }
+
+      throw new Error(
+        /permission/i.test(detail)
+          ? 'Permission denied. Add the "' + NODES[name] + '" rule in Firebase (see the instructions) and Publish.'
+          : "Could not save (error " + response.status + (detail ? ": " + detail : "") + ")."
+      );
+    }
+
+    keep(name, payload);
+  }
+
+  window.RW = {
+    configured,
+    HEART_FOLDER, HEART_EXT, VOTE_GROUPS, VOTE_POINTS, EDITIONS_BASE,
+    listOf, same, slug, safeImage, imageSrc,
+    cached, load, keep, setHearts, heartMap, heartPath, heartImg,
+    cleanVotes, normRow, normalizeResults, pointsFor, groupsWithVotes,
+    editions, normEntry, normalizeParticipants,
+    sampleResults, sampleParticipants,
+    signedIn: () => Boolean(session),
+    userEmail: () => (session && session.email) || "",
+    signIn, signOut: () => saveSession(null), publish
+  };
+})();
+
+  
+  </script>
+  <script>
+    (function () {
+      const $ = (id) => document.getElementById(id);
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const el = (tag, className, text) => {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text !== undefined) element.textContent = text;
+        return element;
+      };
+
+      const ROW = 54;
+      const STEP = 60;
+
+      const SCALES = {
+        standard: { label: "Standard (12-10-8...)", values: [12, 10, 8, 7, 6, 5, 4, 3, 2, 1] },
+        top5: { label: "Top 5 only", values: [12, 10, 8, 7, 6, 0, 0, 0, 0, 0] },
+        linear: { label: "Linear (10 to 1)", values: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1] },
+        bonus: { label: "Winner bonus (15-10-8...)", values: [15, 10, 8, 7, 6, 5, 4, 3, 2, 1] },
+        podium: { label: "Podium only (5-3-1)", values: [5, 3, 1, 0, 0, 0, 0, 0, 0, 0] }
+      };
+
+      const fmt = (value) => String(Math.round(value * 10) / 10);
+      const ordinal = (n) => n + (["th", "st", "nd", "rd"][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)]);
+      const link = (name) => "country.html?c=" + encodeURIComponent(RW.slug(name));
+
+      /* ---------- Data ---------- */
+
+      let results = {};
+      let usingSample = false;
+
+      // Made-up votes (including two semi-finals), used only until real votes are published
+      function demo() {
+        const families = [
+          ["Albania", "North Macedonia", "Croatia", "Montenegro"],
+          ["Georgia", "Armenia", "Azerbaijan", "Ukraine", "Poland"],
+          ["Spain", "Portugal", "France", "Italy"],
+          ["Malta", "Cyprus", "Netherlands"]
+        ];
+        const family = (name) => families.findIndex((list) => list.includes(name));
+        const hash = (text) => [...text].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+
+        const make = (finalists, extras) => {
+          const votes = (name, index, seed) => finalists
+            .filter((other) => other !== name)
+            .map((other) => [other, (family(other) === family(name) ? 45 : 0) + ((hash(other) * (index + 3 + seed * 3)) % 31)])
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 10)
+            .map(([other]) => other);
+
+          const rows = finalists.map((country, index) => ({ country, points: 0, votes: { jury: votes(country, index, 1), tele: votes(country, index, 4) } }))
+            .concat(extras.map((country, index) => ({ country, points: 0, voterOnly: true, votes: { jury: votes(country, index + 20, 2), tele: votes(country, index + 20, 6) } })));
+
+          const normal = RW.normalizeResults({ 1: { grand: rows } })[1].grand;
+          const finalistRows = normal.filter((row) => !row.voterOnly);
+          finalistRows.forEach((row) => { row.points = normal.reduce((sum, giver) => sum + RW.pointsFor(giver, row.country, "total"), 0); });
+          finalistRows.sort((a, b) => b.points - a.points);
+          return finalistRows.concat(normal.filter((row) => row.voterOnly));
+        };
+
+        const names = ["France", "Ukraine", "Georgia", "Armenia", "Spain", "Albania", "North Macedonia", "Poland",
+          "Netherlands", "Malta", "Italy", "Portugal", "Croatia", "Azerbaijan", "Cyprus", "Montenegro"];
+
+        return {
+          2028: {
+            city: "Yerevan, Armenia",
+            grand: make(names, ["Sweden", "Norway"]),
+            rounds: [
+              { name: "Semi-final 1", rows: make(names.slice(0, 8), ["Greece", "Sweden"]) },
+              { name: "Semi-final 2", rows: make(names.slice(8), ["Norway", "Finland"]) }
+            ]
+          }
+        };
+      }
+
+      function readData() {
+        results = RW.normalizeResults(RW.cached("results"));
+        const hasVotes = Object.values(results).some((edition) =>
+          edition.grand.some((row) => row.votes) || edition.rounds.some((round) => round.rows.some((row) => row.votes)));
+
+        usingSample = !hasVotes;
+        if (usingSample) results = RW.normalizeResults(demo());
+      }
+
+      // Only shows that have votes can be simulated
+      const showsOf = (year) => {
+        const edition = results[year];
+        if (!edition) return [];
+        return [{ name: "Grand Final", rows: edition.grand }, ...edition.rounds]
+          .filter((show) => show.rows.some((row) => row.votes));
+      };
+
+      const yearsWithVotes = () => Object.keys(results).map(Number).filter((y) => showsOf(y).length).sort((a, b) => a - b);
+
+      /* ---------- The scenario ---------- */
+
+      const DEFAULTS = () => ({ j: 50, scale: "standard", q: null, off: new Set(), official: false, sel: "" });
+      let state = { year: 0, show: "Grand Final", ...DEFAULTS() };
+
+      const showNow = () => showsOf(state.year).find((show) => show.name === state.show) || showsOf(state.year)[0];
+      const isFinal = (show) => show.name === "Grand Final";
+      const defaultQ = (n) => (n >= 14 ? 10 : Math.max(1, Math.ceil(n * 0.6)));
+
+      function readHash() {
+        const [path, query] = location.hash.replace("#", "").split("?");
+        const [yearText, showText] = path.split("/");
+        const years = yearsWithVotes();
+
+        state.year = years.includes(Number(yearText)) ? Number(yearText) : years[years.length - 1];
+
+        const shows = showsOf(state.year);
+        const wanted = decodeURIComponent(showText || "");
+        const match = shows.find((show) => RW.slug(show.name) === wanted || show.name === wanted);
+        state.show = (match || shows.find((show) => show.name === "Grand Final") || shows[0]).name;
+
+        Object.assign(state, DEFAULTS());
+        const params = new URLSearchParams(query || "");
+
+        if (params.has("j")) state.j = Math.min(100, Math.max(0, Number(params.get("j")) || 0));
+        if (SCALES[params.get("s")]) state.scale = params.get("s");
+        if (params.has("q")) state.q = Number(params.get("q")) || null;
+        if (params.get("o") === "1") state.official = true;
+        if (params.get("off")) params.get("off").split(",").filter(Boolean).forEach((key) => state.off.add(key));
+        if (params.get("c")) state.sel = params.get("c");
+      }
+
+      function writeHash() {
+        const params = new URLSearchParams();
+        const base = DEFAULTS();
+
+        if (state.j !== base.j) params.set("j", state.j);
+        if (state.scale !== base.scale) params.set("s", state.scale);
+        if (state.q) params.set("q", state.q);
+        if (state.official) params.set("o", "1");
+        if (state.off.size) params.set("off", [...state.off].join(","));
+        if (state.sel) params.set("c", state.sel);
+
+        const query = params.toString();
+        history.replaceState(null, "", location.pathname + location.search + "#" + state.year + "/" + RW.slug(state.show) + (query ? "?" + query : ""));
+      }
+
+      /* ---------- The sums ---------- */
+
+      function compute(show) {
+        const rows = show.rows;
+        const receivers = rows.filter((row) => !row.voterOnly);
+        const givers = rows.filter((giver) => !state.off.has(RW.slug(giver.country)));
+        const keys = RW.groupsWithVotes(rows).map((group) => group.key);
+        const hasJury = keys.includes("jury");
+        const hasTele = keys.includes("tele");
+        const both = hasJury && hasTele;
+        const wj = both ? state.j / 100 : (hasJury ? 0.5 : 0);
+        const wt = both ? 1 - wj : (hasTele ? 0.5 : 0);
+        const scale = SCALES[state.scale].values;
+
+        const given = (giver, name, key) => {
+          const list = (giver.votes && giver.votes[key]) || [];
+          const position = list.findIndex((other) => RW.same(other, name));
+          return position >= 0 ? scale[position] : 0;
+        };
+
+        const items = receivers.map((row, index) => {
+          let jury = 0;
+          let tele = 0;
+          const from = [];
+
+          givers.forEach((giver) => {
+            if (RW.same(giver.country, row.country)) return;
+            const pj = given(giver, row.country, "jury");
+            const pt = given(giver, row.country, "tele");
+            jury += pj;
+            tele += pt;
+            const part = 2 * (wj * pj + wt * pt);
+            if (part) from.push({ name: giver.country, heart: giver.heart, points: part });
+          });
+
+          return {
+            key: RW.slug(row.country), name: row.country, heart: row.heart,
+            officialIndex: index, officialPoints: Number(row.points) || 0,
+            jury, tele, from: from.sort((a, b) => b.points - a.points),
+            score: state.official ? (Number(row.points) || 0) : 2 * (wj * jury + wt * tele)
+          };
+        });
+
+        const sorted = items.slice().sort((a, b) => b.score - a.score || a.officialIndex - b.officialIndex);
+        sorted.forEach((item, index) => { item.index = index; });
+
+        const rank = (field, target) => items.slice()
+          .sort((a, b) => b[field] - a[field] || a.officialIndex - b.officialIndex)
+          .forEach((item, index) => { item[target] = index + 1; });
+        rank("jury", "juryRank");
+        rank("tele", "teleRank");
+
+        return { items, sorted, both, hasJury, hasTele, voters: givers.length, everyone: rows.length };
+      }
+
+      /* ---------- The scoreboard ---------- */
+
+      const rowEls = new Map();
+
+      function tween(node, to) {
+        const from = node._v === undefined ? to : node._v;
+        node._v = to;
+        cancelAnimationFrame(node._raf);
+
+        if (reduceMotion || from === to) { node.textContent = fmt(to); return; }
+
+        const start = performance.now();
+        const step = (now) => {
+          const t = Math.min(1, (now - start) / 500);
+          node.textContent = fmt(from + (to - from) * t * (2 - t));
+          if (t < 1) node._raf = requestAnimationFrame(step);
+        };
+        node._raf = requestAnimationFrame(step);
+      }
+
+      function buildBoard(show, result) {
+        const board = $("board");
+        board.innerHTML = "";
+        rowEls.clear();
+        board.style.height = result.items.length * STEP - (STEP - ROW) + "px";
+
+        result.items.forEach((item) => {
+          const row = el("div", "srow");
+          row.setAttribute("role", "listitem");
+          row.tabIndex = 0;
+          row.style.setProperty("--i", item.officialIndex);
+          row.style.transform = "translateY(" + item.officialIndex * STEP + "px)";
+
+          const rank = el("div", "rk", String(item.officialIndex + 1).padStart(2, "0"));
+          const name = el("div", "nm");
+          name.append(RW.heartImg(item.name, "heart-img", item.heart));
+          const text = el("div", "tx");
+          text.append(el("span", "t", item.name), el("small", ""));
+          name.append(text, el("span", "chg"));
+          const score = el("div", "sc", "0");
+
+          row.append(rank, name, score);
+          row.addEventListener("click", () => pick(item.key));
+          row.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); pick(item.key); } });
+
+          rowEls.set(item.key, row);
+          board.append(row);
+        });
+
+        const line = el("div", "qline");
+        line.id = "qline";
+        line.append(el("span", "", "Qualification line"));
+        board.append(line);
+      }
+
+      function updateBoard(show, result) {
+        const semi = !isFinal(show);
+        const qualifiers = semi ? Math.min(result.items.length - 1, state.q || defaultQ(result.items.length)) : 0;
+
+        result.sorted.forEach((item) => {
+          const row = rowEls.get(item.key);
+          const before = row.dataset.index === undefined ? item.index : Number(row.dataset.index);
+          row.dataset.index = item.index;
+          row.style.transform = "translateY(" + item.index * STEP + "px)";
+          row.querySelector(".rk").textContent = String(item.index + 1).padStart(2, "0");
+          row.classList.toggle("win", item.index === 0);
+          row.classList.toggle("out", semi && item.index >= qualifiers);
+          row.classList.toggle("picked", state.sel === item.key);
+
+          const detail = result.both && !state.official
+            ? "Jury " + ordinal(item.juryRank) + " · Televote " + ordinal(item.teleRank)
+            : (state.official ? "Official result" : "");
+          row.querySelector("small").textContent = detail;
+          row.querySelector("small").hidden = !detail;
+
+          const change = item.officialIndex - item.index;
+          const badge = row.querySelector(".chg");
+          badge.textContent = change > 0 ? "▲" + change : (change < 0 ? "▼" + -change : "");
+          badge.className = "chg" + (change > 0 ? " up" : change < 0 ? " down" : "");
+
+          tween(row.querySelector(".sc"), item.score);
+          if (before !== item.index) row.animate([{ filter: "brightness(1.5)" }, { filter: "none" }], { duration: 700 });
+        });
+
+        const line = $("qline");
+        line.hidden = !semi;
+        if (semi) line.style.top = qualifiers * STEP - 3 + "px";
+      }
+
+      /* ---------- The side panel ---------- */
+
+      function renderSide(show, result) {
+        const side = $("side");
+        side.innerHTML = "";
+
+        const official = result.items.slice().sort((a, b) => a.officialIndex - b.officialIndex);
+        const winner = result.sorted[0];
+        const second = result.sorted[1];
+        const semi = !isFinal(show);
+        const qualifiers = semi ? Math.min(result.items.length - 1, state.q || defaultQ(result.items.length)) : 0;
+
+        // Winner
+        const changed = winner.key !== official[0].key;
+        const card = el("div", "card" + (changed ? " alert" : ""));
+        card.append(el("h2", "", semi ? "Top of the table" : "Winner"));
+        const row = el("div", "winner");
+        row.append(RW.heartImg(winner.name, "heart-img", winner.heart));
+        const text = el("div");
+        text.append(el("b", "", winner.name));
+        text.append(el("small", "", fmt(winner.score) + " points" + (second ? " · +" + fmt(winner.score - second.score) + " ahead" : "")));
+        row.append(text);
+        card.append(row);
+
+        const note = el("div", "kv");
+        note.append(el("span", "", changed ? "Changes the winner! Officially" : "Same as the official winner"),
+          el("b", "", changed ? official[0].name : ""));
+        card.append(note);
+        side.append(card);
+
+        // Moves
+        const moves = result.items.map((item) => ({ item, change: item.officialIndex - item.index }));
+        const climber = moves.slice().sort((a, b) => b.change - a.change)[0];
+        const faller = moves.slice().sort((a, b) => a.change - b.change)[0];
+        const moved = moves.filter((move) => move.change !== 0).length;
+
+        const movesCard = el("div", "card");
+        movesCard.append(el("h2", "", "What changes"));
+        const line = (label, value) => { const kv = el("div", "kv"); kv.append(el("span", "", label), el("b", "", value)); return kv; };
+        movesCard.append(line("Places that change", moved ? moved + " of " + result.items.length : "none"));
+        if (climber && climber.change > 0) movesCard.append(line("Biggest climber", climber.item.name + " ▲" + climber.change));
+        if (faller && faller.change < 0) movesCard.append(line("Biggest fall", faller.item.name + " ▼" + -faller.change));
+
+        if (semi) {
+          const officialIn = new Set(official.slice(0, qualifiers).map((item) => item.key));
+          const nowIn = new Set(result.sorted.slice(0, qualifiers).map((item) => item.key));
+          const comeIn = result.items.filter((item) => nowIn.has(item.key) && !officialIn.has(item.key)).map((item) => item.name);
+          const dropOut = result.items.filter((item) => !nowIn.has(item.key) && officialIn.has(item.key)).map((item) => item.name);
+          movesCard.append(line("Now qualify", comeIn.length ? comeIn.join(", ") : "no change"));
+          movesCard.append(line("Now out", dropOut.length ? dropOut.join(", ") : "no change"));
+        }
+        side.append(movesCard);
+
+        // The scenario in words
+        const scenario = el("div", "card");
+        scenario.append(el("h2", "", "This scenario"));
+        scenario.append(line("Count", state.official ? "Official points" : (result.both ? "Jury " + state.j + "% · Televote " + (100 - state.j) + "%" : (result.hasJury ? "Jury votes only" : "Televote only"))));
+        scenario.append(line("Scale", SCALES[state.scale].label));
+        scenario.append(line("Voting", result.voters + " of " + result.everyone));
+        side.append(scenario);
+
+        // The country you tapped
+        const picked = result.items.find((item) => item.key === state.sel);
+        if (picked) {
+          const detail = el("div", "card");
+          detail.append(el("h2", "", picked.name));
+          const open = el("a", "", "Open country page");
+          open.href = link(picked.name);
+          open.style.cssText = "color:#d4c7ff;font-size:13px;text-decoration:underline;text-underline-offset:3px";
+          detail.append(open);
+
+          detail.append(line("Official place", "#" + (picked.officialIndex + 1) + " · " + picked.officialPoints + " pts"));
+          detail.append(line("In this scenario", "#" + (picked.index + 1) + " · " + fmt(picked.score) + " pts"));
+          if (result.hasJury) detail.append(line("Jury points", fmt(picked.jury) + " (" + ordinal(picked.juryRank) + ")"));
+          if (result.hasTele) detail.append(line("Televote points", fmt(picked.tele) + " (" + ordinal(picked.teleRank) + ")"));
+
+          if (picked.from.length && !state.official) {
+            detail.append(el("h2", "", "Biggest supporters"));
+            picked.from.slice(0, 5).forEach((supporter) => {
+              const row2 = el("div", "support");
+              row2.append(RW.heartImg(supporter.name, "heart-img", supporter.heart), el("span", "", supporter.name), el("span", "", fmt(supporter.points)));
+              detail.append(row2);
+            });
+          }
+          side.append(detail);
+        }
+      }
+
+      /* ---------- Controls ---------- */
+
+      function renderControls(show, result) {
+        // Editions
+        const years = yearsWithVotes();
+        $("years").innerHTML = "";
+        $("years").hidden = years.length < 2;
+        years.forEach((year) => {
+          const button = el("button", "", String(year));
+          button.type = "button";
+          button.classList.toggle("active", year === state.year);
+          button.addEventListener("click", () => {
+            state.year = year;
+            const shows = showsOf(year);
+            state.show = (shows.find((item) => item.name === "Grand Final") || shows[0]).name;
+            Object.assign(state, DEFAULTS());
+            refresh(true);
+          });
+          $("years").append(button);
+        });
+
+        // Shows: the Grand Final and every semi-final with votes
+        const shows = showsOf(state.year);
+        $("show").innerHTML = "";
+        shows.forEach((item) => $("show").append(new Option(item.name, item.name)));
+        $("show").value = state.show;
+        $("show").hidden = shows.length < 2;
+
+        // Quick settings
+        const presets = [
+          ["official", "Official"], ["jury", "Jury only"], ["even", "50 / 50"], ["tele", "Televote only"]
+        ];
+        const current = state.official ? "official" : (result.both ? (state.j === 100 ? "jury" : state.j === 50 ? "even" : state.j === 0 ? "tele" : "") : "");
+
+        $("presets").innerHTML = "";
+        $("presets").hidden = !result.both;
+        presets.forEach(([key, label]) => {
+          const button = el("button", "", label);
+          button.type = "button";
+          button.classList.toggle("active", key === current);
+          button.addEventListener("click", () => {
+            state.official = key === "official";
+            if (key === "jury") state.j = 100;
+            if (key === "even") state.j = 50;
+            if (key === "tele") state.j = 0;
+            refresh(false);
+          });
+          $("presets").append(button);
+        });
+
+        // Jury / televote mix
+        const mixer = $("mixer");
+        mixer.value = state.j;
+        mixer.style.setProperty("--p", state.j + "%");
+        mixer.disabled = !result.both || state.official;
+        $("jLabel").textContent = result.both ? "Jury " + state.j + "%" : (result.hasJury ? "Jury" : "");
+        $("tLabel").textContent = result.both ? "Televote " + (100 - state.j) + "%" : (result.hasTele ? "Televote" : "");
+        $("mixNote").textContent = !result.both
+          ? "This show only has " + (result.hasJury ? "jury" : "televote") + " votes, so there is nothing to mix."
+          : (state.official ? "Showing the official points. Move a setting to start a what-if." : "Drag the slider to give the jury or the public more say.");
+
+        // Scale
+        if (!$("scale").options.length) Object.entries(SCALES).forEach(([key, item]) => $("scale").append(new Option(item.label, key)));
+        $("scale").value = state.scale;
+
+        // Qualifiers (semi-finals only)
+        const semi = !isFinal(show);
+        $("qWrap").hidden = !semi;
+        if (semi) $("qOut").textContent = Math.min(result.items.length - 1, state.q || defaultQ(result.items.length));
+
+        renderVoters(show);
+      }
+
+      function renderVoters(show) {
+        $("voters").innerHTML = "";
+        const on = show.rows.filter((row) => !state.off.has(RW.slug(row.country))).length;
+        $("votersSummary").textContent = "Who votes (" + on + " of " + show.rows.length + ")";
+
+        show.rows.forEach((row) => {
+          const key = RW.slug(row.country);
+          const chip = el("button", "voter" + (state.off.has(key) ? " off" : ""));
+          chip.type = "button";
+          chip.setAttribute("aria-pressed", String(!state.off.has(key)));
+          chip.append(RW.heartImg(row.country, "heart-img", row.heart), el("span", "", row.country));
+          if (row.voterOnly) chip.append(el("small", "", "extra"));
+          chip.addEventListener("click", () => {
+            if (state.off.has(key)) state.off.delete(key); else state.off.add(key);
+            state.official = false;
+            refresh(false);
+          });
+          $("voters").append(chip);
+        });
+      }
+
+      function pick(key) {
+        state.sel = state.sel === key ? "" : key;
+        refresh(false);
+      }
+
+      /* ---------- Putting it together ---------- */
+
+      let currentKey = "";
+
+      // rebuild = draw the scoreboard rows again (new edition or show)
+      function refresh(rebuild) {
+        const show = showNow();
+        const result = compute(show);
+        const key = state.year + "|" + show.name + "|" + result.items.map((item) => item.key).join(",");
+
+        if (rebuild || key !== currentKey) {
+          buildBoard(show, result);
+          currentKey = key;
+        }
+
+        $("badge").hidden = !usingSample;
+        renderControls(show, result);
+        updateBoard(show, result);
+        renderSide(show, result);
+        writeHash();
+      }
+
+      $("show").addEventListener("change", () => {
+        state.show = $("show").value;
+        Object.assign(state, DEFAULTS());
+        refresh(true);
+      });
+
+      $("mixer").addEventListener("input", () => {
+        state.j = Number($("mixer").value);
+        state.official = false;
+        refresh(false);
+      });
+
+      $("scale").addEventListener("change", () => { state.scale = $("scale").value; state.official = false; refresh(false); });
+
+      const stepQ = (delta) => {
+        const show = showNow();
+        const n = show.rows.filter((row) => !row.voterOnly).length;
+        state.q = Math.min(n - 1, Math.max(1, (state.q || defaultQ(n)) + delta));
+        refresh(false);
+      };
+      $("qUp").addEventListener("click", () => stepQ(1));
+      $("qDown").addEventListener("click", () => stepQ(-1));
+
+      $("votersAll").addEventListener("click", () => { state.off.clear(); refresh(false); });
+      $("votersNone").addEventListener("click", () => { showNow().rows.forEach((row) => state.off.add(RW.slug(row.country))); state.official = false; refresh(false); });
+      $("votersNoExtra").addEventListener("click", () => {
+        state.off.clear();
+        showNow().rows.filter((row) => row.voterOnly).forEach((row) => state.off.add(RW.slug(row.country)));
+        state.official = false;
+        refresh(false);
+      });
+
+      $("reset").addEventListener("click", () => { Object.assign(state, DEFAULTS()); refresh(false); });
+
+      $("copy").addEventListener("click", async () => {
+        const button = $("copy");
+        try {
+          await navigator.clipboard.writeText(location.href);
+          button.textContent = "Link copied";
+        } catch (error) {
+          window.prompt("Copy this link:", location.href);
+        }
+        setTimeout(() => { button.textContent = "Copy link to this scenario"; }, 1800);
+      });
+
+      window.addEventListener("hashchange", () => { readHash(); refresh(true); });
+
+      /* ---------- Start ---------- */
+
+      function start() {
+        readData();
+        $("layout").hidden = false;
+        $("empty").hidden = true;
+        readHash();
+        refresh(true);
+      }
+
+      start();
+
+      RW.load("hearts").then(() => refresh(true));
+      RW.load("results").then(() => { readData(); readHash(); refresh(true); });
+    })();
+
+    if (window.lucide) window.lucide.createIcons();
+  </script>
+
+  <script>
+    // Scroll the navigation icons so the current page is in view.
+    (function () {
+      var pill = document.querySelector(".nav-pill");
+      var active = pill && pill.querySelector(".nav-link.active");
+      if (active) pill.scrollLeft = active.offsetLeft - (pill.clientWidth - active.offsetWidth) / 2;
+    })();
+  </script>
+
+</body>
+</html>
