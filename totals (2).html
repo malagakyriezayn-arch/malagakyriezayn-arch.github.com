@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Totals</title>
+  <link rel="icon" href="images/logo.png">
+  <link rel="preload" as="font" type="font/otf" href="fonts/Neulis-ExtraBold.otf" crossorigin>
+  <link rel="preload" as="font" type="font/otf" href="fonts/Neulis-Bold.otf" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ---- fonts: put the .otf files in a "fonts" folder next to this page ---- */
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-Thin.otf") format("opentype");font-weight:100;font-style:normal;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-ThinItalic.otf") format("opentype");font-weight:100;font-style:italic;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-ExtraLight.otf") format("opentype");font-weight:200;font-style:normal;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-ExtraLightItalic.otf") format("opentype");font-weight:200;font-style:italic;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-Light.otf") format("opentype");font-weight:300;font-style:normal;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-LightItalic.otf") format("opentype");font-weight:300;font-style:italic;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-Regular.otf") format("opentype");font-weight:400;font-style:normal;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-Italic.otf") format("opentype");font-weight:400;font-style:italic;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-Medium.otf") format("opentype");font-weight:500;font-style:normal;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-MediumItalic.otf") format("opentype");font-weight:500;font-style:italic;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-SemiBold.otf") format("opentype");font-weight:600;font-style:normal;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-SemiBoldItalic.otf") format("opentype");font-weight:600;font-style:italic;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-Bold.otf") format("opentype");font-weight:700;font-style:normal;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-BoldItalic.otf") format("opentype");font-weight:700;font-style:italic;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-ExtraBold.otf") format("opentype");font-weight:800;font-style:normal;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-ExtraBoldItalic.otf") format("opentype");font-weight:800;font-style:italic;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-Black.otf") format("opentype");font-weight:900;font-style:normal;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-BlackItalic.otf") format("opentype");font-weight:900;font-style:italic;font-display:swap}
+    @font-face{font-family:"NeulisAlt";src:url("fonts/NeulisAlt-Black.otf") format("opentype");font-weight:900;font-style:normal;font-display:swap}
+    @font-face{font-family:"NeulisAlt";src:url("fonts/NeulisAlt-BlackItalic.otf") format("opentype");font-weight:900;font-style:italic;font-display:swap}
+
+    :root {
+      --font: "Neulis", "Montserrat", system-ui, sans-serif;
+      --fw-name: 800; --fw-num: 700; --fw-total: 900;
+      --name-style: normal; --name-tt: none; --ls: 0px;
+      --fs: 15px; --row-h: 58px; --rank-s: 38px; --rank-r: 11px; --flag-w: 38px;
+      --board-r: 18px; --line-w: 1px; --line-o: 14%;
+      --bg: #101522; --board: #0c0a28; --head: #1a1548; --text: #ffffff; --muted: #b9b5d6; --line-c: #ffffff;
+      --jury: #65d5d0; --tele: #ff9fd0; --total: #ffffff; --rank-bg: #5a2aa3; --rank-text: #ffffff; --accent: #8c78ff;
+      --line: color-mix(in srgb, var(--line-c) var(--line-o), transparent);
+      --c-rank: calc(var(--rank-s) + 16px);
+      --c-n: calc(var(--fs) * 4.3);
+      --c-total: calc(var(--fs) * 5);
+      --pad-x: 10px;
+      --safe-b: env(safe-area-inset-bottom, 0px);
+    }
+    @media (min-width: 640px) {
+      :root { --fs: 17px; --row-h: 64px; --rank-s: 42px; --rank-r: 12px; --flag-w: 46px; --pad-x: 14px; }
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0; min-height: 100vh; color: var(--text); background: var(--bg);
+      font: 600 var(--fs)/1.35 var(--font); letter-spacing: var(--ls);
+      padding-bottom: calc(24px + var(--safe-b));
+    }
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(ellipse at 10% 0%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 45%),
+        radial-gradient(ellipse at 100% 40%, color-mix(in srgb, var(--jury) 14%, transparent), transparent 42%);
+    }
+    body.customizing { padding-bottom: 66vh; }
+    button, input, select { font-family: inherit; }
+    a { color: inherit; }
+    .wrap { width: min(var(--board-w, 880px), 100%); margin: 0 auto; padding: 0 12px; }
+
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 0 6px; }
+    .back {
+      display: inline-flex; align-items: center; padding: 8px 14px; color: var(--text); font-size: .85em; font-weight: 800;
+      text-decoration: none; background: color-mix(in srgb, var(--text) 9%, transparent); border: 1px solid var(--line); border-radius: 999px;
+    }
+    .live { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: .78em; font-weight: 700; }
+    .live i { width: 8px; height: 8px; background: #3be08a; border-radius: 50%; }
+    .live.off i { background: #8a87a6; }
+
+    h1 { margin: 8px 0 2px; font-size: var(--title-s, clamp(30px, 9vw, 54px)); font-weight: 900; letter-spacing: -.01em; line-height: 1; text-transform: uppercase; text-align: center; }
+    .sub { margin: 0 0 14px; color: var(--muted); font-size: .86em; text-align: center; }
+    body.no-title h1, body.no-title .sub { display: none; }
+    body.no-title .controls { margin-top: 10px; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 14px; }
+    .seg {
+      display: flex; gap: 2px; max-width: 100%; padding: 3px; overflow-x: auto; scrollbar-width: none;
+      background: color-mix(in srgb, var(--text) 7%, transparent); border: 1px solid var(--line); border-radius: 999px;
+    }
+    .seg::-webkit-scrollbar { display: none; }
+    .seg button { flex: none; padding: 8px 14px; color: var(--muted); font-size: .8em; font-weight: 800; white-space: nowrap; background: transparent; border: 0; border-radius: 999px; cursor: pointer; }
+    .seg button[aria-pressed="true"] { color: #fff; background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #000)); }
+    button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid #c9bdff; outline-offset: 2px; }
+
+    /* ---------- grid table ---------- */
+    .board { background: var(--board); border: var(--line-w) solid var(--line); border-radius: var(--board-r); overflow: hidden; }
+    .grid { display: grid; grid-template-columns: var(--c-rank) minmax(0,1fr) var(--c-j, var(--c-n)) var(--c-t, var(--c-n)) var(--c-total); column-gap: var(--gap, 0px); align-items: stretch; }
+    .head { position: sticky; top: 0; z-index: 3; min-height: var(--head-h, 40px); background: var(--head); border-bottom: var(--line-w) solid var(--line); font-size: .74em; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .head > * { display: flex; align-items: center; justify-content: var(--num-jc, flex-end); min-width: 0; }
+    .head > :not(:first-child) { border-left: var(--line-w) solid var(--line); }
+    .head button { width: 100%; height: 100%; padding: 0 var(--pad-x); overflow: hidden; color: var(--muted); font: inherit; letter-spacing: inherit; text-align: var(--num-ta, right); text-overflow: ellipsis; text-transform: inherit; white-space: nowrap; background: none; border: 0; cursor: pointer; }
+    .head button[aria-sort="descending"]::after { content: " ▼"; font-size: 8px; }
+    .head button[aria-sort="ascending"]::after { content: " ▲"; font-size: 8px; }
+    .head button[aria-sort] { color: var(--text); }
+    .head .j { color: var(--jury); } .head .t { color: var(--tele); }
+    .head .j[aria-sort], .head .t[aria-sort] { filter: brightness(1.25); }
+
+    .row { min-height: var(--row-h); border-bottom: var(--line-w) solid var(--line); }
+    .row:last-child { border-bottom: 0; }
+    body:not(.no-zebra) .row:nth-child(even) { background: color-mix(in srgb, var(--text) 3.5%, transparent); }
+    .row > .cell { display: flex; align-items: center; min-width: 0; }
+    .row > .cell:not(:first-child) { border-left: var(--line-w) solid var(--line); }
+    .c-rank { justify-content: center; }
+    .rank {
+      position: relative; display: grid; place-items: center; width: var(--rank-s); height: var(--rank-s); color: var(--rank-text);
+      font-size: calc(var(--fs) * .92); font-weight: 900; background: var(--rank-bg); border-radius: var(--rank-r);
+    }
+    .rank sup { position: absolute; top: -4px; right: -4px; padding: 0 3px; font-size: 9px; background: rgba(0,0,0,.45); border-radius: 6px; color: #fff; }
+    body.no-tie .rank sup { display: none; }
+    body:not(.no-medals) .row.r1 .rank { color: #1b1830; background: linear-gradient(180deg, #ffe58a, #f2b705); }
+    body:not(.no-medals) .row.r2 .rank { color: #1b1830; background: linear-gradient(180deg, #f2f5fb, #b9c2d6); }
+    body:not(.no-medals) .row.r3 .rank { color: #2a1405; background: linear-gradient(180deg, #f6c08c, #c47a3d); }
+
+    .country { gap: 10px; padding: 0 var(--pad-x); }
+    .flag { flex: none; width: var(--flag-w); height: calc(var(--flag-w) * .68); object-fit: contain; border-radius: var(--flag-r, 4px); }
+    body.no-flags .flag { display: none; }
+    .name { min-width: 0; overflow: hidden; font-size: calc(1em * var(--name-scale, 1)); font-weight: var(--fw-name); font-style: var(--name-style); text-transform: var(--name-tt); text-overflow: ellipsis; white-space: nowrap; }
+
+    .num { flex-direction: column; align-items: var(--num-ai, flex-end); justify-content: center; padding: 0 var(--pad-x); font-variant-numeric: tabular-nums; }
+    .num b { display: block; font-size: calc(1.02em * var(--num-scale, 1)); font-weight: var(--fw-num); }
+    .num.dash b { opacity: .3; }
+    .bar { display: block; height: 3px; margin-top: 4px; border-radius: 3px; }
+    body.no-bars .bar { display: none; }
+    .j-col b { color: color-mix(in srgb, var(--jury) 55%, var(--text)); } .j-col .bar { background: var(--jury); }
+    .t-col b { color: color-mix(in srgb, var(--tele) 55%, var(--text)); } .t-col .bar { background: var(--tele); }
+    .num.top b { color: var(--text); text-shadow: 0 0 14px currentColor; }
+    
+    .num.total b { font-size: calc(1.2em * var(--total-scale, 1)); font-weight: var(--fw-total); color: var(--total); }
+    body:not(.no-medals) .row.r1 .total b { color: #ffd54a; }
+
+    .empty { padding: 44px 18px; color: var(--muted); text-align: center; }
+    .foot { margin: 12px 4px 0; color: var(--muted); font-size: .72em; line-height: 1.5; text-align: center; }
+
+    @keyframes rise { from { opacity: 0; transform: translate3d(0, 8px, 0); } to { opacity: 1; transform: none; } }
+    .row { animation: rise 280ms ease-out backwards; }
+    .row:nth-child(n+11) { animation: none; }
+    .row:nth-child(1){animation-delay:40ms}.row:nth-child(2){animation-delay:70ms}.row:nth-child(3){animation-delay:100ms}
+    .row:nth-child(4){animation-delay:130ms}.row:nth-child(5){animation-delay:160ms}.row:nth-child(6){animation-delay:190ms}
+    .row:nth-child(7){animation-delay:220ms}.row:nth-child(8){animation-delay:250ms}.row:nth-child(9){animation-delay:280ms}
+    .row:nth-child(10){animation-delay:310ms}
+    .board.quiet .row { animation: none; }
+    @media (prefers-reduced-motion: reduce) { .row { animation: none; } }
+    @media (max-width: 360px) { :root { --rank-s: 32px; --rank-r: 9px; --flag-w: 30px; --pad-x: 6px; } .country { gap: 6px; } }
+    
+
+
+    /* ---- cell fills, spacing between cells, sticky header ---- */
+    .row > .cell {
+      background: color-mix(in srgb, var(--cell-c, #ffffff) var(--cell-o, 0%), transparent);
+      border-radius: var(--cell-r, 0px);
+    }
+    .row > .j-col { background: linear-gradient(color-mix(in srgb, var(--jury) var(--jury-tint, 0%), transparent), color-mix(in srgb, var(--jury) var(--jury-tint, 0%), transparent)), color-mix(in srgb, var(--cell-c, #ffffff) var(--cell-o, 0%), transparent); }
+    .row > .t-col { background: linear-gradient(color-mix(in srgb, var(--tele) var(--tele-tint, 0%), transparent), color-mix(in srgb, var(--tele) var(--tele-tint, 0%), transparent)), color-mix(in srgb, var(--cell-c, #ffffff) var(--cell-o, 0%), transparent); }
+    .row > .num.total { background: linear-gradient(color-mix(in srgb, var(--text) var(--total-tint, 5%), transparent), color-mix(in srgb, var(--text) var(--total-tint, 5%), transparent)), color-mix(in srgb, var(--cell-c, #ffffff) var(--cell-o, 0%), transparent); }
+    body.gapped .board { padding: var(--gap); }
+    body.gapped .head { border-radius: var(--cell-r, 10px); margin-bottom: var(--gap); border-bottom: 0; }
+    body.gapped .row { border-bottom: 0; margin-bottom: var(--gap); }
+    body.gapped .row:last-child { margin-bottom: 0; }
+    body.gapped .row > .cell { border-left: 0 !important; }
+    body.no-sticky .head { position: static; }
+
+    /* ---------- ?customize panel ---------- */
+    .cz {
+      position: fixed; right: 0; bottom: 0; left: 0; z-index: 20; max-height: 62vh; padding: 16px 14px calc(12px + var(--safe-b));
+      overflow-y: auto; overscroll-behavior: contain; color: #fff; font-family: "Montserrat", system-ui, sans-serif;
+      background: #0e0c20; border-top: 1px solid rgba(255,255,255,.18); border-radius: 22px 22px 0 0; box-shadow: 0 -18px 50px rgba(0,0,0,.5);
+      font-size: 13px; letter-spacing: 0;
+    }
+    .cz[hidden] { display: none; }
+    .cz-in { width: min(720px, 100%); margin: 0 auto; }
+    .cz-title { display: flex; align-items: center; justify-content: space-between; margin: 0 0 4px; font-size: 15px; font-weight: 800; }
+    .cz-title small { color: #b9b5d6; font-weight: 600; font-size: 11px; }
+    .cz h4 { margin: 18px 0 8px; padding-bottom: 6px; color: #65d5d0; font-size: 11px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,.12); }
+    .cz label.r { display: grid; grid-template-columns: minmax(96px, 36%) 1fr auto; align-items: center; gap: 10px; margin-bottom: 6px; padding: 6px 10px; background: rgba(255,255,255,.045); border-radius: 10px; }
+    .cz label.r > span { color: #d6d3ea; font-weight: 700; }
+    .cz output { min-width: 42px; color: #fff; font-size: 11px; text-align: right; font-variant-numeric: tabular-nums; }
+    .cz input[type=range] { width: 100%; height: 28px; accent-color: #8c78ff; }
+    .cz select, .cz input[type=text] { width: 100%; min-width: 0; padding: 8px 10px; color: #fff; font-size: 13px; font-weight: 700; background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.18); border-radius: 8px; grid-column: 2 / 4; }
+    .cz select option { color: #000; }
+    .cz input[type=color] { width: 40px; height: 30px; padding: 0; background: none; border: 0; border-radius: 8px; cursor: pointer; }
+    .cz label.r.color { grid-template-columns: 40px 1fr auto; }
+    .cz label.r.toggle { grid-template-columns: 1fr auto; }
+    .cz input[type=checkbox] { width: 44px; height: 24px; margin: 0; appearance: none; background: rgba(255,255,255,.2); border-radius: 999px; position: relative; cursor: pointer; transition: background .15s; }
+    .cz input[type=checkbox]::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform .15s; }
+    .cz input[type=checkbox]:checked { background: #8c78ff; }
+    .cz input[type=checkbox]:checked::after { transform: translateX(20px); }
+    .cz-themes { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+    .cz button { padding: 10px 14px; color: #fff; font-size: 13px; font-weight: 800; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.16); border-radius: 12px; cursor: pointer; }
+    .cz button.theme { display: flex; align-items: center; gap: 8px; padding: 8px 10px; text-align: left; }
+    .cz .dots { display: inline-flex; } .cz .dots i { width: 14px; height: 14px; margin-right: -4px; border: 2px solid #0e0c20; border-radius: 50%; }
+    .cz-actions { position: sticky; bottom: -12px; z-index: 2; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; padding: 10px 0 4px; background: linear-gradient(180deg, transparent, #0e0c20 28%); }
+    .cz-actions .primary { background: linear-gradient(135deg, #20b67a, #14815a); }
+    .cz-actions .main { background: linear-gradient(135deg, #6f5bd9, #4d3da6); }
+    .cz-login { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .cz-login input { flex: 1 1 140px; padding: 9px 10px; color: #fff; font-size: 13px; background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.18); border-radius: 8px; }
+    .cz-note { min-height: 18px; margin: 10px 0 0; color: #65d5d0; font-size: 12px; font-weight: 700; }
+    .cz-note.error { color: #ff8c8c; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <a class="back" href="results.html">← Results</a>
+      <span class="live off" id="live"><i></i><span id="liveText">Loading…</span></span>
+    </div>
+
+    <h1 id="title">Totals</h1>
+    <p class="sub" id="sub">Jury, televote and overall score</p>
+
+    <div class="controls">
+      <div class="seg" id="years" role="group" aria-label="Edition"></div>
+      <div class="seg" id="rounds" role="group" aria-label="Round"></div>
+    </div>
+
+    <div class="board" id="boardBox">
+      <div class="grid head" role="row">
+        <div class="h-rank" aria-label="Rank"></div>
+        <div class="h-country" aria-label="Country"></div>
+        <button type="button" class="j" data-sort="jury" id="hJury">Jury</button>
+        <button type="button" class="t" data-sort="tele" id="hTele">Tele</button>
+        <button type="button" data-sort="total" id="hTotal">Total</button>
+      </div>
+      <div id="rows" role="rowgroup"></div>
+      <div class="empty" id="empty" hidden></div>
+    </div>
+
+    <p class="foot" id="foot">Ranked by overall score. Level scores are split by televote points. Tap a column title to sort.</p>
+  </div>
+
+
+  <section class="cz" id="cz" hidden aria-label="Customize design">
+    <div class="cz-in">
+      <p class="cz-title">Customize <small id="czWho"></small></p>
+      <div id="czRows"></div>
+      <form class="cz-login" id="czLogin" hidden>
+        <input type="text" id="czEmail" placeholder="Admin email" autocomplete="username">
+        <input type="password" id="czPass" placeholder="Password" autocomplete="current-password">
+        <button type="submit">Sign in</button>
+      </form>
+      <div class="cz-actions">
+        <button type="button" class="primary" id="czPublish">Publish for everyone</button>
+        <button type="button" class="main" id="czLocal">Save on this device</button>
+        <button type="button" id="czCopy">Copy settings</button>
+        <button type="button" id="czReset">Reset</button>
+      </div>
+      <p class="cz-note" id="czNote" role="status"></p>
+    </div>
+  </section>
+
+  <script src="status-config.js"></script>
+  <script src="flags.js" onerror="void 0"></script>
+  <script>
+    /* =========================================================
+       TOTALS PAGE
+       Reads the same published results as results.html and adds up, per country,
+       the jury points, the televote points and the overall score.
+       Flags come from flags.js (see flagUrls below for what it understands).
+    ========================================================= */
+
+    const FALLBACK_CODES = {
+      "albania":"al","andorra":"ad","armenia":"am","australia":"au","austria":"at","azerbaijan":"az",
+      "belarus":"by","belgium":"be","bosnia-and-herzegovina":"ba","bulgaria":"bg","croatia":"hr",
+      "cyprus":"cy","czechia":"cz","czech-republic":"cz","denmark":"dk","estonia":"ee","finland":"fi",
+      "france":"fr","georgia":"ge","germany":"de","greece":"gr","hungary":"hu","iceland":"is",
+      "ireland":"ie","israel":"il","italy":"it","latvia":"lv","lithuania":"lt","luxembourg":"lu",
+      "malta":"mt","moldova":"md","monaco":"mc","montenegro":"me","morocco":"ma","netherlands":"nl",
+      "north-macedonia":"mk","norway":"no","poland":"pl","portugal":"pt","romania":"ro","russia":"ru",
+      "san-marino":"sm","serbia":"rs","slovakia":"sk","slovenia":"si","spain":"es","sweden":"se",
+      "switzerland":"ch","turkey":"tr","turkiye":"tr","ukraine":"ua","united-kingdom":"gb","uk":"gb",
+      "england":"gb-eng","scotland":"gb-sct","wales":"gb-wls","kosovo":"xk","liechtenstein":"li",
+      "kazakhstan":"kz","kyrgyzstan":"kg","uzbekistan":"uz","tajikistan":"tj","turkmenistan":"tm",
+      "vietnam":"vn","cambodia":"kh","laos":"la","mongolia":"mn","bhutan":"bt","philippines":"ph",
+      "bangladesh":"bd","thailand":"th","rep-of-korea":"kr","republic-of-korea":"kr","south-korea":"kr",
+      "north-korea":"kp","nepal":"np","malaysia":"my","japan":"jp","china":"cn","india":"in",
+      "indonesia":"id","singapore":"sg","myanmar":"mm","sri-lanka":"lk","pakistan":"pk","brunei":"bn",
+      "timor-leste":"tl","taiwan":"tw","hong-kong":"hk","maldives":"mv","afghanistan":"af",
+      "usa":"us","united-states":"us","canada":"ca","brazil":"br","mexico":"mx","argentina":"ar",
+      "new-zealand":"nz","south-africa":"za","egypt":"eg","lebanon":"lb","tunisia":"tn","algeria":"dz",
+      "jordan":"jo","saudi-arabia":"sa","united-arab-emirates":"ae","qatar":"qa","iran":"ir"
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const CFG = window.STATUS_CONFIG || {};
+    const BASE = (CFG.dbUrl || "").replace(/\/$/, "");
+    const DATA_URL = BASE + "/results-data.json";
+    const DATA_CACHE = "resultsDataCache";     // shared with results.html, so the page paints instantly
+    const VOTE_POINTS = [12, 10, 8, 7, 6, 5, 4, 3, 2, 1];
+
+    const slug = (text) => String(text || "").toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    const listOf = (v) => Array.isArray(v) ? v : Object.values(v || {});
+    const same = (a, b) => String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
+    const votesVia = (row) => (row && (row.voting === "jury" || row.voting === "tele") ? row.voting : "both");
+    const mayVote = (row, key) => votesVia(row) === "both" || votesVia(row) === key;
+
+    /* ---------- flags (flags.js) ----------
+       Works with any of these from flags.js, checked in this order:
+         a function  flagUrls(item) | flagSrc(item) | getFlag(name) | flagFor(name) | getFlagUrl(name) | flagUrl(name)
+         an object   FLAGS / FLAG_MAP  { "france": "images/flags/france.png" }
+         FLAG_CODES + FLAG_FOLDER / FLAG_EXTS   (same as results.html)
+       and falls back to images/flags/<country>.png and flagcdn.com. */
+    const g = (name) => { try { return (0, eval)("typeof " + name + " !== 'undefined' ? " + name + " : undefined"); } catch (e) { return undefined; } };
+
+    const FLAG_PAGE = "totals";   // page name used in flags-admin.html ("flag" or "heart" per page; unset = flags)
+
+    function flagUrls(country) {
+      const key = slug(country);
+      // flags.js (FlagPicker): assigned file first, then the default folders, then flagcdn as a last resort
+      if (window.FlagPicker && typeof window.FlagPicker.urls === "function") {
+        const code = FALLBACK_CODES[key];
+        const list = window.FlagPicker.urls(country, FLAG_PAGE, code ? { cdn: "https://flagcdn.com/w160/" + code + ".png" } : {});
+        if (list.length) return list;
+      }
+      const item = { country };
+      const urls = [];
+      const add = (u) => { if (u && typeof u === "string" && !urls.includes(u)) urls.push(u); };
+      const addAny = (r) => (Array.isArray(r) ? r : [r]).forEach(add);
+
+      ["flagUrls", "flagSrc", "getFlag", "flagFor", "getFlagUrl", "flagUrl"].forEach((fn) => {
+        const f = g(fn);
+        if (typeof f !== "function") return;
+        try { addAny(f(item)); } catch (e) { /* try the next */ }
+        try { addAny(f(country)); } catch (e) { /* try the next */ }
+      });
+
+      ["FLAGS", "FLAG_MAP"].forEach((name) => {
+        const map = g(name);
+        if (!map || typeof map !== "object") return;
+        const hit = map[country] || map[key] || map[String(country).toLowerCase()];
+        if (typeof hit === "string") add(/^(https?:|\/|images\/|\.)/.test(hit) || /\.\w{3,4}$/.test(hit) ? hit : "https://flagcdn.com/w160/" + hit + ".png");
+      });
+
+      const folder = g("FLAG_FOLDER") !== undefined ? g("FLAG_FOLDER") : "images/flags/";
+      const exts = g("FLAG_EXTS") || [".png", ".svg", ".webp", ".jpg"];
+      if (folder && key) exts.forEach((ext) => add(folder + key + ext));
+
+      const codes = g("FLAG_CODES") || FALLBACK_CODES;
+      const code = codes[key] || FALLBACK_CODES[key];
+      if (code) add("https://flagcdn.com/w160/" + code + ".png");
+      return urls;
+    }
+
+    function flagImg(country, eager) {
+      const img = new Image();
+      const urls = flagUrls(country);
+      let i = 0;
+      img.className = "flag";
+      img.alt = "";
+      img.width = 36; img.height = 25;
+      img.decoding = "async";
+      img.loading = eager ? "eager" : "lazy";
+      img.addEventListener("error", () => { if (++i < urls.length) img.src = urls[i]; });
+      if (urls.length) img.src = urls[0]; else img.style.visibility = "hidden";
+      return img;
+    }
+
+    /* ---------- data ---------- */
+    let data = null;
+    const state = { year: null, round: "Grand Final", sort: "total", dir: -1 };
+
+    function parseData(raw) {
+      const out = {};
+      Object.keys(raw || {}).forEach((year) => {
+        if (!Number.isInteger(Number(year))) return;
+        const v = raw[year];
+        const grand = Array.isArray(v) ? v : listOf(v && v.grand);
+        const rounds = Array.isArray(v) ? [] : listOf(v && v.rounds).filter((r) => r && r.name);
+        const entry = { city: v && !Array.isArray(v) && v.city ? String(v.city) : "", rounds: {} };
+        if (grand.length) entry.rounds["Grand Final"] = grand.filter((r) => r && r.country);
+        rounds.forEach((r) => { entry.rounds[String(r.name)] = listOf(r.rows).filter((x) => x && x.country); });
+        if (Object.keys(entry.rounds).length) out[year] = entry;
+      });
+      return out;
+    }
+
+    // Jury, televote and overall score for every country of one round
+    function totalsFor(rows) {
+      const map = new Map();
+      rows.filter((r) => !r.voterOnly).forEach((r) => {
+        map.set(String(r.country).trim().toLowerCase(), { country: r.country, jury: 0, tele: 0, stored: r.points, hasVotes: false });
+      });
+
+      rows.forEach((giver) => {
+        ["jury", "tele"].forEach((key) => {
+          if (!mayVote(giver, key)) return;
+          const list = giver.votes && giver.votes[key] ? listOf(giver.votes[key]) : [];
+          list.forEach((name, pos) => {
+            const e = map.get(String(name || "").trim().toLowerCase());
+            if (!e || same(name, giver.country) || !VOTE_POINTS[pos]) return;
+            e[key] += VOTE_POINTS[pos];
+            e.hasVotes = true;
+          });
+        });
+      });
+
+      const out = [];
+      map.forEach((e) => {
+        const stored = e.stored === undefined || e.stored === null || e.stored === "" ? null : Number(e.stored);
+        e.total = e.hasVotes ? e.jury + e.tele : (stored === null || isNaN(stored) ? null : stored);
+        if (!e.hasVotes) { e.jury = null; e.tele = null; }
+        out.push(e);
+      });
+
+      // official order: overall, then televote, then alphabetical; nothing yet goes last
+      out.sort((a, b) =>
+        (b.total === null) - (a.total === null) ||
+        (b.total || 0) - (a.total || 0) ||
+        (b.tele || 0) - (a.tele || 0) ||
+        a.country.localeCompare(b.country));
+
+      let last = null;
+      out.forEach((e, i) => {
+        if (e.total === null) { e.rank = null; return; }
+        const tied = last && last.total === e.total && (last.tele || 0) === (e.tele || 0);
+        e.rank = tied ? last.rank : i + 1;
+        e.tie = Boolean(tied) || (out[i + 1] && out[i + 1].total === e.total && (out[i + 1].tele || 0) === (e.tele || 0));
+        last = e;
+      });
+      return out;
+    }
+
+    /* ---------- render ---------- */
+    const fmt = (n) => (n === null || n === undefined ? "–" : String(n));
+
+    function renderControls() {
+      const years = Object.keys(data || {}).sort((a, b) => b - a);
+      $("years").hidden = years.length < 2;
+      $("years").textContent = "";
+      years.forEach((y) => {
+        const b = document.createElement("button");
+        b.type = "button"; b.textContent = y; b.setAttribute("aria-pressed", String(y === String(state.year)));
+        b.addEventListener("click", () => { state.year = y; state.round = "Grand Final"; render(); });
+        $("years").append(b);
+      });
+
+      const names = state.year && data[state.year] ? Object.keys(data[state.year].rounds) : [];
+      names.sort((a, b) => (a === "Grand Final" ? -1 : b === "Grand Final" ? 1 : a.localeCompare(b)));
+      $("rounds").hidden = names.length < 2;
+      $("rounds").textContent = "";
+      names.forEach((n) => {
+        const b = document.createElement("button");
+        b.type = "button"; b.textContent = n; b.setAttribute("aria-pressed", String(n === state.round));
+        b.addEventListener("click", () => { state.round = n; render(); });
+        $("rounds").append(b);
+      });
+    }
+
+    function renderRows(quiet) {
+      const rowsHost = $("rows");
+      rowsHost.textContent = "";
+      $("empty").hidden = true;
+      $("boardBox").classList.toggle("quiet", Boolean(quiet));
+
+      const entry = data && state.year ? data[state.year] : null;
+      const rows = entry ? entry.rounds[state.round] : null;
+      if (!rows || !rows.length) {
+        $("empty").hidden = false;
+        $("empty").textContent = data && Object.keys(data).length
+          ? "No results for this round yet."
+          : "Results will appear here once they are published.";
+        return;
+      }
+
+      const list = totalsFor(rows);
+      const maxJ = Math.max(1, ...list.map((e) => e.jury || 0));
+      const maxT = Math.max(1, ...list.map((e) => e.tele || 0));
+      const bestJ = Math.max(...list.map((e) => e.jury || 0));
+      const bestT = Math.max(...list.map((e) => e.tele || 0));
+
+      const view = list.slice();
+      if (state.sort !== "total" || state.dir !== -1) {
+        const key = state.sort;
+        view.sort((a, b) => {
+          const av = a[key], bv = b[key];
+          return (av === null) - (bv === null) || (av - bv) * state.dir || a.country.localeCompare(b.country);
+        });
+      }
+
+      const frag = document.createDocumentFragment();
+      view.forEach((e, i) => {
+        const row = document.createElement("div");
+        row.className = "grid row" + (e.rank && e.rank <= 3 ? " r" + e.rank : "");
+        row.setAttribute("role", "row");
+
+        const rankCell = document.createElement("div");
+        rankCell.className = "cell c-rank";
+        const rank = document.createElement("div");
+        rank.className = "rank";
+        rank.textContent = e.rank ? String(e.rank) : "–";
+        if (e.tie && e.rank) { const s = document.createElement("sup"); s.textContent = "="; rank.append(s); }
+        rankCell.append(rank);
+
+        const country = document.createElement("div");
+        country.className = "cell country";
+        const name = document.createElement("span");
+        name.className = "name"; name.textContent = e.country;
+        country.append(flagImg(e.country, i < 12), name);
+
+        const cell = (value, cls, max, best) => {
+          const d = document.createElement("div");
+          d.className = "cell num " + cls + (value === null ? " dash" : "") + (value && value === best && best > 0 ? " top" : "");
+          const b = document.createElement("b");
+          b.textContent = fmt(value);
+          d.append(b);
+          if (max && value) {
+            const bar = document.createElement("span");
+            bar.className = "bar";
+            bar.style.width = Math.max(6, Math.round((value / max) * 100)) + "%";
+            d.append(bar);
+          }
+          return d;
+        };
+
+        const total = cell(e.total, "total", 0, 0);
+        row.append(rankCell, country, cell(e.jury, "j-col", maxJ, bestJ), cell(e.tele, "t-col", maxT, bestT), total);
+        frag.append(row);
+      });
+      rowsHost.append(frag);
+    }
+
+    function renderHead() {
+      document.querySelectorAll(".head [data-sort]").forEach((b) => {
+        const on = b.dataset.sort === state.sort;
+        if (on) b.setAttribute("aria-sort", state.dir === -1 ? "descending" : "ascending");
+        else b.removeAttribute("aria-sort");
+      });
+    }
+
+    function render(quiet) {
+      if (!state.year || !data || !data[state.year]) {
+        const years = Object.keys(data || {}).sort((a, b) => b - a);
+        state.year = years[0] || null;
+      }
+      const entry = data && state.year ? data[state.year] : null;
+      if (entry && !entry.rounds[state.round]) state.round = entry.rounds["Grand Final"] ? "Grand Final" : Object.keys(entry.rounds)[0];
+
+      $("title").textContent = (STYLE.titleText || "Totals") + (state.year ? " " + state.year : "");
+      $("sub").textContent = entry
+        ? (state.round + (entry.city ? " · " + entry.city : "") + " — jury, televote and overall score")
+        : "Jury, televote and overall score";
+      document.title = state.year ? "Totals " + state.year : "Totals";
+      renderControls();
+      renderHead();
+      renderRows(quiet);
+    }
+
+    document.querySelector(".head").addEventListener("click", (event) => {
+      const b = event.target.closest("[data-sort]");
+      if (!b) return;
+      if (state.sort === b.dataset.sort) state.dir = -state.dir;
+      else { state.sort = b.dataset.sort; state.dir = -1; }
+      render(true);
+    });
+
+    /* ---------- load: cache first, then a quiet refresh only if something changed ---------- */
+    function setLive(ok, text) { $("live").classList.toggle("off", !ok); $("liveText").textContent = text; }
+
+    let cached = null;
+    try { cached = localStorage.getItem(DATA_CACHE); } catch (e) { /* ignore */ }
+    if (cached) { try { data = parseData(JSON.parse(cached)); setLive(false, "Saved copy"); } catch (e) { data = null; } }
+
+
+    /* =========================================================
+       DESIGN SETTINGS  (totals.html?customize)
+       Order of precedence: defaults  <  published for everyone  <  saved on this device
+    ========================================================= */
+    const FONT_STACKS = {
+      neulis:     '"Neulis", "Montserrat", system-ui, sans-serif',
+      neulisalt:  '"NeulisAlt", "Neulis", "Montserrat", system-ui, sans-serif',
+      montserrat: '"Montserrat", system-ui, sans-serif',
+      system:     'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
+      serif:      'Georgia, "Times New Roman", serif',
+      mono:       'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace'
+    };
+    const WEIGHTS = [["300", "Light"], ["400", "Regular"], ["500", "Medium"], ["600", "SemiBold"], ["700", "Bold"], ["800", "ExtraBold"], ["900", "Black"]];
+
+    const colWidth = (i) => { const el = document.querySelector(".head").children[i]; return el ? Math.round(el.getBoundingClientRect().width) : 60; };
+
+    // type: sel (choice) | rng (slider) | col (colour) | tog (on/off) | txt (text)
+    // css: the CSS variable it sets (px unless "unit" says otherwise)
+    const SPEC = [
+      { sec: "Font" },
+      { key: "font", label: "Font", type: "sel", def: "neulis", opts: [["neulis", "Neulis"], ["neulisalt", "Neulis Alt (Black only)"], ["montserrat", "Montserrat"], ["system", "System"], ["serif", "Serif"], ["mono", "Monospace"]] },
+      { key: "fwName", label: "Country weight", type: "sel", def: "800", opts: WEIGHTS, css: "fw-name" },
+      { key: "fwNum", label: "Score weight", type: "sel", def: "700", opts: WEIGHTS, css: "fw-num" },
+      { key: "fwTotal", label: "Total weight", type: "sel", def: "900", opts: WEIGHTS, css: "fw-total" },
+      { key: "fs", label: "Text size", type: "rng", def: 0, min: 11, max: 26, step: 1, css: "fs", unit: "px", auto: true },
+      { key: "ls", label: "Letter spacing", type: "rng", def: 0, min: -1, max: 4, step: 0.1, css: "ls", unit: "px" },
+      { key: "nameScale", label: "Country text size", type: "rng", def: 1, min: 0.6, max: 1.6, step: 0.05, css: "name-scale", unit: "×", cssUnit: "" },
+      { key: "numScale", label: "Jury / televote size", type: "rng", def: 1, min: 0.6, max: 1.6, step: 0.05, css: "num-scale", unit: "×", cssUnit: "" },
+      { key: "totalScale", label: "Total size", type: "rng", def: 1, min: 0.6, max: 1.8, step: 0.05, css: "total-scale", unit: "×", cssUnit: "" },
+      { key: "titleSize", label: "Title size", type: "rng", def: 0, min: 18, max: 96, step: 1, css: "title-s", unit: "px", auto: true, probe: () => parseFloat(getComputedStyle($("title")).fontSize) },
+      { key: "italic", label: "Italic country names", type: "tog", def: false },
+      { key: "upper", label: "UPPERCASE country names", type: "tog", def: false },
+
+      { sec: "Size and shape" },
+      { key: "boardW", label: "Page / board width", type: "rng", def: 880, min: 340, max: 1500, step: 10, css: "board-w", unit: "px" },
+      { key: "colRank", label: "Rank column width", type: "rng", def: 0, min: 36, max: 140, step: 1, css: "c-rank", unit: "px", auto: true, probe: () => colWidth(0) },
+      { key: "colJury", label: "Jury column width", type: "rng", def: 0, min: 40, max: 220, step: 1, css: "c-j", unit: "px", auto: true, probe: () => colWidth(2) },
+      { key: "colTele", label: "Televote column width", type: "rng", def: 0, min: 40, max: 220, step: 1, css: "c-t", unit: "px", auto: true, probe: () => colWidth(3) },
+      { key: "colTotal", label: "Total column width", type: "rng", def: 0, min: 44, max: 240, step: 1, css: "c-total", unit: "px", auto: true, probe: () => colWidth(4) },
+      { key: "headH", label: "Header height", type: "rng", def: 40, min: 24, max: 90, step: 1, css: "head-h", unit: "px" },
+      { key: "padX", label: "Cell side padding", type: "rng", def: 0, min: 0, max: 40, step: 1, css: "pad-x", unit: "px", auto: true, probe: () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--pad-x")) || 10 },
+      { key: "gap", label: "Space between cells", type: "rng", def: 0, min: 0, max: 24, step: 1, css: "gap", unit: "px" },
+      { key: "cellR", label: "Cell corner roundness", type: "rng", def: 0, min: 0, max: 30, step: 1, css: "cell-r", unit: "px" },
+      { key: "cellO", label: "Cell fill strength", type: "rng", def: 0, min: 0, max: 40, step: 1, unit: "%" },
+      { key: "juryTint", label: "Jury cell tint", type: "rng", def: 0, min: 0, max: 40, step: 1, css: "jury-tint", unit: "%" },
+      { key: "teleTint", label: "Televote cell tint", type: "rng", def: 0, min: 0, max: 40, step: 1, css: "tele-tint", unit: "%" },
+      { key: "totalTint", label: "Total cell tint", type: "rng", def: 5, min: 0, max: 40, step: 1, css: "total-tint", unit: "%" },
+      { key: "flagR", label: "Flag corner roundness", type: "rng", def: 4, min: 0, max: 20, step: 1, css: "flag-r", unit: "px" },
+      { key: "numAlign", label: "Score alignment", type: "sel", def: "right", opts: [["right", "Right"], ["center", "Centre"], ["left", "Left"]] },
+      { key: "rowH", label: "Row height", type: "rng", def: 0, min: 40, max: 100, step: 1, css: "row-h", unit: "px", auto: true },
+      { key: "rankS", label: "Rank square size", type: "rng", def: 0, min: 26, max: 70, step: 1, css: "rank-s", unit: "px", auto: true },
+      { key: "rankR", label: "Rank roundness", type: "rng", def: 0, min: 0, max: 35, step: 1, css: "rank-r", unit: "px", auto: true },
+      { key: "flagW", label: "Flag / heart width", type: "rng", def: 0, min: 22, max: 80, step: 1, css: "flag-w", unit: "px", auto: true },
+      { key: "boardR", label: "Board corners", type: "rng", def: 18, min: 0, max: 40, step: 1, css: "board-r", unit: "px" },
+      { key: "lineW", label: "Grid line width", type: "rng", def: 1, min: 0, max: 4, step: 0.5, css: "line-w", unit: "px" },
+      { key: "lineO", label: "Grid line strength", type: "rng", def: 14, min: 0, max: 60, step: 1, css: "line-o", unit: "%" },
+
+      { sec: "Show" },
+      { key: "bars", label: "Score bars", type: "tog", def: true },
+      { key: "zebra", label: "Striped rows", type: "tog", def: true },
+      { key: "medals", label: "Gold, silver, bronze ranks", type: "tog", def: true },
+      { key: "tie", label: "Tie mark (=)", type: "tog", def: true },
+      { key: "title", label: "Big title", type: "tog", def: true },
+      { key: "flags", label: "Flags / hearts", type: "tog", def: true },
+      { key: "sticky", label: "Header sticks while scrolling", type: "tog", def: true },
+
+      { sec: "Text" },
+      { key: "titleText", label: "Title", type: "txt", def: "Totals" },
+      { key: "juryLabel", label: "Jury column", type: "txt", def: "Jury" },
+      { key: "teleLabel", label: "Televote column", type: "txt", def: "Tele" },
+      { key: "totalLabel", label: "Total column", type: "txt", def: "Total" },
+
+      { sec: "Colours" },
+      { key: "bg", label: "Page", type: "col", def: "#101522", css: "bg" },
+      { key: "board", label: "Board", type: "col", def: "#0c0a28", css: "board" },
+      { key: "head", label: "Header row", type: "col", def: "#1a1548", css: "head" },
+      { key: "text", label: "Text", type: "col", def: "#ffffff", css: "text" },
+      { key: "muted", label: "Soft text", type: "col", def: "#b9b5d6", css: "muted" },
+      { key: "lineC", label: "Grid lines", type: "col", def: "#ffffff", css: "line-c" },
+      { key: "jury", label: "Jury", type: "col", def: "#65d5d0", css: "jury" },
+      { key: "tele", label: "Televote", type: "col", def: "#ff9fd0", css: "tele" },
+      { key: "total", label: "Total", type: "col", def: "#ffffff", css: "total" },
+      { key: "rankBg", label: "Rank square", type: "col", def: "#5a2aa3", css: "rank-bg" },
+      { key: "rankText", label: "Rank number", type: "col", def: "#ffffff", css: "rank-text" },
+      { key: "accent", label: "Accent", type: "col", def: "#8c78ff", css: "accent" },
+      { key: "cellC", label: "Cell fill colour", type: "col", def: "#ffffff", css: "cell-c" }
+    ];
+    const FIELDS = SPEC.filter((f) => f.key);
+    const DEFAULTS = {};
+    FIELDS.forEach((f) => { DEFAULTS[f.key] = f.def; });
+
+    const THEMES = [
+      { name: "Classic", c: {} },
+      { name: "Midnight", c: { bg: "#0b1020", board: "#0a0e1d", head: "#141c3a", rankBg: "#2f4cdd", accent: "#5b7bff", jury: "#6fe0ff", tele: "#ff8fb8" } },
+      { name: "Sunset",  c: { bg: "#2a0c24", board: "#220a1d", head: "#4a1638", rankBg: "#e2465c", accent: "#ff8a5c", jury: "#ffd28a", tele: "#ff9fd0" } },
+      { name: "Mint",    c: { bg: "#0a1f22", board: "#08191c", head: "#12363c", rankBg: "#14a38b", rankText: "#04201c", accent: "#2fd1b3", jury: "#8ff0d8", tele: "#ffc9a3" } },
+      { name: "Gold",    c: { bg: "#17110a", board: "#120d07", head: "#2d2410", rankBg: "#b8860b", rankText: "#1d1608", accent: "#e0a912", jury: "#ffe082", tele: "#ffb199" } },
+      { name: "Light",   c: { bg: "#f3f1fb", board: "#ffffff", head: "#e9e4fb", text: "#1b1830", muted: "#5b5878", lineC: "#1b1830", lineO: 16, jury: "#0f8f8a", tele: "#c2338a", total: "#1b1830", rankBg: "#5a2aa3", rankText: "#ffffff", accent: "#6f5bd9" } }
+    ];
+
+    const COLOR_RE = /^#[0-9a-f]{6}$/i;
+    function clean(input) {
+      const out = {};
+      const src = input && typeof input === "object" ? input : {};
+      FIELDS.forEach((f) => {
+        const v = src[f.key];
+        if (v === undefined || v === null) return;
+        if (f.type === "rng") { const n = Number(v); if (isFinite(n)) out[f.key] = Math.min(f.max, Math.max(f.min, n)); }
+        else if (f.type === "col") { if (COLOR_RE.test(String(v))) out[f.key] = String(v).toLowerCase(); }
+        else if (f.type === "sel") { if (f.opts.some((o) => o[0] === String(v))) out[f.key] = String(v); }
+        else if (f.type === "tog") out[f.key] = v === true || v === "true";
+        else if (f.type === "txt") out[f.key] = String(v).slice(0, 24);
+      });
+      return out;
+    }
+
+    const LS_LOCAL = "totalsStyleLocal";
+    const LS_PUB = "totalsStylePublished";
+    const readLS = (k) => { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } };
+    let published = clean(readLS(LS_PUB));
+    let local = clean(readLS(LS_LOCAL));
+    let STYLE = Object.assign({}, DEFAULTS, published, local);
+
+    function applyStyle(st) {
+      STYLE = Object.assign({}, DEFAULTS, st);
+      const root = document.documentElement.style;
+      FIELDS.forEach((f) => {
+        if (!f.css) return;
+        const v = STYLE[f.key];
+        if (f.auto && !v) { root.removeProperty("--" + f.css); return; }    // 0 = use the built-in size for this screen
+        root.setProperty("--" + f.css, f.type === "rng" ? v + (f.cssUnit !== undefined ? f.cssUnit : (f.unit || "")) : v);
+      });
+      root.setProperty("--font", FONT_STACKS[STYLE.font] || FONT_STACKS.neulis);
+      const gapped = Number(STYLE.gap) > 0;
+      root.setProperty("--cell-o", (Number(STYLE.cellO) || (gapped ? 6 : 0)) + "%");
+      if (gapped && !Number(STYLE.cellR)) root.setProperty("--cell-r", "10px");
+      const al = { right: ["flex-end", "right"], center: ["center", "center"], left: ["flex-start", "left"] }[STYLE.numAlign] || ["flex-end", "right"];
+      root.setProperty("--num-ai", al[0]); root.setProperty("--num-jc", al[0]); root.setProperty("--num-ta", al[1]);
+      root.setProperty("--name-style", STYLE.italic ? "italic" : "normal");
+      root.setProperty("--name-tt", STYLE.upper ? "uppercase" : "none");
+      const cls = document.body.classList;
+      cls.toggle("no-bars", !STYLE.bars);
+      cls.toggle("no-zebra", !STYLE.zebra);
+      cls.toggle("no-medals", !STYLE.medals);
+      cls.toggle("no-tie", !STYLE.tie);
+      cls.toggle("no-title", !STYLE.title);
+      cls.toggle("no-flags", !STYLE.flags);
+      cls.toggle("no-sticky", !STYLE.sticky);
+      cls.toggle("gapped", gapped);
+      $("hJury").textContent = STYLE.juryLabel || "Jury";
+      $("hTele").textContent = STYLE.teleLabel || "Tele";
+      $("hTotal").textContent = STYLE.totalLabel || "Total";
+    }
+    applyStyle(Object.assign({}, published, local));
+
+    /* ---------- the ?customize panel ---------- */
+    if (new URLSearchParams(location.search).has("customize")) {
+      document.body.classList.add("customizing");
+      const panel = $("cz");
+      panel.hidden = false;
+
+      const SESSION_KEY = "statusAdminSession";
+      let session = null;
+      try { session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null"); } catch (e) { session = null; }
+      const note = (t, err) => { $("czNote").textContent = t; $("czNote").classList.toggle("error", Boolean(err)); };
+      const showLogin = () => { $("czLogin").hidden = Boolean(session); $("czWho").textContent = session ? "Signed in as " + session.email : "Preview only until you sign in"; };
+      showLogin();
+
+      let draft = Object.assign({}, DEFAULTS, published, local);
+      const touch = () => { applyStyle(draft); note("Previewing. Save on this device, or publish for everyone."); };
+
+      function build() {
+        const host = $("czRows");
+        host.textContent = "";
+
+        const h = document.createElement("h4"); h.textContent = "Themes"; host.append(h);
+        const grid = document.createElement("div"); grid.className = "cz-themes";
+        THEMES.forEach((th) => {
+          const b = document.createElement("button");
+          b.type = "button"; b.className = "theme";
+          const c = Object.assign({}, { bg: DEFAULTS.bg, board: DEFAULTS.board, rankBg: DEFAULTS.rankBg }, th.c);
+          b.innerHTML = '<span class="dots"><i style="background:' + c.bg + '"></i><i style="background:' + c.board + '"></i><i style="background:' + c.rankBg + '"></i></span><b>' + th.name + "</b>";
+          b.addEventListener("click", () => {
+            FIELDS.filter((f) => f.type === "col" || f.key === "lineO").forEach((f) => { draft[f.key] = f.def; });
+            Object.assign(draft, th.c);
+            touch(); build();
+          });
+          grid.append(b);
+        });
+        host.append(grid);
+
+        SPEC.forEach((f) => {
+          if (f.sec) { const t = document.createElement("h4"); t.textContent = f.sec; host.append(t); return; }
+          const row = document.createElement("label");
+          row.className = "r " + (f.type === "col" ? "color" : f.type === "tog" ? "toggle" : "");
+          const name = document.createElement("span"); name.textContent = f.label;
+          const val = draft[f.key];
+
+          if (f.type === "sel") {
+            const sel = document.createElement("select");
+            f.opts.forEach(([v, l]) => { const o = document.createElement("option"); o.value = v; o.textContent = l; sel.append(o); });
+            sel.value = val;
+            sel.addEventListener("change", () => { draft[f.key] = sel.value; touch(); });
+            row.append(name, sel);
+          } else if (f.type === "rng") {
+            const inp = document.createElement("input"); inp.type = "range"; inp.min = f.min; inp.max = f.max; inp.step = f.step;
+            const out = document.createElement("output");
+            const shown = () => {
+              if (f.auto && !draft[f.key]) {
+                if (f.probe) { const p = f.probe(); return Math.min(f.max, Math.max(f.min, p || f.min)); }
+                const live = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--" + f.css)) || f.min;
+                return live;
+              }
+              return draft[f.key];
+            };
+            const cur = shown();
+            inp.value = cur; out.textContent = (f.auto && !draft[f.key] ? "auto" : cur + (f.unit || ""));
+            inp.addEventListener("input", () => {
+              draft[f.key] = Number(inp.value);
+              out.textContent = inp.value + (f.unit || "");
+              touch();
+            });
+            if (f.auto) out.addEventListener("click", () => { draft[f.key] = 0; touch(); build(); });
+            row.append(name, inp, out);
+          } else if (f.type === "col") {
+            const inp = document.createElement("input"); inp.type = "color"; inp.value = val;
+            const out = document.createElement("output"); out.textContent = val;
+            inp.addEventListener("input", () => { draft[f.key] = inp.value; out.textContent = inp.value; touch(); });
+            row.append(inp, name, out);
+          } else if (f.type === "tog") {
+            const inp = document.createElement("input"); inp.type = "checkbox"; inp.checked = Boolean(val);
+            inp.addEventListener("change", () => { draft[f.key] = inp.checked; touch(); });
+            row.append(name, inp);
+          } else if (f.type === "txt") {
+            const inp = document.createElement("input"); inp.type = "text"; inp.maxLength = 24; inp.value = val;
+            inp.addEventListener("input", () => { draft[f.key] = inp.value; applyStyle(draft); render(true); note("Previewing."); });
+            row.append(name, inp);
+          }
+          host.append(row);
+        });
+      }
+      build();
+
+      // only what differs from the defaults is stored
+      const diff = () => {
+        const out = {};
+        FIELDS.forEach((f) => { if (draft[f.key] !== f.def) out[f.key] = draft[f.key]; });
+        return out;
+      };
+
+      $("czLocal").addEventListener("click", () => {
+        try { localStorage.setItem(LS_LOCAL, JSON.stringify(diff())); local = clean(diff()); note("Saved on this device. Other visitors are not affected."); }
+        catch (e) { note("Could not save on this device.", true); }
+      });
+
+      $("czCopy").addEventListener("click", async () => {
+        const text = JSON.stringify(diff(), null, 2);
+        try { await navigator.clipboard.writeText(text); note("Settings copied."); }
+        catch (e) { window.prompt("Copy your settings:", text); }
+      });
+
+      $("czReset").addEventListener("click", () => {
+        draft = Object.assign({}, DEFAULTS);
+        try { localStorage.removeItem(LS_LOCAL); } catch (e) { /* ignore */ }
+        local = {};
+        applyStyle(draft); build(); render(true);
+        note("Back to the default design. Press Publish for everyone to make that the default for all visitors.");
+      });
+
+      async function getToken() {
+        if (!session) throw new Error("Sign in first.");
+        if (session.expiresAt - Date.now() > 60000) return session.idToken;
+        const r = await fetch("https://securetoken.googleapis.com/v1/token?key=" + CFG.apiKey, {
+          method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: "grant_type=refresh_token&refresh_token=" + encodeURIComponent(session.refreshToken)
+        });
+        const d = await r.json();
+        if (!r.ok) { session = null; localStorage.removeItem(SESSION_KEY); showLogin(); throw new Error("Your session ended. Please sign in again."); }
+        session = { ...session, idToken: d.id_token, refreshToken: d.refresh_token, expiresAt: Date.now() + Number(d.expires_in) * 1000 };
+        localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+        return session.idToken;
+      }
+
+      $("czLogin").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        note("Signing in...");
+        try {
+          const r = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + CFG.apiKey, {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: $("czEmail").value.trim(), password: $("czPass").value, returnSecureToken: true })
+          });
+          const d = await r.json();
+          if (!r.ok) throw new Error("Wrong email or password.");
+          session = { email: d.email, idToken: d.idToken, refreshToken: d.refreshToken, expiresAt: Date.now() + Number(d.expiresIn) * 1000 };
+          localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+          $("czPass").value = "";
+          showLogin();
+          note("Signed in. Now press Publish for everyone.");
+        } catch (e) { note(e.message, true); }
+      });
+
+      $("czPublish").addEventListener("click", async () => {
+        if (!BASE || /YOUR-/.test(BASE)) return note("Fill in status-config.js first.", true);
+        if (!session) { showLogin(); return note("Sign in first (below), then press Publish again.", true); }
+        note("Publishing...");
+        try {
+          const token = await getToken();
+          const r = await fetch(BASE + "/totals-style.json?auth=" + encodeURIComponent(token), {
+            method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(diff())
+          });
+          if (!r.ok) {
+            let detail = ""; try { detail = (await r.json()).error || ""; } catch (e) { /* ignore */ }
+            throw new Error(/permission/i.test(detail) ? "Permission denied. Add a rule for totals-style in Firebase (same as results-style) and Publish." : "Could not save (error " + r.status + (detail ? ": " + detail : "") + ").");
+          }
+          published = clean(diff());
+          try { localStorage.setItem(LS_PUB, JSON.stringify(diff())); localStorage.removeItem(LS_LOCAL); } catch (e) { /* ignore */ }
+          local = {};
+          note("Published. Everyone now sees this design.");
+        } catch (e) { note(e.message, true); }
+      });
+    }
+
+    const q = new URLSearchParams(location.search);
+    if (q.get("year")) state.year = q.get("year");
+    if (q.get("round")) state.round = q.get("round");
+    render();
+
+    // flags-config.json arrives a moment later: redraw quietly so assigned flags/hearts appear
+    if (window.FlagPicker && typeof window.FlagPicker.onChange === "function") {
+      window.FlagPicker.onChange(() => render(true));
+    }
+
+    if (BASE && !/YOUR-/.test(BASE) && !location.search.includes("customize")) {
+      fetch(BASE + "/totals-style.json", { cache: "no-store" })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          const fresh = JSON.stringify(clean(d));
+          let old = null; try { old = localStorage.getItem(LS_PUB); } catch (e) { /* ignore */ }
+          if (fresh === old) return;
+          try { localStorage.setItem(LS_PUB, fresh); } catch (e) { /* ignore */ }
+          published = clean(d);
+          applyStyle(Object.assign({}, published, local));
+          render(true);
+        })
+        .catch(() => {});
+    }
+
+    if (BASE && !/YOUR-/.test(BASE)) {
+      fetch(DATA_URL, { cache: "no-store" })
+        .then((r) => { if (!r.ok) throw new Error(r.status); return r.text(); })
+        .then((text) => {
+          setLive(true, "Live");
+          if (text === cached) return;
+          try { localStorage.setItem(DATA_CACHE, text); } catch (e) { /* ignore */ }
+          data = parseData(JSON.parse(text));
+          render(Boolean(cached));
+        })
+        .catch(() => setLive(false, cached ? "Offline · saved copy" : "Offline"));
+    } else {
+      setLive(false, "Not connected");
+    }
+  </script>
+</body>
+</html>
