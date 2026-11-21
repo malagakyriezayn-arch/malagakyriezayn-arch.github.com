@@ -1,0 +1,2305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#171329">
+
+  <title>Participants | Eurovision Rewind</title>
+  <meta name="description" content="The participants and running order of every Eurovision Rewind edition.">
+  <link rel="icon" href="images/logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@0.460.0"></script>
+
+  <style>
+    :root {
+      --white: #ffffff;
+      --border: rgba(255, 255, 255, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 24px;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: "Montserrat", sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(ellipse at 10% 0%, rgba(112, 83, 213, .25), transparent 40%),
+        radial-gradient(ellipse at 100% 35%, rgba(52, 166, 175, .13), transparent 38%),
+        linear-gradient(145deg, #171329, #101522 65%, #171329);
+      background-attachment: fixed;
+    }
+
+    @media (hover: none) {
+      body { background-attachment: scroll; }
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    /* NAVIGATION */
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 13px 5%;
+      background: rgba(19, 17, 39, .72);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+
+    .navbar {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .brand-logo {
+      width: 43px;
+      height: 43px;
+      object-fit: contain;
+    }
+
+    .nav-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.075);
+      box-shadow: 0 8px 30px rgba(0,0,0,.16);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      color: #d0ccdf;
+      font-size: 11px;
+      font-weight: 600;
+      transition: .25s ease;
+    }
+
+    .nav-link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .nav-link:hover {
+      color: white;
+      background: rgba(255,255,255,.09);
+    }
+
+    .nav-link.active {
+      color: white;
+      background: linear-gradient(135deg, #806be8, #5545ae);
+      box-shadow: 0 4px 18px rgba(103,81,210,.25);
+    }
+
+    .nav-home {
+      width: 40px;
+      padding: 0;
+    }
+
+    /* MAIN (empty - add your content here) */
+
+    main {
+      width: min(1180px, 94%);
+      margin: 0 auto;
+      padding: 30px 0 80px;
+    }
+
+    /* =========================
+       CUSTOM FONT
+       Put the font files in a "fonts" folder next to this page.
+    ========================= */
+
+    @font-face {
+      font-family: "ResultsFont";
+      src: url("fonts/Neulis-Light.otf") format("opentype");
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "ResultsFont";
+      src: url("fonts/Neulis-Regular.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "ResultsFont";
+      src: url("fonts/Neulis-Medium.otf") format("opentype");
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "ResultsFont";
+      src: url("fonts/Neulis-MediumItalic.otf") format("opentype");
+      font-weight: 500;
+      font-style: italic;
+      font-display: swap;
+    }
+
+    :root {
+      --artist-font: "ResultsFont", "Neulis", "Montserrat", sans-serif;
+      --muted: rgba(255, 255, 255, 0.7);
+      --line: rgba(255, 255, 255, 0.16);
+      --rank-bg: #7b2c8a;
+      --name-bg: #913e9f;
+      --board-bg: #571f64;
+    }
+
+    [hidden] { display: none !important; }
+
+    a:focus-visible,
+    button:focus-visible,
+    select:focus-visible {
+      outline: 2px solid #c9bdff;
+      outline-offset: 3px;
+    }
+
+    .page-head { margin-bottom: 22px; text-align: center; }
+
+    .page-head h1 {
+      color: #fff;
+      font-family: var(--artist-font);
+      font-size: clamp(36px, 7.5vw, 62px);
+      font-weight: 500;
+      letter-spacing: -1px;
+      line-height: 1.05;
+    }
+
+    .page-head p {
+      max-width: 580px;
+      margin: 12px auto 0;
+      color: var(--muted);
+      font-family: var(--artist-font);
+      font-size: clamp(14px, 2vw, 17px);
+      line-height: 1.7;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 5px 12px;
+      color: #ffd28a;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(255, 210, 138, 0.1);
+      border: 1px solid rgba(255, 210, 138, 0.3);
+      border-radius: 999px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .chips a,
+    .chips button {
+      min-width: 74px;
+      padding: 9px 18px;
+      color: #c2bfd6;
+      font: 700 13px "Montserrat", sans-serif;
+      letter-spacing: 0.6px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .chips a:hover,
+    .chips button:hover { color: #fff; background: rgba(255, 255, 255, 0.13); }
+
+    .chips .active {
+      color: #fff;
+      background: linear-gradient(135deg, #6f5bd9, #4d3da6);
+      border-color: transparent;
+    }
+
+    .empty {
+      padding: 40px 18px;
+      color: var(--muted);
+      font-family: var(--artist-font);
+      font-size: 17px;
+      text-align: center;
+    }
+
+    .heart-img {
+      flex: none;
+      width: 34px;
+      height: auto;
+      aspect-ratio: 10 / 9;
+      object-fit: contain;
+    }
+
+    select.pick {
+      padding: 10px 14px;
+      color: #fff;
+      font: 600 13px "Montserrat", sans-serif;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+    }
+
+    select.pick option { color: #000; }
+
+    /* =========================
+       PARTICIPANTS AND RUNNING ORDER
+       (same scoreboard look as results.html)
+    ========================= */
+
+    :root {
+      --rank-bg: #5a2aa3;
+      --flag-bg: #2b2478;
+      --name-text: #1c1a55;
+      --board-bg: #1a1560;
+      --gold: #ffcf4a;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .page-head h1 { animation: p-in .6s ease backwards; }
+
+    .summary {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin: -4px 0 22px;
+    }
+
+    .summary span {
+      padding: 6px 14px;
+      color: #e6dfff;
+      font: 700 12px "Montserrat", sans-serif;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+    }
+
+    .summary .city { color: #fff; background: linear-gradient(135deg, #6f5bd9, #4d3da6); border-color: transparent; }
+
+    .edit-hint {
+      max-width: 620px;
+      margin: -4px auto 20px;
+      padding: 9px 16px;
+      color: #ffe39a;
+      font: 600 12px/1.5 "Montserrat", sans-serif;
+      text-align: center;
+      background: rgba(255, 207, 74, 0.08);
+      border: 1px dashed rgba(255, 207, 74, 0.45);
+      border-radius: 12px;
+    }
+
+    /* Tools: search and filter */
+
+    .p-tools {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px 14px;
+      margin-bottom: 22px;
+    }
+
+    .p-tools .chips { margin-bottom: 0; }
+    .p-tools .chips button { min-width: 0; padding: 7px 14px; font-size: 12px; }
+
+    .search input {
+      width: min(300px, 80vw);
+      padding: 10px 16px;
+      color: #fff;
+      font: 600 13px "Montserrat", sans-serif;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+    }
+
+    .search input::placeholder { color: #b9b4d6; }
+    .search input:focus-visible { outline: 2px solid #c9bdff; outline-offset: 2px; }
+
+    /* Flag or heart of a country (set per page in flags-admin.html) */
+
+    .crest {
+      position: relative;
+      display: block;
+      flex: none;
+      overflow: hidden;
+      background: var(--flag-bg);
+    }
+
+    .crest img {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .crest.heart { background: transparent; }
+    .crest.heart img { inset: 8%; width: 84%; height: 84%; object-fit: contain; }
+
+    .crest .initials {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font: 800 14px "Montserrat", sans-serif;
+      letter-spacing: 0.5px;
+      background: hsl(var(--h, 250) 45% 32%);
+    }
+
+    /* Participants: one card per country */
+
+    .p-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr));
+      gap: 12px;
+    }
+
+    .p-card {
+      display: flex;
+      align-items: stretch;
+      min-width: 0;
+      min-height: 92px;
+      overflow: hidden;
+      color: #fff;
+      font-family: var(--artist-font);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      animation: p-in 0.45s ease backwards;
+      animation-delay: calc(var(--i, 0) * 28ms);
+    }
+
+    @keyframes p-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+    .p-card:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.3); transform: translateY(-3px); }
+    .p-card .crest { width: 108px; }
+    .p-card .info { display: flex; flex-direction: column; justify-content: center; gap: 3px; min-width: 0; padding: 12px 16px; }
+    .p-card .t { display: block; overflow: hidden; font-size: 19px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+    .p-card small { display: block; overflow: hidden; color: var(--muted); font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+
+    .tagrow { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+
+    .tag {
+      padding: 2px 9px;
+      color: #d4c7ff;
+      font-family: "Montserrat", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+    }
+
+    .tag.gold { color: #ffd28a; border-color: rgba(255, 210, 138, 0.4); }
+    .tag.dim { color: var(--muted); }
+
+    /* Running order */
+
+    .ro-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+      gap: 30px 28px;
+      align-items: start;
+    }
+
+    .ro { position: relative; }
+
+    .ro h2 {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      color: #d4c7ff;
+      font-family: var(--artist-font);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .ro h2 span { color: var(--muted); font-size: 12px; letter-spacing: 0.5px; }
+    .ro.final h2 { color: #ffd86b; border-bottom-color: rgba(255, 216, 107, 0.4); }
+
+    .line {
+      display: flex;
+      align-items: stretch;
+      min-height: 56px;
+      margin-bottom: 6px;
+      color: #fff;
+      font-family: var(--artist-font);
+      font-weight: 500;
+      transition: transform 0.16s ease;
+    }
+
+    .line .a {
+      display: flex;
+      flex: none;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      min-width: 58px;
+      font-size: 20px;
+      background: linear-gradient(180deg, #7b4bd9, #5a2aa3);
+      border-radius: 14px 0 0 14px;
+    }
+
+    .ro.final .line:first-of-type .a { color: #1b1830; background: linear-gradient(180deg, #ffe07a, #ffcf4a); }
+
+    .line .crest { width: 70px; margin: 0 4px; }
+
+    .line .b {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      min-width: 0;
+      padding: 6px 16px;
+      color: var(--name-text);
+      background: #fff;
+      border-radius: 0 14px 14px 0;
+      transition: background 0.2s ease;
+    }
+
+    .line .b .txt { min-width: 0; }
+    .line .b .t { display: block; overflow: hidden; font-size: 17px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+    .line .b small { display: block; overflow: hidden; color: #6a66a0; font-size: 13px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+    a.line:hover .b { background: #f0ecff; }
+
+    .subnav { margin-top: 26px; text-align: center; font-size: 13px; }
+    .subnav a { margin: 0 8px; color: #d4c7ff; text-decoration: underline; text-underline-offset: 3px; }
+
+    /* Dragging (running order) */
+
+    .sortable { position: relative; }
+    .is-sorting { user-select: none; -webkit-user-select: none; }
+    .is-sorting .dragging { position: relative; z-index: 20; transition: none !important; filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.55)); }
+
+    .grip {
+      display: inline-flex;
+      flex: none;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      min-height: 32px;
+      padding: 0;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 18px;
+      line-height: 1;
+      background: none;
+      border: 0;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .grip:hover { color: #fff; }
+    .dragging .grip { cursor: grabbing; }
+
+    /* =========================
+       EDITOR (?add)
+    ========================= */
+
+    body.adding main { padding-bottom: 72vh; }
+
+    .add-panel {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
+      max-height: 66vh;
+      padding: 8px 16px 0;
+      background: rgba(17, 15, 40, 0.97);
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 22px 22px 0 0;
+      box-shadow: 0 -18px 50px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .add-panel > * { width: min(780px, 100%); margin-left: auto; margin-right: auto; }
+
+    .add-grip { flex: none; width: 46px !important; height: 4px; margin-bottom: 8px; background: rgba(255, 255, 255, 0.25); border-radius: 4px; }
+
+    .add-top {
+      display: flex;
+      flex: none;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px 12px;
+      margin-bottom: 10px;
+    }
+
+    .add-title { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 800; }
+
+    .dirty {
+      padding: 3px 10px;
+      color: #ffe39a;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(255, 207, 74, 0.12);
+      border: 1px solid rgba(255, 207, 74, 0.4);
+      border-radius: 999px;
+    }
+
+    .tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    #addBody { display: flex; flex: 1; flex-direction: column; min-height: 0; }
+    .add-panel.collapsed #addBody { display: none; }
+    .add-panel.collapsed { padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }
+
+    .add-scroll { flex: 1; min-height: 0; padding: 2px 2px 14px; overflow: auto; overscroll-behavior: contain; }
+
+    .add-foot {
+      flex: none;
+      padding: 10px 0 calc(12px + env(safe-area-inset-bottom, 0px));
+      background: rgba(17, 15, 40, 0.97);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .add-panel button,
+    .file-button {
+      padding: 10px 16px;
+      color: #fff;
+      font: 700 12px "Montserrat", sans-serif;
+      background: linear-gradient(135deg, #6f5bd9, #4d3da6);
+      border: 1px solid transparent;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.2s ease;
+    }
+
+    .add-panel button:hover { transform: translateY(-1px); }
+    .add-panel button.ghost { background: rgba(255, 255, 255, 0.09); border-color: var(--line); }
+    .add-panel button.small { padding: 7px 12px; }
+    .add-panel button.tab { background: rgba(255, 255, 255, 0.09); border-color: var(--line); }
+    .add-panel button.tab.active { background: linear-gradient(135deg, #6f5bd9, #4d3da6); border-color: transparent; }
+
+    .add-panel input[type="text"],
+    .add-panel input[type="password"],
+    .add-panel select {
+      width: 100%;
+      min-width: 0;
+      padding: 9px 11px;
+      color: #fff;
+      font: 600 13px "Montserrat", sans-serif;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    .add-panel input:focus-visible, .add-panel select:focus-visible { outline: 2px solid #c9bdff; outline-offset: 1px; }
+    .add-panel select option { color: #000; }
+
+    .add-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 12px; }
+    .add-foot .add-actions { margin: 0; }
+    .add-login { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .add-login input { flex: 1 1 150px; width: auto; }
+    .add-note { min-height: 18px; margin-top: 8px; color: #65d5d0; font-size: 12px; }
+    .add-note.error { color: #ff9b9b; }
+    .tool-help { margin-bottom: 12px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+
+    /* Entries */
+
+    .entry {
+      position: relative;
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-areas:
+        "thumb country artist"
+        "thumb song    semi"
+        "thumb final   btns";
+      gap: 6px 8px;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+
+    .entry .thumb { grid-area: thumb; align-self: stretch; }
+    .entry .thumb .crest { width: 100%; height: 100%; min-height: 74px; border-radius: 8px; }
+    .entry .n {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 2;
+      min-width: 22px;
+      padding: 1px 6px;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 999px;
+    }
+
+    .entry [data-prop="country"] { grid-area: country; font-weight: 800; }
+    .entry [data-prop="artist"] { grid-area: artist; }
+    .entry [data-prop="song"] { grid-area: song; }
+    .entry [data-prop="semi"] { grid-area: semi; }
+    .entry .final { grid-area: final; display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .entry .final input { width: 16px; height: 16px; accent-color: #8a73ff; }
+    .entry .btns { grid-area: btns; display: flex; justify-content: flex-end; gap: 4px; }
+    .entry .btns button { padding: 7px 11px; font-size: 13px; }
+
+    /* Running order list (drag the handle) */
+
+    .order-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 52px;
+      margin-bottom: 6px;
+      padding: 6px 10px 6px 4px;
+      font-size: 13px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      transition: transform 0.16s ease;
+    }
+
+    .order-row .n { width: 26px; color: var(--gold); font-size: 14px; font-weight: 800; text-align: center; }
+    .order-row .crest { width: 52px; height: 34px; border-radius: 4px; }
+    .order-row .crest.heart { width: 40px; }
+    .order-row .who { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .order-row .who small { display: block; overflow: hidden; color: var(--muted); font-size: 11px; font-weight: 600; text-overflow: ellipsis; }
+    .order-row .arrows { display: flex; gap: 4px; }
+    .order-row button.ghost { padding: 6px 11px; font-size: 13px; }
+    .order-row .grip { width: 30px; min-height: 40px; color: rgba(255, 255, 255, 0.6); background: none !important; border: 0 !important; }
+    .order-row .grip:hover { color: #fff; transform: none; }
+    .order-row .grip:focus-visible { outline: 2px solid #c9bdff; border-radius: 8px; }
+    .is-sorting .order-row.dragging { background: #35288a; border-color: rgba(255, 255, 255, 0.4); }
+
+    .heart-row {
+      display: grid;
+      grid-template-columns: 38px 120px minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .heart-row .heart-img { width: 36px; }
+
+    @media (max-width: 620px) {
+      .entry {
+        grid-template-columns: 72px minmax(0, 1fr);
+        grid-template-areas: "thumb country" "thumb artist" "song song" "semi semi" "final final" "btns btns";
+      }
+      .heart-row { grid-template-columns: 38px minmax(0, 1fr) auto; }
+      .heart-row .name { display: none; }
+      .order-row .arrows { display: none; }
+      .p-card .crest { width: 88px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .p-card, .page-head h1 { animation: none; }
+      .line, .order-row { transition: none; }
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 560px) {
+      .site-header {
+        padding: 10px 12px;
+      }
+
+      .navbar {
+        gap: 8px;
+      }
+
+      .brand-logo {
+        width: 35px;
+        height: 35px;
+      }
+
+      .nav-pill {
+        gap: 2px;
+        padding: 4px;
+      }
+
+      .nav-link {
+        min-height: 35px;
+        padding: 0 9px;
+        font-size: 0;
+      }
+
+      .nav-home {
+        width: 35px;
+      }
+
+      main {
+        width: 92%;
+        padding-top: 22px;
+        padding-bottom: 60px;
+      }
+    }
+
+    @media (max-width: 350px) {
+      .brand-logo {
+        width: 29px;
+        height: 29px;
+      }
+
+      .nav-link {
+        padding: 0 7px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *, *::before, *::after {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <header class="site-header">
+    <nav class="navbar" aria-label="Main navigation">
+
+      <a class="brand" href="index.html" aria-label="Eurovision Rewind home">
+        <img
+          class="brand-logo"
+          src="images/logo.png"
+          alt="Eurovision Rewind logo"
+          width="43"
+          height="43"
+        >
+      </a>
+
+      <div class="nav-pill">
+
+        <a class="nav-link nav-home"
+           href="index.html"
+           aria-label="Home"
+           title="Home">
+          <i data-lucide="house"></i>
+        </a>
+
+        <a class="nav-link"
+           href="2029.html#overview"
+           aria-label="Overview"
+           title="Overview">
+          <i data-lucide="layout-grid"></i>
+        </a>
+
+        <a class="nav-link"
+           href="2029.html#countries"
+           aria-label="Countries"
+           title="Countries">
+          <i data-lucide="flag"></i>
+        </a>
+
+        <a class="nav-link"
+           href="results.html#2029"
+           aria-label="Results"
+           title="Results">
+          <i data-lucide="trophy"></i>
+        </a>
+
+        <a class="nav-link"
+           href="artists.html"
+           aria-label="Artists"
+           title="Artists">
+          <i data-lucide="mic-vocal"></i>
+        </a>
+
+        <a class="nav-link active"
+           href="participants.html"
+           aria-label="Participants"
+           title="Participants"
+           aria-current="page">
+          <i data-lucide="users"></i>
+        </a>
+
+        <a class="nav-link"
+           href="matrix.html"
+           aria-label="Voting matrix"
+           title="Voting matrix">
+          <i data-lucide="grid-3x3"></i>
+        </a>
+
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-head">
+      <h1>Participants</h1>
+      <p>The countries, artists and songs of each edition, and the order they perform in.</p>
+      <span class="badge" id="badge" hidden>Sample data - it disappears when you publish real participants</span>
+    </section>
+
+    <nav class="chips" id="years" aria-label="Choose an edition"></nav>
+    <nav class="chips" id="views" aria-label="Choose a view"></nav>
+    <div class="summary" id="summary"></div>
+
+    <p class="edit-hint" id="editHint" hidden>Drag the ⠿ handle of a country to change the running order. Then press Confirm &amp; publish.</p>
+
+    <div class="p-tools" id="tools" hidden>
+      <label class="search">
+        <span class="sr-only">Search a country, artist or song</span>
+        <input type="search" id="q" placeholder="Search country, artist or song…" autocomplete="off" spellcheck="false">
+      </label>
+      <div class="chips" id="filters" aria-label="Filter by show"></div>
+    </div>
+
+    <div id="content"></div>
+    <p class="empty" id="empty" hidden></p>
+
+    <p class="subnav">
+      <a href="country.html">All countries</a>
+      <a href="matrix.html">Voting matrix</a>
+      <a href="results.html">Results</a>
+    </p>
+  </main>
+
+  <datalist id="semis"></datalist>
+
+  <section class="add-panel" id="addPanel" aria-label="Edit participants" hidden>
+    <div class="add-grip" aria-hidden="true"></div>
+
+    <div class="add-top">
+      <div class="add-title">
+        <span>Edit participants</span>
+        <span class="dirty" id="dirty" hidden>Unpublished changes</span>
+      </div>
+      <div class="tabs" id="tabs" role="tablist"></div>
+      <button type="button" class="ghost small" id="addToggle">Hide</button>
+    </div>
+
+    <div id="addBody">
+      <div class="add-scroll">
+        <div id="tabEntries">
+          <p class="tool-help">Add the countries of the edition you have open above. Leave "Semi-final" empty for a country that goes straight to the final.</p>
+          <div class="add-actions">
+            <button type="button" id="entryAdd">+ Add country</button>
+            <button type="button" class="ghost" id="entryFromResults">Add from the results</button>
+            <button type="button" class="ghost" id="entrySort">Sort A-Z</button>
+          </div>
+          <div id="entryList"></div>
+        </div>
+
+        <div id="tabOrder" hidden>
+          <p class="tool-help">Choose a show, then <b>drag the ⠿ handle</b> of a country to put it in its running order (the arrow buttons and the up and down keys work too). You can also drag straight on the page above, or draw the order at random.</p>
+          <div class="add-actions">
+            <select id="orderShow" aria-label="Show" style="width:auto;min-width:160px"></select>
+            <button type="button" class="ghost" id="orderDraw">🎲 Random draw</button>
+            <button type="button" class="ghost" id="orderSort">A-Z</button>
+          </div>
+          <div id="orderList"></div>
+        </div>
+
+        <div id="tabHearts" hidden>
+          <p class="tool-help">Which pictures a page uses (flags or hearts) is set in flags-admin.html. Here you can replace a heart everywhere on the site: type a different file or web address.</p>
+          <div id="heartList"></div>
+        </div>
+      </div>
+
+      <div class="add-foot">
+        <div class="add-actions">
+          <button type="button" id="addConfirm">Confirm &amp; publish</button>
+          <button type="button" class="ghost" id="addUndo">Undo</button>
+        </div>
+
+        <form class="add-login" id="addLogin" hidden>
+          <input type="text" id="addEmail" placeholder="Admin email" autocomplete="username">
+          <input type="password" id="addPassword" placeholder="Password" autocomplete="current-password">
+          <button type="submit">Sign in</button>
+        </form>
+
+        <p class="add-note" id="addNote" role="status"></p>
+      </div>
+    </div>
+  </section>
+
+  <script src="status-config.js"></script>
+  <script src="flags.js"></script>
+  <script>
+
+/* Shows a message on the page instead of leaving it blank if something goes wrong. */
+window.addEventListener("error", function (event) {
+  var main = document.querySelector("main");
+  if (!main || main.dataset.errorShown) return;
+  main.dataset.errorShown = "1";
+  var note = document.createElement("p");
+  note.className = "empty";
+  note.textContent = "Something went wrong while loading this page: " + event.message;
+  main.prepend(note);
+});
+
+/* =========================================================
+   Eurovision Rewind - shared helpers
+   Used by participants.html, matrix.html and country.html
+   (and, if present, by artists.html and results.html for heart flags).
+
+   Keep this file in the same folder as the pages, next to status-config.js.
+========================================================= */
+
+(function () {
+  "use strict";
+
+  const CFG = window.STATUS_CONFIG || {};
+  const configured = Boolean(CFG.dbUrl && CFG.apiKey && !/YOUR-/.test(CFG.dbUrl + CFG.apiKey));
+  const BASE = (CFG.dbUrl || "").replace(/\/$/, "");
+
+  /* ---------- Heart flags ----------
+     Every country is shown by a heart image. The file is found from the country name:
+       "North Macedonia" -> images/hearts/north-macedonia.png
+     A different file can be set for any country with participants.html?add (Hearts tab). */
+
+  const HEART_FOLDER = "images/hearts/";
+  const HEART_EXT = ".png";
+
+  const VOTE_GROUPS = [
+    { key: "jury", label: "Jury" },
+    { key: "tele", label: "Televote" }
+  ];
+  const VOTE_POINTS = [12, 10, 8, 7, 6, 5, 4, 3, 2, 1];
+
+  // Editions that always exist. More can be added with results.html?data.
+  const EDITIONS_BASE = [
+    { year: 2026, city: "Vienna, Austria" },
+    { year: 2027, city: "Zagreb, Croatia" },
+    { year: 2028, city: "Yerevan, Armenia" },
+    { year: 2029, city: "Zürich, Switzerland" }
+  ];
+
+  const listOf = (value) => Array.isArray(value) ? value : Object.values(value || {});
+
+  const same = (a, b) =>
+    String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
+
+  function slug(name) {
+    return String(name || "")
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase().replace(/&/g, "and")
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  }
+
+  function safeImage(value) {
+    const text = String(value || "").trim();
+    if (!text) return "";
+    if (/^data:image\/(png|jpe?g|webp|gif|svg\+xml)[;,]/i.test(text)) return text;
+    if (/^https?:\/\//i.test(text)) return text;
+    if (/^[a-z][a-z0-9+.-]*:/i.test(text)) return "";
+    return text;
+  }
+
+  const imageSrc = (value) => {
+    const safe = safeImage(value);
+    return /^data:/i.test(safe) ? safe : encodeURI(safe).replace(/%25([0-9A-F]{2})/g, "%$1");
+  };
+
+  /* ---------- Loading data (cached in the browser, refreshed from the database) ---------- */
+
+  const NODES = {
+    hearts: "hearts",
+    results: "results-data",
+    participants: "participants",
+    artists: "artists"
+  };
+
+  const store = {};
+
+  function cached(name) {
+    if (name in store) return store[name];
+    try {
+      store[name] = JSON.parse(localStorage.getItem("rw:" + name) || "null");
+    } catch (error) {
+      store[name] = null;
+    }
+    return store[name];
+  }
+
+  function keep(name, data) {
+    store[name] = data;
+    try {
+      if (data && Object.keys(data).length) localStorage.setItem("rw:" + name, JSON.stringify(data));
+      else localStorage.removeItem("rw:" + name);
+    } catch (error) { /* storage full or blocked */ }
+  }
+
+  function load(name) {
+    if (!configured) return Promise.resolve(cached(name));
+
+    return fetch(BASE + "/" + NODES[name] + ".json", { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => { keep(name, data); return data; })
+      .catch(() => cached(name));
+  }
+
+  /* ---------- Heart lookups ---------- */
+
+  // Preview a set of heart replacements without saving it in the browser.
+  const setHearts = (map) => { store.hearts = map; };
+
+  const heartMap = () => {
+    const raw = cached("hearts");
+    return raw && typeof raw === "object" ? raw : {};
+  };
+
+  // override (a row's own heart) -> the replacement set for this country -> images/hearts/<country>.png
+  function heartPath(country, override) {
+    return safeImage(override) || safeImage(heartMap()[slug(country)]) || HEART_FOLDER + slug(country) + HEART_EXT;
+  }
+
+  // A missing image keeps its space but stays invisible.
+  function heartImg(country, className, override) {
+    const image = document.createElement("img");
+    image.className = className || "heart-img";
+    image.src = imageSrc(heartPath(country, override));
+    image.alt = "";
+    image.decoding = "async";
+    image.addEventListener("error", () => { image.style.visibility = "hidden"; });
+    return image;
+  }
+
+  /* ---------- Results and votes ---------- */
+
+  function cleanVotes(votes) {
+    if (!votes) return undefined;
+    const out = {};
+
+    VOTE_GROUPS.forEach(({ key }) => {
+      const raw = votes[key];
+      if (!raw) return;
+      const list = listOf(raw);
+      const names = VOTE_POINTS.map((_, i) => String(list[i] || "").trim());
+      if (names.some(Boolean)) out[key] = names;
+    });
+
+    return Object.keys(out).length ? out : undefined;
+  }
+
+  function normRow(item) {
+    return {
+      country: String(item.country),
+      points: item.points,
+      ...(item.heart ? { heart: String(item.heart) } : {}),
+      ...(item.voterOnly ? { voterOnly: true } : {}),
+      ...(cleanVotes(item.votes) ? { votes: cleanVotes(item.votes) } : {})
+    };
+  }
+
+  // { 2028: { city, grand: [rows], rounds: [{ name, rows }] } }
+  function normalizeResults(data) {
+    const out = {};
+
+    Object.keys(data || {}).forEach((year) => {
+      if (!Number.isInteger(Number(year))) return;
+      const value = data[year];
+      const rows = (list) => listOf(list).filter((item) => item && item.country).map(normRow);
+
+      out[year] = {
+        city: value && !Array.isArray(value) && value.city ? String(value.city) : "",
+        grand: Array.isArray(value) ? rows(value) : rows(value && value.grand),
+        rounds: Array.isArray(value) ? [] : listOf(value && value.rounds)
+          .filter((round) => round && round.name)
+          .map((round) => ({ name: String(round.name), rows: rows(round.rows) }))
+      };
+    });
+
+    return out;
+  }
+
+  // Points one country gave another. group: "jury", "tele" or "total" (all groups added together).
+  function pointsFor(giver, receiver, group) {
+    const keys = group === "total" ? VOTE_GROUPS.map((item) => item.key) : [group];
+    let sum = 0;
+
+    keys.forEach((key) => {
+      const list = (giver.votes && giver.votes[key]) || [];
+      const position = list.findIndex((name) => same(name, receiver));
+      if (position >= 0) sum += VOTE_POINTS[position];
+    });
+
+    return sum;
+  }
+
+  const groupsWithVotes = (rows) =>
+    VOTE_GROUPS.filter(({ key }) => rows.some((row) => row.votes && row.votes[key]));
+
+  /* ---------- Editions ---------- */
+
+  // Every year that has a name, results or participants.
+  function editions(results, participants) {
+    const map = new Map(EDITIONS_BASE.map((edition) => [edition.year, edition.city]));
+
+    Object.keys(results || {}).forEach((year) => {
+      const city = results[year].city;
+      if (city) map.set(Number(year), city);
+      else if (!map.has(Number(year))) map.set(Number(year), "");
+    });
+
+    Object.keys(participants || {}).forEach((year) => {
+      if (Number.isInteger(Number(year)) && !map.has(Number(year))) map.set(Number(year), "");
+    });
+
+    return [...map.entries()].map(([year, city]) => ({ year, city })).sort((a, b) => a.year - b.year);
+  }
+
+  /* ---------- Participants ---------- */
+
+  function normEntry(item) {
+    const number = (value) => (Number.isFinite(Number(value)) && value !== "" && value !== null ? Number(value) : 0);
+
+    return {
+      country: String(item.country || "").trim().slice(0, 60),
+      artist: String(item.artist || "").trim().slice(0, 80),
+      song: String(item.song || "").trim().slice(0, 100),
+      semi: String(item.semi || "").trim().slice(0, 40),
+      inFinal: item.inFinal === undefined ? true : Boolean(item.inFinal),
+      semiOrder: number(item.semiOrder),
+      finalOrder: number(item.finalOrder)
+    };
+  }
+
+  // { 2029: [entries] }
+  function normalizeParticipants(data) {
+    const out = {};
+
+    Object.keys(data || {}).forEach((year) => {
+      if (!Number.isInteger(Number(year))) return;
+      const value = data[year];
+      const list = listOf(Array.isArray(value) ? value : value && value.entries)
+        .filter((item) => item && item.country)
+        .map(normEntry);
+      if (list.length) out[year] = list;
+    });
+
+    return out;
+  }
+
+  /* ---------- Demo data (shown only until you publish real results) ---------- */
+
+  const SAMPLE = [
+    ["France", 248], ["Ukraine", 177], ["Georgia", 176], ["Armenia", 175],
+    ["Spain", 152], ["Albania", 145], ["North Macedonia", 141], ["Poland", 139],
+    ["Netherlands", 93], ["Malta", 92], ["Italy", 73], ["Portugal", 73],
+    ["Croatia", 70], ["Azerbaijan", 66], ["Cyprus", 50], ["Montenegro", 49]
+  ];
+
+  function sampleResults() {
+    const names = SAMPLE.map(([name]) => name);
+    const hash = (text) => [...text].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+
+    const pick = (name, index, seed) => names
+      .filter((other) => other !== name)
+      .map((other) => [other, (hash(other) * (index + 3) + seed * 7) % 97])
+      .sort((a, b) => a[1] - b[1])
+      .slice(0, 10)
+      .map(([other]) => other);
+
+    const rows = SAMPLE.map(([country, points], index) =>
+      normRow({ country, points, votes: { jury: pick(country, index, 1), tele: pick(country, index, 5) } }));
+
+    return { 2028: { city: "Yerevan, Armenia", grand: rows, rounds: [], sample: true } };
+  }
+
+  function sampleParticipants() {
+    return {
+      2028: SAMPLE.map(([country], index) => normEntry({
+        country,
+        artist: "Artist",
+        song: "Song Title",
+        semi: index < 8 ? "Semi-final 1" : "Semi-final 2",
+        inFinal: true,
+        semiOrder: (index % 8) + 1,
+        finalOrder: index + 1
+      }))
+    };
+  }
+
+  /* ---------- Admin sign-in (the same login as the other editors) ---------- */
+
+  const SESSION_KEY = "statusAdminSession";
+  let session = null;
+
+  try { session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null"); } catch (error) { session = null; }
+
+  function saveSession(next) {
+    session = next;
+    if (next) localStorage.setItem(SESSION_KEY, JSON.stringify(next));
+    else localStorage.removeItem(SESSION_KEY);
+  }
+
+  async function signIn(email, password) {
+    const response = await fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + CFG.apiKey,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, returnSecureToken: true })
+      }
+    );
+    const data = await response.json();
+    if (!response.ok) throw new Error("Wrong email or password.");
+
+    saveSession({
+      email: data.email,
+      idToken: data.idToken,
+      refreshToken: data.refreshToken,
+      expiresAt: Date.now() + Number(data.expiresIn) * 1000
+    });
+  }
+
+  async function getToken() {
+    if (!session) throw new Error("Sign in first.");
+    if (session.expiresAt - Date.now() > 60000) return session.idToken;
+
+    const response = await fetch(
+      "https://securetoken.googleapis.com/v1/token?key=" + CFG.apiKey,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "grant_type=refresh_token&refresh_token=" + encodeURIComponent(session.refreshToken)
+      }
+    );
+    const data = await response.json();
+
+    if (!response.ok) {
+      saveSession(null);
+      throw new Error("Your session ended. Please sign in again.");
+    }
+
+    saveSession({
+      ...session,
+      idToken: data.id_token,
+      refreshToken: data.refresh_token,
+      expiresAt: Date.now() + Number(data.expires_in) * 1000
+    });
+
+    return session.idToken;
+  }
+
+  // Writes a whole node ("participants", "hearts") to the database.
+  async function publish(name, payload) {
+    const token = await getToken();
+    const response = await fetch(BASE + "/" + NODES[name] + ".json?auth=" + encodeURIComponent(token), {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      let detail = "";
+      try { detail = (await response.json()).error || ""; } catch (error) { detail = ""; }
+
+      throw new Error(
+        /permission/i.test(detail)
+          ? 'Permission denied. Add the "' + NODES[name] + '" rule in Firebase (see the instructions) and Publish.'
+          : "Could not save (error " + response.status + (detail ? ": " + detail : "") + ")."
+      );
+    }
+
+    keep(name, payload);
+  }
+
+  window.RW = {
+    configured,
+    HEART_FOLDER, HEART_EXT, VOTE_GROUPS, VOTE_POINTS, EDITIONS_BASE,
+    listOf, same, slug, safeImage, imageSrc,
+    cached, load, keep, setHearts, heartMap, heartPath, heartImg,
+    cleanVotes, normRow, normalizeResults, pointsFor, groupsWithVotes,
+    editions, normEntry, normalizeParticipants,
+    sampleResults, sampleParticipants,
+    signedIn: () => Boolean(session),
+    userEmail: () => (session && session.email) || "",
+    signIn, signOut: () => saveSession(null), publish
+  };
+})();
+
+  </script>
+  <script>
+    (function () {
+      const $ = (id) => document.getElementById(id);
+      const adding = new URLSearchParams(location.search).has("add");
+      const FP = window.FlagPicker || null;     // flags.js (flags or hearts, chosen per page)
+
+      const el = (tag, className, text) => {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text !== undefined) element.textContent = text;
+        return element;
+      };
+
+      const link = (name) => "country.html?c=" + encodeURIComponent(RW.slug(name));
+      const clone = (value) => JSON.parse(JSON.stringify(value));
+
+      let results = {};
+      let savedP = {};
+      let usingSample = false;
+      let draftP = {};            // unpublished edits: year -> entries
+      let draftHearts = null;     // unpublished heart replacements: slug -> path
+      let savedHearts = { ...RW.heartMap() };
+      let year = 0;
+      let view = "participants";
+      let filter = "all";         // all | direct | a semi-final name
+      let query = "";
+      let editor = null;          // set below when the page is opened with ?add
+
+      /* ---------- Flags (from flags.js) ----------
+         The page shows what flags-admin.html chose for "participants": flags or hearts.
+         Each country tries the assigned file first, then the default folders. */
+
+      const FOUND = new Map();      // which file worked
+      const MISSING = new Set();    // countries without any file
+      const crestMode = () => (FP ? FP.mode("participants") : "heart");
+
+      const imgSrc = (value) => {
+        const safe = RW.safeImage(value);
+        return /^data:/i.test(safe) ? safe : encodeURI(safe).replace(/%25([0-9A-F]{2})/g, "%$1");
+      };
+
+      function crestUrls(country) {
+        const out = [];
+        const add = (url) => { const safe = RW.safeImage(url); if (safe && !out.includes(safe)) out.push(safe); };
+
+        if (crestMode() === "heart") add(RW.heartMap()[RW.slug(country)]);   // hearts replaced on the Hearts tab
+        if (FP) FP.urls(country, "participants").forEach(add);
+        else add(RW.heartPath(country));
+
+        return out;
+      }
+
+      function initials(name) {
+        const words = String(name).replace(/[^\p{L}\p{N} ]/gu, " ").split(/\s+/).filter(Boolean);
+        const letters = words.length > 1 ? words.map((word) => word[0]).join("") : (words[0] || "?");
+        return letters.slice(0, 3).toUpperCase();
+      }
+
+      function crest(country) {
+        const mode = crestMode();
+        const box = el("span", "crest " + mode);
+        const key = mode + "|" + (FP ? FP.version() : 0) + "|" + RW.slug(country) + "|" + (RW.heartMap()[RW.slug(country)] || "");
+
+        const letters = () => {
+          const tile = el("span", "initials", initials(country));
+          tile.style.setProperty("--h", [...String(country)].reduce((sum, char) => (sum * 31 + char.charCodeAt(0)) % 360, 17));
+          box.replaceChildren(tile);
+        };
+
+        if (MISSING.has(key) || !RW.slug(country)) { letters(); return box; }
+
+        let urls = crestUrls(country);
+        if (FOUND.has(key)) urls = [FOUND.get(key), ...urls.filter((url) => url !== FOUND.get(key))];
+        if (!urls.length) { letters(); return box; }
+
+        const image = document.createElement("img");
+        let tried = 0;
+        image.alt = "";
+        image.decoding = "async";
+        image.addEventListener("load", () => FOUND.set(key, urls[tried]));
+        image.addEventListener("error", () => {
+          tried += 1;
+          if (tried < urls.length) image.src = imgSrc(urls[tried]);
+          else { MISSING.add(key); letters(); }
+        });
+        image.src = imgSrc(urls[0]);
+        box.append(image);
+        return box;
+      }
+
+      /* ---------- Dragging (running order) ----------
+         Works with the mouse, a finger or the keyboard. The handle starts the drag; the other rows
+         slide out of the way; letting go calls onMove(from, to). */
+
+      function scrollParent(node) {
+        for (let parent = node.parentElement; parent; parent = parent.parentElement) {
+          const overflow = getComputedStyle(parent).overflowY;
+          if ((overflow === "auto" || overflow === "scroll") && parent.scrollHeight > parent.clientHeight) return parent;
+        }
+        return window;
+      }
+
+      function makeSortable(container, options) {
+        container.classList.add("sortable");
+        let drag = null;
+
+        const itemsOf = () => [...container.querySelectorAll(options.item)];
+
+        function clear() {
+          if (!drag) return;
+          cancelAnimationFrame(drag.raf);
+          drag.items.forEach((item) => { item.style.transform = ""; item.classList.remove("dragging"); });
+          container.classList.remove("is-sorting");
+          try { drag.handle.releasePointerCapture(drag.id); } catch (error) { /* already released */ }
+          document.removeEventListener("keydown", onKey);
+          drag = null;
+        }
+
+        function onKey(event) {
+          if (event.key === "Escape") clear();
+        }
+
+        function frame() {
+          if (!drag) return;
+
+          // keep scrolling while the pointer rests near the edge of the scrolling area
+          const area = drag.scroller === window
+            ? { top: 70, bottom: window.innerHeight }
+            : drag.scroller.getBoundingClientRect();
+          const edge = 60;
+          if (drag.y < area.top + edge) drag.scroller.scrollBy(0, -14 * Math.min(1, (area.top + edge - drag.y) / edge));
+          else if (drag.y > area.bottom - edge) drag.scroller.scrollBy(0, 14 * Math.min(1, (drag.y - (area.bottom - edge)) / edge));
+
+          const top = drag.y - container.getBoundingClientRect().top - drag.grab;
+          const first = drag.items[0].offsetTop;
+          const last = drag.items[drag.items.length - 1].offsetTop;
+          const clamped = Math.max(first, Math.min(last, top));
+
+          drag.item.style.transform = "translateY(" + (clamped - drag.startTop) + "px)";
+
+          const to = Math.max(0, Math.min(drag.items.length - 1, Math.round((clamped - first) / drag.pitch)));
+          if (to !== drag.to) {
+            drag.to = to;
+            drag.items.forEach((item, index) => {
+              if (item === drag.item) return;
+              const shift = drag.from < to && index > drag.from && index <= to ? -drag.pitch
+                : drag.from > to && index >= to && index < drag.from ? drag.pitch : 0;
+              item.style.transform = shift ? "translateY(" + shift + "px)" : "";
+            });
+          }
+
+          drag.raf = requestAnimationFrame(frame);
+        }
+
+        container.addEventListener("pointerdown", (event) => {
+          const handle = event.target.closest(options.handle);
+          if (!handle || !container.contains(handle) || (event.pointerType === "mouse" && event.button !== 0)) return;
+
+          const items = itemsOf();
+          const item = handle.closest(options.item);
+          const from = items.indexOf(item);
+          if (from < 0 || items.length < 2) return;
+
+          event.preventDefault();
+          handle.setPointerCapture(event.pointerId);
+
+          drag = {
+            handle, items, item, from, to: from, id: event.pointerId,
+            pitch: items[1].offsetTop - items[0].offsetTop || item.offsetHeight,
+            startTop: item.offsetTop,
+            grab: event.clientY - container.getBoundingClientRect().top - item.offsetTop,
+            y: event.clientY,
+            scroller: scrollParent(container),
+            raf: 0
+          };
+
+          item.classList.add("dragging");
+          container.classList.add("is-sorting");
+          document.addEventListener("keydown", onKey);
+          drag.raf = requestAnimationFrame(frame);
+        });
+
+        container.addEventListener("pointermove", (event) => {
+          if (drag && event.pointerId === drag.id) drag.y = event.clientY;
+        });
+
+        const finish = (event) => {
+          if (!drag || event.pointerId !== drag.id) return;
+          const { from, to } = drag;
+          clear();
+          if (event.type === "pointerup" && from !== to) options.onMove(from, to);
+        };
+
+        container.addEventListener("pointerup", finish);
+        container.addEventListener("pointercancel", finish);
+
+        // a click on a handle inside a link must not open the link
+        container.addEventListener("click", (event) => { if (event.target.closest(options.handle)) event.preventDefault(); });
+
+        // Keyboard: focus a handle, then press the up or down arrow
+        if (options.keyboard) {
+          container.addEventListener("keydown", (event) => {
+            const handle = event.target.closest(options.handle);
+            if (!handle || (event.key !== "ArrowUp" && event.key !== "ArrowDown")) return;
+
+            const items = itemsOf();
+            const from = items.indexOf(handle.closest(options.item));
+            const to = from + (event.key === "ArrowUp" ? -1 : 1);
+            if (from < 0 || to < 0 || to >= items.length) return;
+
+            event.preventDefault();
+            options.onMove(from, to);
+            requestAnimationFrame(() => {
+              const handles = container.querySelectorAll(options.handle);
+              if (handles[to]) handles[to].focus();
+            });
+          });
+        }
+      }
+
+      /* ---------- Data ---------- */
+
+      function readData() {
+        results = RW.normalizeResults(RW.cached("results"));
+        savedP = RW.normalizeParticipants(RW.cached("participants"));
+        usingSample = !adding && !Object.keys(savedP).length;
+        if (usingSample) savedP = RW.normalizeParticipants(RW.sampleParticipants());
+      }
+
+      const entriesFor = (y) => draftP[y] || savedP[y] || [];
+      const editionList = () => RW.editions(results, { ...savedP, ...draftP });
+
+      function pickYear() {
+        const [hashYear, hashView] = location.hash.replace("#", "").split("/");
+        const years = editionList().map((edition) => edition.year);
+        const withData = years.filter((y) => entriesFor(y).length);
+        year = years.includes(Number(hashYear)) ? Number(hashYear) : (withData[withData.length - 1] || years[years.length - 1]);
+        view = hashView === "order" ? "order" : "participants";
+      }
+
+      function setHash() {
+        history.replaceState(null, "", location.pathname + location.search + "#" + year + (view === "order" ? "/order" : ""));
+      }
+
+      const byOrder = (field) => (a, b) =>
+        ((a[field] || 1e9) - (b[field] || 1e9)) || a.country.localeCompare(b.country);
+
+      // Semi-finals (in name order) and the Grand Final, each with its countries in running order
+      function showsOf(entries) {
+        const semis = [...new Set(entries.map((entry) => entry.semi).filter(Boolean))]
+          .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+        const shows = semis.map((name) => ({
+          name, key: "semi", field: "semiOrder",
+          entries: entries.filter((entry) => entry.semi === name).sort(byOrder("semiOrder"))
+        }));
+
+        const final = entries.filter((entry) => entry.inFinal);
+        if (final.length) shows.push({ name: "Grand Final", key: "final", field: "finalOrder", entries: final.sort(byOrder("finalOrder")) });
+        return shows;
+      }
+
+      /* ---------- The page ---------- */
+
+      function renderChips() {
+        $("years").innerHTML = "";
+        editionList().forEach((edition) => {
+          const button = el("button", "", String(edition.year));
+          button.type = "button";
+          button.classList.toggle("active", edition.year === year);
+          button.addEventListener("click", () => { year = edition.year; filter = "all"; setHash(); renderAll(); });
+          $("years").append(button);
+        });
+
+        $("views").innerHTML = "";
+        [["participants", "Participants"], ["order", "Running order"]].forEach(([key, label]) => {
+          const button = el("button", "", label);
+          button.type = "button";
+          button.classList.toggle("active", key === view);
+          button.addEventListener("click", () => { view = key; setHash(); renderPage(); renderChips(); });
+          $("views").append(button);
+        });
+      }
+
+      function cardFor(entry, index) {
+        const card = el("a", "p-card");
+        card.href = link(entry.country);
+        card.style.setProperty("--i", Math.min(index, 20));
+        card.append(crest(entry.country));
+
+        const info = el("div", "info");
+        info.append(el("span", "t", entry.country));
+        const details = [entry.artist, entry.song].filter(Boolean).join(" - ");
+        if (details) info.append(el("small", "", details));
+
+        const tags = el("div", "tagrow");
+        tags.append(el("span", "tag", entry.semi || "Direct to final"));
+        if (entry.semi && entry.inFinal) tags.append(el("span", "tag gold", "Qualified"));
+        if (entry.semi && !entry.inFinal) tags.append(el("span", "tag dim", "Did not qualify"));
+        info.append(tags);
+
+        card.append(info);
+        return card;
+      }
+
+      function lineFor(entry, number) {
+        // while editing, the lines can be dragged (they are not links then)
+        const row = el(adding ? "div" : "a", "line");
+        if (!adding) row.href = link(entry.country);
+
+        const rank = el("div", "a");
+        if (adding) {
+          const grip = el("button", "grip", "⠿");
+          grip.type = "button";
+          grip.tabIndex = -1;
+          grip.title = "Drag to change the running order";
+          grip.setAttribute("aria-label", "Drag " + entry.country + " to change the running order");
+          rank.append(grip);
+        }
+        rank.append(el("span", "", String(number).padStart(2, "0")));
+        row.append(rank, crest(entry.country));
+
+        const name = el("div", "b");
+        const text = el("div", "txt");
+        text.append(el("span", "t", entry.country));
+        const details = [entry.artist, entry.song].filter(Boolean).join(" - ");
+        if (details) text.append(el("small", "", details));
+        name.append(text);
+        row.append(name);
+        return row;
+      }
+
+      function matches(entry) {
+        if (filter === "direct" && entry.semi) return false;
+        if (filter !== "all" && filter !== "direct" && entry.semi !== filter) return false;
+        const wanted = query.trim().toLowerCase();
+        return !wanted || [entry.country, entry.artist, entry.song, entry.semi].join(" ").toLowerCase().includes(wanted);
+      }
+
+      function renderTools(entries) {
+        const show = view === "participants" && entries.length > 0;
+        $("tools").hidden = !show;
+        $("filters").innerHTML = "";
+        if (!show) return;
+
+        const semis = [...new Set(entries.map((entry) => entry.semi).filter(Boolean))]
+          .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+        const options = [["all", "All"], ...semis.map((name) => [name, name])];
+        if (entries.some((entry) => !entry.semi) && semis.length) options.push(["direct", "Direct to final"]);
+        if (!options.some(([key]) => key === filter)) filter = "all";
+
+        if (options.length > 1) {
+          options.forEach(([key, label]) => {
+            const button = el("button", "", label);
+            button.type = "button";
+            button.classList.toggle("active", key === filter);
+            button.addEventListener("click", () => { filter = key; renderPage(); });
+            $("filters").append(button);
+          });
+        }
+      }
+
+      function renderSummary(entries, edition) {
+        $("summary").innerHTML = "";
+        if (edition && edition.city) $("summary").append(el("span", "city", edition.city));
+        if (!entries.length) return;
+
+        const semis = new Set(entries.map((entry) => entry.semi).filter(Boolean)).size;
+        $("summary").append(el("span", "", entries.length + (entries.length === 1 ? " country" : " countries")));
+        if (semis) $("summary").append(el("span", "", semis + (semis === 1 ? " semi-final" : " semi-finals")));
+        $("summary").append(el("span", "", entries.filter((entry) => entry.inFinal).length + " in the final"));
+      }
+
+      function renderPage() {
+        const entries = entriesFor(year);
+        const edition = editionList().find((item) => item.year === year);
+
+        $("badge").hidden = !usingSample;
+        $("editHint").hidden = !(adding && view === "order" && entries.length);
+        renderSummary(entries, edition);
+        renderTools(entries);
+
+        $("content").innerHTML = "";
+        $("empty").hidden = entries.length > 0;
+        $("empty").textContent = "The participants of " + year + " haven't been announced yet.";
+        if (!entries.length) return;
+
+        if (view === "participants") {
+          const shown = entries.filter(matches).sort((a, b) => a.country.localeCompare(b.country));
+
+          if (!shown.length) {
+            $("empty").hidden = false;
+            $("empty").textContent = "No country matches your search.";
+            return;
+          }
+
+          const grid = el("div", "p-grid");
+          shown.forEach((entry, index) => grid.append(cardFor(entry, index)));
+          $("content").append(grid);
+        } else {
+          const grid = el("div", "ro-grid");
+
+          showsOf(entries).forEach((show) => {
+            const block = el("section", "ro" + (show.key === "final" ? " final" : ""));
+            const title = el("h2", "", show.name);
+            title.append(el("span", "", show.entries.length + " countries"));
+            block.append(title);
+            show.entries.forEach((entry, index) => block.append(lineFor(entry, index + 1)));
+            grid.append(block);
+
+            if (adding && editor) {
+              makeSortable(block, { item: ".line", handle: ".grip", onMove: (from, to) => editor.moveInShow(show.name, from, to) });
+            }
+          });
+
+          $("content").append(grid);
+        }
+      }
+
+      function renderAll() {
+        renderChips();
+        renderPage();
+        if (adding) refreshEditor();
+        if (window.lucide) window.lucide.createIcons();
+      }
+
+      $("q").addEventListener("input", () => { query = $("q").value; renderPage(); });
+
+      /* =========================================================
+         participants.html?add  (the editor)
+      ========================================================= */
+
+      let refreshEditor = () => {};
+
+      if (adding) {
+        document.body.classList.add("adding");
+        $("addPanel").hidden = false;
+
+        const note = (text, isError) => {
+          $("addNote").textContent = text;
+          $("addNote").classList.toggle("error", Boolean(isError));
+        };
+
+        const updateDirty = () => { $("dirty").hidden = !(Object.keys(draftP).length || draftHearts); };
+
+        const showLogin = () => { $("addLogin").hidden = RW.signedIn(); };
+
+        $("addLogin").addEventListener("submit", async (event) => {
+          event.preventDefault();
+          note("Signing in...");
+
+          try {
+            await RW.signIn($("addEmail").value.trim(), $("addPassword").value);
+            $("addPassword").value = "";
+            showLogin();
+            note("Signed in. Now press Confirm & publish.");
+          } catch (error) {
+            note(error.message, true);
+          }
+        });
+
+        // The working copy of this edition's list
+        function draft() {
+          if (!draftP[year]) draftP[year] = clone(entriesFor(year));
+          return draftP[year];
+        }
+
+        const changed = () => {
+          renderChips();
+          renderPage();
+          updateDirty();
+          note("Previewing on the page. Press Confirm & publish to share it.");
+        };
+
+        /* ----- Tabs ----- */
+
+        const TABS = [["entries", "Entries", "tabEntries"], ["order", "Running order", "tabOrder"], ["hearts", "Hearts", "tabHearts"]];
+        const tabButtons = {};
+        let tab = "entries";
+
+        function showTab(key) {
+          tab = key;
+          TABS.forEach(([name, , id]) => {
+            $(id).hidden = name !== key;
+            tabButtons[name].classList.toggle("active", name === key);
+            tabButtons[name].setAttribute("aria-selected", String(name === key));
+          });
+          note("");
+          refreshEditor();
+        }
+
+        TABS.forEach(([name, label]) => {
+          const button = el("button", "tab", label);
+          button.type = "button";
+          button.setAttribute("role", "tab");
+          button.addEventListener("click", () => showTab(name));
+          tabButtons[name] = button;
+          $("tabs").append(button);
+        });
+
+        $("addToggle").addEventListener("click", () => {
+          const collapsed = $("addPanel").classList.toggle("collapsed");
+          $("addToggle").textContent = collapsed ? "Show" : "Hide";
+        });
+
+        /* ----- Entries ----- */
+
+        function input(prop, value, placeholder) {
+          const field = el("input");
+          field.type = "text";
+          field.value = value || "";
+          field.placeholder = placeholder || "";
+          field.dataset.prop = prop;
+          return field;
+        }
+
+        function button(label, action, title) {
+          const element = el("button", "ghost", label);
+          element.type = "button";
+          element.dataset.action = action;
+          element.title = title;
+          element.setAttribute("aria-label", title);
+          return element;
+        }
+
+        function buildEntries() {
+          const list = entriesFor(year);
+          $("entryList").innerHTML = "";
+          tabButtons.entries.textContent = "Entries" + (list.length ? " · " + list.length : "");
+
+          $("semis").innerHTML = "";
+          [...new Set(list.map((entry) => entry.semi).filter(Boolean).concat(["Semi-final 1", "Semi-final 2"]))]
+            .forEach((name) => $("semis").append(new Option(name)));
+
+          if (!list.length) {
+            $("entryList").append(el("p", "tool-help", "No countries yet for " + year + ". Press + Add country."));
+            return;
+          }
+
+          list.forEach((entry, index) => {
+            const row = el("div", "entry");
+            row.dataset.index = index;
+
+            const thumb = el("div", "thumb");
+            thumb.append(crest(entry.country));
+
+            const semi = input("semi", entry.semi, "Semi-final (empty = straight to final)");
+            semi.setAttribute("list", "semis");
+
+            const checkbox = el("input");
+            checkbox.type = "checkbox";
+            checkbox.checked = entry.inFinal;
+            checkbox.dataset.prop = "inFinal";
+            const final = el("label", "final");
+            final.append(checkbox, el("span", "", "In the Grand Final"));
+
+            const buttons = el("span", "btns");
+            buttons.append(button("↑", "up", "Move up"), button("↓", "down", "Move down"),
+              button("⧉", "duplicate", "Duplicate"), button("✕", "remove", "Remove"));
+
+            row.append(thumb, el("span", "n", String(index + 1)),
+              input("country", entry.country, "Country"),
+              input("artist", entry.artist, "Artist"),
+              input("song", entry.song, "Song"),
+              semi, final, buttons);
+
+            $("entryList").append(row);
+          });
+        }
+
+        let thumbTimer = 0;
+
+        $("entryList").addEventListener("input", (event) => {
+          const target = event.target;
+          const prop = target.dataset.prop;
+          if (!prop) return;
+
+          const row = target.closest(".entry");
+          const entry = draft()[Number(row.dataset.index)];
+          entry[prop] = target.type === "checkbox" ? target.checked : target.value;
+
+          // the flag next to the row follows the typed name
+          if (prop === "country") {
+            clearTimeout(thumbTimer);
+            thumbTimer = setTimeout(() => row.querySelector(".thumb").replaceChildren(crest(entry.country)), 350);
+          }
+
+          changed();
+        });
+
+        $("entryList").addEventListener("click", (event) => {
+          const target = event.target.closest("button[data-action]");
+          if (!target) return;
+
+          const index = Number(target.closest(".entry").dataset.index);
+          const list = draft();
+          const action = target.dataset.action;
+
+          if (action === "remove") list.splice(index, 1);
+          if (action === "duplicate") list.splice(index + 1, 0, clone(list[index]));
+          if (action === "up" && index > 0) [list[index - 1], list[index]] = [list[index], list[index - 1]];
+          if (action === "down" && index < list.length - 1) [list[index + 1], list[index]] = [list[index], list[index + 1]];
+
+          buildEntries();
+          changed();
+        });
+
+        $("entryAdd").addEventListener("click", () => {
+          draft().push({ country: "", artist: "", song: "", semi: "", inFinal: true, semiOrder: 0, finalOrder: 0 });
+          buildEntries();
+          changed();
+          const countries = $("entryList").querySelectorAll('[data-prop="country"]');
+          countries[countries.length - 1].focus();
+          countries[countries.length - 1].scrollIntoView({ block: "nearest" });
+        });
+
+        $("entrySort").addEventListener("click", () => {
+          draft().sort((a, b) => a.country.localeCompare(b.country));
+          buildEntries();
+          changed();
+        });
+
+        // Fill the list from the countries in this edition's published results
+        $("entryFromResults").addEventListener("click", () => {
+          const edition = results[year];
+          if (!edition || (!edition.grand.length && !edition.rounds.length)) {
+            return note("There are no published results for " + year + " to take countries from.", true);
+          }
+
+          const list = draft();
+          const known = new Set(list.map((entry) => RW.slug(entry.country)));
+          const finalists = new Set(edition.grand.filter((row) => !row.voterOnly).map((row) => RW.slug(row.country)));
+          let added = 0;
+
+          edition.rounds.forEach((round) => round.rows.filter((row) => !row.voterOnly).forEach((row) => {
+            if (known.has(RW.slug(row.country))) return;
+            known.add(RW.slug(row.country));
+            list.push({ country: row.country, artist: "", song: "", semi: round.name, inFinal: finalists.has(RW.slug(row.country)), semiOrder: 0, finalOrder: 0 });
+            added += 1;
+          }));
+
+          edition.grand.filter((row) => !row.voterOnly).forEach((row) => {
+            if (known.has(RW.slug(row.country))) return;
+            known.add(RW.slug(row.country));
+            list.push({ country: row.country, artist: "", song: "", semi: "", inFinal: true, semiOrder: 0, finalOrder: 0 });
+            added += 1;
+          });
+
+          buildEntries();
+          changed();
+          note(added ? added + " countries added from the results." : "Every country from the results is already in the list.");
+        });
+
+        /* ----- Running order ----- */
+
+        function currentShow() {
+          const shows = showsOf(entriesFor(year));
+          return shows.find((show) => show.name === $("orderShow").value) || shows[0];
+        }
+
+        function buildOrder() {
+          const shows = showsOf(entriesFor(year));
+          const previous = $("orderShow").value;
+
+          $("orderShow").innerHTML = "";
+          shows.forEach((show) => $("orderShow").append(new Option(show.name, show.name)));
+          if (shows.some((show) => show.name === previous)) $("orderShow").value = previous;
+
+          $("orderList").innerHTML = "";
+          const show = currentShow();
+
+          if (!show) {
+            $("orderList").append(el("p", "tool-help", "Add countries on the Entries tab first."));
+            return;
+          }
+
+          show.entries.forEach((entry, index) => {
+            const row = el("div", "order-row");
+            row.dataset.index = index;
+
+            const grip = el("button", "grip", "⠿");
+            grip.type = "button";
+            grip.title = "Drag to change the order (or use the up and down arrow keys)";
+            grip.setAttribute("aria-label", "Move " + entry.country + ". Drag, or press the up or down arrow key.");
+
+            const who = el("span", "who", entry.country);
+            const details = [entry.artist, entry.song].filter(Boolean).join(" - ");
+            if (details) who.append(el("small", "", details));
+
+            const up = el("button", "ghost", "↑");
+            up.type = "button";
+            up.dataset.action = "up";
+            up.setAttribute("aria-label", "Move up");
+            const down = el("button", "ghost", "↓");
+            down.type = "button";
+            down.dataset.action = "down";
+            down.setAttribute("aria-label", "Move down");
+            const arrows = el("span", "arrows");
+            arrows.append(up, down);
+
+            row.append(grip, el("span", "n", String(index + 1)), crest(entry.country), who, arrows);
+            $("orderList").append(row);
+          });
+        }
+
+        // Writes 1, 2, 3... into the show's order field for the countries in this list
+        function renumber(show, list) {
+          list.forEach((entry, position) => { entry[show.field] = position + 1; });
+        }
+
+        function withShow(change) {
+          draft();
+          const show = currentShow();
+          if (!show) return;
+          change(show);
+          buildOrder();
+          changed();
+        }
+
+        // Move one country to a new place in a show (used by dragging on this list and on the page)
+        function moveInShow(name, from, to) {
+          draft();
+          const show = showsOf(entriesFor(year)).find((item) => item.name === name);
+          if (!show || from === to || !show.entries[from]) return;
+
+          const [moved] = show.entries.splice(from, 1);
+          show.entries.splice(to, 0, moved);
+          renumber(show, show.entries);
+
+          buildOrder();
+          changed();
+        }
+
+        editor = { moveInShow };
+
+        makeSortable($("orderList"), {
+          item: ".order-row",
+          handle: ".grip",
+          keyboard: true,
+          onMove: (from, to) => { const show = currentShow(); if (show) moveInShow(show.name, from, to); }
+        });
+
+        $("orderShow").addEventListener("change", buildOrder);
+
+        $("orderList").addEventListener("click", (event) => {
+          const target = event.target.closest("button[data-action]");
+          if (!target) return;
+          const index = Number(target.closest(".order-row").dataset.index);
+          const other = target.dataset.action === "up" ? index - 1 : index + 1;
+          const show = currentShow();
+          if (show && other >= 0 && other < show.entries.length) moveInShow(show.name, index, other);
+        });
+
+        $("orderDraw").addEventListener("click", () => withShow((show) => {
+          const list = show.entries.slice();
+          for (let i = list.length - 1; i > 0; i -= 1) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [list[i], list[j]] = [list[j], list[i]];
+          }
+          renumber(show, list);
+        }));
+
+        $("orderSort").addEventListener("click", () => withShow((show) => {
+          renumber(show, show.entries.slice().sort((a, b) => a.country.localeCompare(b.country)));
+        }));
+
+        /* ----- Hearts ----- */
+
+        function allCountries() {
+          const names = new Map();
+          const add = (name) => { if (name && RW.slug(name) && !names.has(RW.slug(name))) names.set(RW.slug(name), String(name).trim()); };
+
+          Object.keys({ ...savedP, ...draftP }).forEach((y) => entriesFor(y).forEach((entry) => add(entry.country)));
+          Object.values(results).forEach((edition) => {
+            [edition.grand, ...edition.rounds.map((round) => round.rows)].forEach((rows) => rows.forEach((row) => add(row.country)));
+          });
+          RW.listOf(RW.cached("artists")).forEach((artist) => artist && add(artist.country));
+          return [...names.entries()].sort((a, b) => a[1].localeCompare(b[1]));
+        }
+
+        function buildHearts() {
+          $("heartList").innerHTML = "";
+          const current = draftHearts || savedHearts;
+          const countries = allCountries();
+
+          if (!countries.length) {
+            $("heartList").append(el("p", "tool-help", "Add some countries first."));
+            return;
+          }
+
+          countries.forEach(([key, name]) => {
+            const row = el("div", "heart-row");
+            row.dataset.key = key;
+
+            const field = input("heart", current[key] || "", RW.HEART_FOLDER + key + RW.HEART_EXT);
+            const clear = el("button", "ghost small", "Reset");
+            clear.type = "button";
+            clear.dataset.action = "reset";
+
+            row.append(RW.heartImg(name), el("span", "name", name), field, clear);
+            $("heartList").append(row);
+          });
+        }
+
+        function setHeart(key, value) {
+          if (!draftHearts) draftHearts = { ...savedHearts };
+          if (RW.safeImage(value)) draftHearts[key] = value.trim(); else delete draftHearts[key];
+          RW.setHearts(draftHearts);
+          renderChips();
+          renderPage();
+          updateDirty();
+          note("Previewing on the page. Press Confirm & publish to share it.");
+        }
+
+        $("heartList").addEventListener("input", (event) => {
+          const row = event.target.closest(".heart-row");
+          if (!row || event.target.dataset.prop !== "heart") return;
+
+          setHeart(row.dataset.key, event.target.value);
+          const old = row.querySelector(".heart-img");
+          old.replaceWith(RW.heartImg(allCountries().find(([key]) => key === row.dataset.key)[1]));
+        });
+
+        $("heartList").addEventListener("click", (event) => {
+          const target = event.target.closest('button[data-action="reset"]');
+          if (!target) return;
+
+          setHeart(target.closest(".heart-row").dataset.key, "");
+          buildHearts();
+        });
+
+        /* ----- Publish / undo ----- */
+
+        refreshEditor = () => {
+          if (tab === "entries") buildEntries();
+          if (tab === "order") buildOrder();
+          if (tab === "hearts") buildHearts();
+          updateDirty();
+        };
+
+        $("addUndo").addEventListener("click", () => {
+          draftP = {};
+          draftHearts = null;
+          RW.setHearts(savedHearts);
+          readData();
+          renderAll();
+          note("Back to the last published version.");
+        });
+
+        $("addConfirm").addEventListener("click", async () => {
+          const years = Object.keys(draftP);
+
+          if (!years.length && !draftHearts) return note("Nothing to publish yet. Edit something first.");
+          if (!RW.configured) return note("Fill in status-config.js first.", true);
+          if (!RW.signedIn()) { showLogin(); return note("Sign in below, then press Confirm again.", true); }
+
+          note("Publishing...");
+
+          try {
+            if (years.length) {
+              const payload = { ...RW.normalizeParticipants(RW.cached("participants")) };
+
+              years.forEach((y) => {
+                const clean = draftP[y].map(RW.normEntry).filter((entry) => entry.country);
+                if (clean.length) payload[y] = clean; else delete payload[y];
+              });
+
+              await RW.publish("participants", payload);
+            }
+
+            if (draftHearts) {
+              const clean = {};
+              Object.entries(draftHearts).forEach(([key, value]) => { if (RW.safeImage(value)) clean[key] = value; });
+              await RW.publish("hearts", clean);
+              savedHearts = { ...clean };
+            }
+
+            draftP = {};
+            draftHearts = null;
+            readData();
+            renderAll();
+            note("Published. Everyone sees the changes now.");
+          } catch (error) {
+            note(error.message, true);
+          }
+        });
+
+        showLogin();
+        showTab("entries");
+      }
+
+      /* ---------- Start ---------- */
+
+      window.addEventListener("hashchange", () => { pickYear(); renderAll(); });
+
+      readData();
+      pickYear();
+      renderAll();
+
+      // The flag settings (flags-admin.html) arrive after the page: draw the pictures again
+      if (FP) FP.onChange(() => renderAll());
+
+      Promise.all([RW.load("hearts"), RW.load("results"), RW.load("participants"), RW.load("artists")]).then(() => {
+        if (!draftHearts) savedHearts = { ...RW.heartMap() };
+        readData();
+        pickYear();
+        renderAll();
+      });
+    })();
+
+  </script>
+
+</body>
+</html>
