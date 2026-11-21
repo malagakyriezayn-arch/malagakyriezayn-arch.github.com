@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>Allocation Draw · Admin</title>
+  <link rel="icon" href="images/logo.png">
+  <link rel="preload" as="font" type="font/otf" href="fonts/Neulis-ExtraBold.otf" crossorigin>
+  <link rel="preload" as="font" type="font/otf" href="fonts/Neulis-Bold.otf" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-Regular.otf") format("opentype");font-weight:400;font-style:normal;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-Medium.otf") format("opentype");font-weight:500;font-style:normal;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-SemiBold.otf") format("opentype");font-weight:600;font-style:normal;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-Bold.otf") format("opentype");font-weight:700;font-style:normal;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-ExtraBold.otf") format("opentype");font-weight:800;font-style:normal;font-display:swap}
+    @font-face{font-family:"Neulis";src:url("fonts/Neulis-Black.otf") format("opentype");font-weight:900;font-style:normal;font-display:swap}
+    :root {
+      --font: "Neulis", "Montserrat", system-ui, sans-serif;
+      --bg: #101522; --board: #0c0a28; --head: #1a1548; --text: #ffffff; --muted: #b9b5d6; --accent: #8c78ff;
+      --sf1: #65d5d0; --sf2: #ff9fd0; --ok: #3be08a; --bad: #ff8c8c;
+      --line: color-mix(in srgb, var(--text) 14%, transparent);
+      --fs: 15px; --safe-b: env(safe-area-inset-bottom, 0px);
+    }
+    @media (min-width: 640px) { :root { --fs: 16px; } }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { margin: 0; min-height: 100vh; color: var(--text); background: var(--bg); font: 600 var(--fs)/1.4 var(--font); padding-bottom: calc(36px + var(--safe-b)); }
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(ellipse at 8% 0%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 45%),
+        radial-gradient(ellipse at 100% 30%, color-mix(in srgb, var(--sf1) 13%, transparent), transparent 42%),
+        radial-gradient(ellipse at 0% 85%, color-mix(in srgb, var(--sf2) 10%, transparent), transparent 40%);
+    }
+    button, input, select, textarea { font-family: inherit; }
+    button { color: inherit; }
+    a { color: inherit; }
+    [hidden] { display: none !important; }
+    .wrap { width: min(980px, 100%); margin: 0 auto; padding: 0 12px; }
+
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 0 4px; }
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; font-size: .82em; font-weight: 800; text-decoration: none; background: color-mix(in srgb, var(--text) 9%, transparent); border: 1px solid var(--line); border-radius: 999px; cursor: pointer; }
+    .who { display: inline-flex; align-items: center; gap: 8px; min-width: 0; color: var(--muted); font-size: .78em; font-weight: 700; }
+    .who span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 42vw; }
+
+    .hero { padding: 8px 0 14px; text-align: center; }
+    .eyebrow { display: inline-block; margin-bottom: 8px; padding: 5px 12px; color: var(--sf1); font-size: .7em; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; border: 1px solid color-mix(in srgb, var(--sf1) 45%, transparent); border-radius: 999px; }
+    h1 { margin: 0; font-size: clamp(28px, 8vw, 54px); font-weight: 900; line-height: 1; letter-spacing: -.01em; text-transform: uppercase; }
+    h1 span { display: block; background: linear-gradient(90deg, var(--sf1), var(--accent), var(--sf2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+    /* ---------- admin gate ---------- */
+    .gate { width: min(420px, 100%); margin: 18px auto 0; padding: 26px 20px; text-align: center; background: var(--board); border: 1px solid var(--line); border-radius: 22px; }
+    .gate .lock { display: grid; place-items: center; width: 56px; height: 56px; margin: 0 auto 12px; font-size: 24px; background: color-mix(in srgb, var(--accent) 35%, transparent); border-radius: 18px; }
+    .gate h2 { margin: 0 0 4px; font-size: 1.3em; font-weight: 900; text-transform: uppercase; }
+    .gate p { margin: 0 0 14px; color: var(--muted); font-size: .9em; }
+    .gate form { display: grid; gap: 8px; }
+    .msg { min-height: 20px; margin: 10px 0 0; font-size: .85em; font-weight: 700; color: var(--sf1); }
+    .msg.error { color: var(--bad); }
+
+    input[type=text], input[type=number], input[type=password], textarea {
+      width: 100%; padding: 11px 12px; color: var(--text); font-size: 1em; font-weight: 600; background: color-mix(in srgb, #000 30%, transparent); border: 1px solid var(--line); border-radius: 12px;
+    }
+    textarea { min-height: 120px; resize: vertical; line-height: 1.5; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 2px solid #c9bdff; outline-offset: 2px; }
+
+    .btn { padding: 11px 18px; font-size: .9em; font-weight: 800; background: color-mix(in srgb, var(--text) 10%, transparent); border: 1px solid var(--line); border-radius: 13px; cursor: pointer; }
+    .btn.main { background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #000)); border-color: transparent; }
+    .btn.go { background: linear-gradient(135deg, #20b67a, #14815a); border-color: transparent; }
+    .btn.danger { color: var(--bad); }
+    .btn:disabled { opacity: .45; cursor: default; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; margin: 4px 0 16px; }
+    .seg { display: flex; gap: 2px; max-width: 100%; padding: 3px; overflow-x: auto; scrollbar-width: none; background: color-mix(in srgb, var(--text) 7%, transparent); border: 1px solid var(--line); border-radius: 999px; }
+    .seg::-webkit-scrollbar { display: none; }
+    .seg button { flex: none; padding: 9px 15px; color: var(--muted); font-size: .82em; font-weight: 800; white-space: nowrap; background: transparent; border: 0; border-radius: 999px; cursor: pointer; }
+    .seg button[aria-pressed="true"] { color: #fff; background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #000)); }
+
+    .card { margin-bottom: 14px; padding: 16px; background: var(--board); border: 1px solid var(--line); border-radius: 18px; }
+    .card h3 { margin: 0 0 4px; font-size: 1.02em; font-weight: 900; letter-spacing: .05em; text-transform: uppercase; }
+    .card .hint { margin: 0 0 12px; color: var(--muted); font-size: .86em; }
+    .row2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+    .fld { display: grid; gap: 5px; color: #d6d3ea; font-size: .86em; font-weight: 700; }
+    .bar-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+    .saved { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .saved button { padding: 6px 12px; font-size: .8em; font-weight: 800; background: color-mix(in srgb, var(--text) 8%, transparent); border: 1px solid var(--line); border-radius: 999px; cursor: pointer; }
+    .summary { margin-top: 12px; padding: 12px; color: #dcd9ee; font-size: .88em; background: color-mix(in srgb, var(--text) 5%, transparent); border-radius: 12px; }
+    .summary b { color: #fff; }
+    .summary .warn { color: #ffd28a; }
+    details.manual { margin-top: 12px; }
+    details.manual summary { padding: 10px 0; font-weight: 800; cursor: pointer; color: var(--muted); }
+
+    /* ---------- live draw ---------- */
+    .stepper { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+    .step { padding: 10px 8px; text-align: center; background: color-mix(in srgb, var(--text) 5%, transparent); border: 1px solid var(--line); border-radius: 14px; font-size: .72em; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+    .step b { display: block; margin-bottom: 2px; font-size: 1.5em; font-weight: 900; color: var(--text); }
+    .step small { display: block; margin-top: 2px; font-size: .95em; font-weight: 700; text-transform: none; letter-spacing: 0; }
+    .step.on { color: #fff; border-color: var(--accent); background: color-mix(in srgb, var(--accent) 28%, transparent); }
+    .step.done b { color: var(--ok); }
+    @media (max-width: 520px) { .step { font-size: .62em; padding: 8px 4px; } }
+
+    .bowl { text-align: center; }
+    .bowl .phase { margin: 0 0 4px; color: var(--sf1); font-size: .76em; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .bowl .title { margin: 0 0 12px; font-size: 1.15em; font-weight: 900; }
+    .inbowl { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 14px; }
+    .inbowl .mini { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 6px; font-size: .78em; font-weight: 800; background: color-mix(in srgb, var(--text) 7%, transparent); border: 1px solid var(--line); border-radius: 999px; }
+    .inbowl .mini img { width: 20px; height: 14px; object-fit: contain; border-radius: 2px; }
+    .reveal { display: grid; place-items: center; gap: 6px; min-height: 130px; margin-bottom: 14px; padding: 14px; background: color-mix(in srgb, var(--text) 5%, transparent); border: 1px dashed var(--line); border-radius: 16px; }
+    .reveal img { width: 72px; height: 50px; object-fit: contain; border-radius: 6px; }
+    .reveal .big { font-size: 1.5em; font-weight: 900; line-height: 1.1; }
+    .reveal .to { font-size: 1.02em; font-weight: 800; padding: 6px 14px; border-radius: 999px; color: #101522; }
+    .reveal .to.s1 { background: var(--sf1); } .reveal .to.s2 { background: var(--sf2); }
+    .reveal.spin .big { opacity: .7; }
+    .reveal .idle { color: var(--muted); font-size: .9em; }
+    .reveal.pop { animation: pop 320ms ease-out; }
+    .controls2 { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .log { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; max-height: 260px; overflow-y: auto; }
+    .log li { display: flex; align-items: center; gap: 10px; padding: 6px 10px; font-size: .88em; background: color-mix(in srgb, var(--text) 5%, transparent); border-radius: 10px; }
+    .log .n { width: 24px; color: var(--muted); font-size: .8em; text-align: right; font-variant-numeric: tabular-nums; }
+    .log img { width: 26px; height: 18px; object-fit: contain; border-radius: 3px; }
+    .log .to { margin-left: auto; font-weight: 800; white-space: nowrap; }
+    .log .s1 { color: var(--sf1); } .log .s2 { color: var(--sf2); }
+
+    /* ---------- the four buckets ---------- */
+    .semis { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .sf { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+    .sf-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 16px; border-radius: 16px; font-size: 1.05em; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; color: #101522; }
+    .sf-head small { font-size: .62em; font-weight: 800; letter-spacing: .1em; opacity: .75; }
+    .sf.one .sf-head { background: linear-gradient(135deg, var(--sf1), color-mix(in srgb, var(--sf1) 55%, #fff)); }
+    .sf.two .sf-head { background: linear-gradient(135deg, var(--sf2), color-mix(in srgb, var(--sf2) 55%, #fff)); }
+    .half { background: var(--board); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+    .half-h { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--head); border-bottom: 1px solid var(--line); font-size: .74em; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .count { min-width: 28px; padding: 2px 9px; color: #fff; text-align: center; background: color-mix(in srgb, var(--text) 14%, transparent); border-radius: 999px; font-variant-numeric: tabular-nums; }
+    .list { display: grid; gap: 6px; padding: 8px; }
+    .list:empty::after { content: "Nothing drawn yet"; padding: 18px 8px; color: var(--muted); font-size: .85em; text-align: center; }
+    .chip { display: flex; align-items: center; gap: 10px; min-width: 0; min-height: 46px; padding: 6px 10px; background: color-mix(in srgb, var(--text) 5%, transparent); border: 1px solid var(--line); border-radius: 12px; }
+    .chip.latest { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 22%, transparent); animation: pop 320ms ease-out; }
+    .chip .flag { flex: none; width: 36px; height: 25px; object-fit: contain; border-radius: 4px; }
+    .chip .nm { flex: 1; min-width: 0; overflow: hidden; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+    .pot { flex: none; display: grid; place-items: center; width: 26px; height: 26px; color: #101522; font-size: .72em; font-weight: 900; border-radius: 8px; }
+    body.no-pots .pot { display: none; }
+    .chip.hid { opacity: 0; transform: scale(.94) translateY(6px); }
+    .chip.show { opacity: 1; transform: none; transition: opacity 260ms ease-out, transform 260ms ease-out; }
+    @keyframes pop { from { opacity: 0; transform: translate3d(0, 8px, 0) scale(.97); } to { opacity: 1; transform: none; } }
+    .block-title { display: flex; align-items: center; gap: 10px; margin: 24px 2px 4px; font-size: 1.05em; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
+    .block-title::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+    .block-note { margin: 0 2px 12px; color: var(--muted); font-size: .85em; }
+    .pre { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .pre .half-h { background: transparent; }
+    .pre .one .half-h { color: var(--sf1); } .pre .two .half-h { color: var(--sf2); }
+    .pots { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+    .pot-card .half-h { color: #101522; }
+    .legend { margin: 0 2px 12px; color: var(--muted); font-size: .85em; text-align: center; }
+    .empty { padding: 30px 16px; color: var(--muted); text-align: center; background: var(--board); border: 1px dashed var(--line); border-radius: 18px; }
+    .tools { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 14px; }
+
+    /* how it works */
+    .how { display: grid; gap: 10px; }
+    details.cardd { background: var(--board); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+    details.cardd summary { display: flex; align-items: center; gap: 12px; padding: 14px 16px; font-weight: 900; list-style: none; cursor: pointer; }
+    details.cardd summary::-webkit-details-marker { display: none; }
+    details.cardd summary::after { content: "+"; margin-left: auto; color: var(--muted); font-size: 1.3em; font-weight: 700; }
+    details.cardd[open] summary::after { content: "–"; }
+    .ico { display: grid; place-items: center; flex: none; width: 34px; height: 34px; font-size: .9em; background: var(--accent); border-radius: 10px; color: #fff; }
+    .cardd .body { padding: 0 16px 16px; color: #dcd9ee; font-size: .93em; }
+    .steps { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; counter-reset: s; }
+    .steps li { position: relative; padding: 12px 12px 12px 54px; background: color-mix(in srgb, var(--text) 5%, transparent); border-radius: 12px; counter-increment: s; }
+    .steps li::before { content: counter(s); position: absolute; top: 10px; left: 12px; display: grid; place-items: center; width: 30px; height: 30px; color: #fff; font-weight: 900; background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #000)); border-radius: 9px; }
+    .steps b { display: block; margin-bottom: 2px; color: #fff; }
+    .why { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .why li { padding: 12px; background: color-mix(in srgb, var(--text) 5%, transparent); border-radius: 12px; }
+    .why b { display: block; margin-bottom: 2px; color: var(--sf1); }
+
+    @media (max-width: 640px) { .semis, .pre { grid-template-columns: 1fr; } }
+    @media (prefers-reduced-motion: reduce) { .chip.latest, .reveal.pop { animation: none; } .chip.show { transition: none; } }
+  
+    /* pots page */
+    select { width: 100%; padding: 11px 12px; color: var(--text); font-size: 1em; font-weight: 700; background: color-mix(in srgb, #000 30%, transparent); border: 1px solid var(--line); border-radius: 12px; }
+    select option { color: #000; }
+    .stepbox { display: inline-flex; align-items: center; gap: 10px; font-size: .9em; font-weight: 800; }
+    .stepbox b { min-width: 18px; text-align: center; font-size: 1.2em; }
+    .btn.sq { width: 38px; padding: 9px 0; text-align: center; }
+    .btn[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 45%, transparent); }
+    .counts { display: flex; flex-wrap: wrap; gap: 6px; }
+    .cnt { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; font-size: .78em; font-weight: 800; background: color-mix(in srgb, var(--text) 7%, transparent); border: 1px solid var(--line); border-radius: 999px; font-variant-numeric: tabular-nums; }
+    .cnt i { width: 10px; height: 10px; border-radius: 3px; }
+    .cnt.warn { color: #ffd28a; border-color: #ffd28a; }
+    .clist { display: grid; gap: 6px; }
+    .crow { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; min-height: 52px; padding: 6px 8px 6px 10px; background: color-mix(in srgb, var(--text) 4%, transparent); border: 1px solid var(--line); border-radius: 14px; }
+    .crow.empty { border-color: color-mix(in srgb, #ffd28a 55%, transparent); }
+    .crow .who2 { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .crow .who2 img { flex: none; width: 36px; height: 25px; object-fit: contain; border-radius: 4px; }
+    .crow .who2 span { overflow: hidden; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+    .picks { display: flex; flex-wrap: wrap; gap: 5px; justify-content: flex-end; }
+    .pb { width: 34px; height: 34px; padding: 0; color: var(--text); font-size: .85em; font-weight: 900; background: color-mix(in srgb, var(--text) 8%, transparent); border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
+    .pb.on { color: #101522; border-color: transparent; }
+    .pb.pre.on { background: #ffd54a; }
+    @media (max-width: 520px) { .crow { grid-template-columns: 1fr; } .picks { justify-content: flex-start; } .pb { width: 38px; height: 38px; } }
+
+    /* process page: the bowls */
+    .bowls { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin-bottom: 14px; }
+    .bowlc { background: var(--board); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+    .bowlc.cur { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 40%, transparent); }
+    .bowlc .bh { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; color: #101522; font-size: .74em; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+    .bowlc .bb { display: grid; gap: 4px; padding: 8px; }
+    .m2 { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 3px 8px 3px 5px; font-size: .8em; font-weight: 800; background: color-mix(in srgb, var(--text) 6%, transparent); border-radius: 8px; transition: opacity .2s; }
+    .m2 img { flex: none; width: 22px; height: 15px; object-fit: contain; border-radius: 2px; }
+    .m2 span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .m2 em { flex: none; font-size: .78em; font-style: normal; color: var(--sf1); }
+    .m2.s2 em { color: var(--sf2); }
+    .m2.done { opacity: .4; }
+    .m2.done span { text-decoration: line-through; text-decoration-thickness: 1px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <a class="pill" href="results.html">← Results</a>
+      <span class="who" id="who" hidden><span id="whoEmail"></span><button type="button" class="pill" id="signOut">Sign out</button></span>
+    </div>
+
+    <header class="hero">
+      <span class="eyebrow" id="eyebrow">Admin · Eurovision</span>
+      <h1>Semi-Final <span>Allocation Draw</span></h1>
+    </header>
+
+    <!-- ===== Only admins get past this ===== -->
+    <section class="gate" id="gate">
+      <div class="lock">🔒</div>
+      <h2>Admins only</h2>
+      <p>Sign in with the admin account to run the draw.</p>
+      <form id="login">
+        <input type="text" id="email" placeholder="Admin email" autocomplete="username" inputmode="email">
+        <input type="password" id="pass" placeholder="Password" autocomplete="current-password">
+        <button type="submit" class="btn main" id="loginBtn">Sign in</button>
+      </form>
+      <p class="msg" id="gateMsg" role="status"></p>
+    </section>
+
+    <div id="app" hidden>
+      <div class="controls">
+        <div class="seg" id="tabs" role="group" aria-label="View">
+          <button type="button" data-tab="setup" aria-pressed="true">1 · Pots</button>
+          <button type="button" data-tab="live" aria-pressed="false">2 · The draw</button>
+          <button type="button" data-tab="result" aria-pressed="false">Result</button>
+          <button type="button" data-tab="how" aria-pressed="false">How it works</button>
+        </div>
+      </div>
+
+      <!-- PAGE 1: put the countries in pots -->
+      <section id="p-setup">
+        <div class="card">
+          <h3>Edition</h3>
+          <div class="row2">
+            <label class="fld">Year<select id="fYear"></select></label>
+            <label class="fld">Host city (optional)<input type="text" id="fCity" maxlength="40"></label>
+          </div>
+          <div class="saved" id="saved"></div>
+        </div>
+
+        <div class="card">
+          <h3>Put the countries in pots</h3>
+          <p class="hint">The countries come from the participants page. Tap a number to put a country in that pot. ★ marks the pre-qualified countries (they are drawn first).</p>
+          <div class="bar-row" style="margin:0 0 10px">
+            <span class="stepbox"><button type="button" class="btn sq" id="potDel" aria-label="Fewer pots">–</button><b id="potN">5</b> pots<button type="button" class="btn sq" id="potAdd" aria-label="More pots">+</button></span>
+            <button type="button" class="btn" id="hidePlaced" aria-pressed="false">Hide placed</button>
+            <button type="button" class="btn" id="clearPots">Clear pots</button>
+            <button type="button" class="btn" id="reloadPeople">↻ Reload countries</button>
+          </div>
+          <div class="counts" id="counts"></div>
+          <input type="text" id="filter" placeholder="Search countries…" autocomplete="off" style="margin:10px 0">
+          <div class="clist" id="countryList"></div>
+          <div class="summary" id="summary"></div>
+          <div class="bar-row">
+            <button type="button" class="btn go" id="start">Start the draw →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- LIVE DRAW -->
+      <section id="p-live" hidden>
+        <div class="stepper" id="stepper"></div>
+        <div class="bowls" id="bowls"></div>
+        <div class="card bowl">
+          <p class="phase" id="phase"></p>
+          <p class="title" id="bowlTitle"></p>
+          <div class="inbowl" id="inbowl"></div>
+          <div class="reveal" id="reveal"><span class="idle">Press “Draw next”</span></div>
+          <div class="controls2">
+            <button type="button" class="btn go" id="drawNext">Draw next</button>
+            <button type="button" class="btn" id="auto" aria-pressed="false">▶ Auto draw</button>
+            <button type="button" class="btn" id="drawAll">Draw all</button>
+            <button type="button" class="btn" id="undo">Undo</button>
+            <button type="button" class="btn danger" id="resetDraw">Reset</button>
+          </div>
+        </div>
+        <div id="liveBoard"></div>
+        <div class="card" style="margin-top:14px">
+          <h3>Draw order</h3>
+          <ol class="log" id="log" reversed></ol>
+        </div>
+      </section>
+
+      <section id="p-result" hidden></section>
+      <section id="p-how" hidden></section>
+
+      <div class="card" style="margin-top:6px">
+        <div class="bar-row" style="margin-top:0">
+          <button type="button" class="btn main" id="save">Save draw</button>
+          <button type="button" class="btn" id="load">Load saved</button>
+          <span class="msg" id="msg" role="status" style="margin:0"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="status-config.js"></script>
+  <script src="flags.js" onerror="void 0"></script>
+  <script>
+    const FALLBACK_CODES = {
+      "albania":"al","andorra":"ad","armenia":"am","australia":"au","austria":"at","azerbaijan":"az",
+      "belarus":"by","belgium":"be","bosnia-and-herzegovina":"ba","bulgaria":"bg","croatia":"hr",
+      "cyprus":"cy","czechia":"cz","czech-republic":"cz","denmark":"dk","estonia":"ee","finland":"fi",
+      "france":"fr","georgia":"ge","germany":"de","greece":"gr","hungary":"hu","iceland":"is",
+      "ireland":"ie","israel":"il","italy":"it","latvia":"lv","lithuania":"lt","luxembourg":"lu",
+      "malta":"mt","moldova":"md","monaco":"mc","montenegro":"me","morocco":"ma","netherlands":"nl",
+      "north-macedonia":"mk","norway":"no","poland":"pl","portugal":"pt","romania":"ro","russia":"ru",
+      "san-marino":"sm","serbia":"rs","slovakia":"sk","slovenia":"si","spain":"es","sweden":"se",
+      "switzerland":"ch","turkey":"tr","turkiye":"tr","ukraine":"ua","united-kingdom":"gb","uk":"gb",
+      "england":"gb-eng","scotland":"gb-sct","wales":"gb-wls","kosovo":"xk","liechtenstein":"li",
+      "kazakhstan":"kz","kyrgyzstan":"kg","uzbekistan":"uz","tajikistan":"tj","turkmenistan":"tm",
+      "vietnam":"vn","cambodia":"kh","laos":"la","mongolia":"mn","bhutan":"bt","philippines":"ph",
+      "bangladesh":"bd","thailand":"th","rep-of-korea":"kr","republic-of-korea":"kr","south-korea":"kr",
+      "north-korea":"kp","nepal":"np","malaysia":"my","japan":"jp","china":"cn","india":"in",
+      "indonesia":"id","singapore":"sg","myanmar":"mm","sri-lanka":"lk","pakistan":"pk","brunei":"bn",
+      "timor-leste":"tl","taiwan":"tw","hong-kong":"hk","maldives":"mv","afghanistan":"af",
+      "usa":"us","united-states":"us","canada":"ca","brazil":"br","mexico":"mx","argentina":"ar",
+      "new-zealand":"nz","south-africa":"za","egypt":"eg","lebanon":"lb","tunisia":"tn","algeria":"dz",
+      "jordan":"jo","saudi-arabia":"sa","united-arab-emirates":"ae","qatar":"qa","iran":"ir"
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const CFG = window.STATUS_CONFIG || {};
+    const BASE = (CFG.dbUrl || "").replace(/\/$/, "");
+    const SESSION_KEY = "statusAdminSession";
+    const POT_COLORS = ["#ff8fb8", "#ffb86b", "#ffe28a", "#7fe3a8", "#7fb4ff", "#c79bff", "#7fe0e0", "#ff9b9b"];
+    const BUCKET_NAMES = ["Semi-Final 1 · first half", "Semi-Final 1 · second half", "Semi-Final 2 · first half", "Semi-Final 2 · second half"];
+    const slug = (t) => String(t || "").toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    const lines = (t) => String(t || "").split(/\r?\n/).map((x) => x.trim()).filter(Boolean).filter((x, i, a) => a.findIndex((y) => y.toLowerCase() === x.toLowerCase()) === i);
+    const listOf = (v) => Array.isArray(v) ? v : Object.values(v || {});
+    const key = (n) => String(n).toLowerCase();
+    const pick = (a) => a[Math.floor(Math.random() * a.length)];
+
+    /* ---------- theme shared with the totals page ---------- */
+    const FONTS = {
+      neulis: '"Neulis", "Montserrat", system-ui, sans-serif',
+      neulisalt: '"NeulisAlt", "Neulis", "Montserrat", system-ui, sans-serif',
+      montserrat: '"Montserrat", system-ui, sans-serif',
+      system: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
+      serif: 'Georgia, "Times New Roman", serif',
+      mono: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace'
+    };
+    function applyTheme(st) {
+      if (!st || typeof st !== "object") return;
+      const root = document.documentElement.style;
+      const map = { bg: "bg", board: "board", head: "head", text: "text", muted: "muted", accent: "accent", jury: "sf1", tele: "sf2" };
+      Object.keys(map).forEach((k) => { if (/^#[0-9a-f]{6}$/i.test(st[k] || "")) root.setProperty("--" + map[k], st[k]); });
+      if (FONTS[st.font]) root.setProperty("--font", FONTS[st.font]);
+    }
+
+    /* ---------- flags (flags.js) ---------- */
+    function flagUrls(country) {
+      const k = slug(country);
+      const code = FALLBACK_CODES[k];
+      if (window.FlagPicker && typeof window.FlagPicker.urls === "function") {
+        const l = window.FlagPicker.urls(country, "draw", code ? { cdn: "https://flagcdn.com/w160/" + code + ".png" } : {});
+        if (l.length) return l;
+      }
+      const urls = [];
+      if (k) [".png", ".svg", ".webp", ".jpg"].forEach((e) => urls.push("images/flags/" + k + e));
+      if (code) urls.push("https://flagcdn.com/w160/" + code + ".png");
+      return urls;
+    }
+    function flagImg(country, cls) {
+      const img = new Image();
+      const urls = flagUrls(country);
+      let i = 0;
+      img.className = cls || "flag"; img.alt = ""; img.decoding = "async";
+      if (!cls) { img.width = 36; img.height = 25; }
+      img.addEventListener("error", () => { if (++i < urls.length) img.src = urls[i]; });
+      if (urls.length) img.src = urls[0]; else img.style.visibility = "hidden";
+      return img;
+    }
+
+    /* =========================================================
+       THE DRAW  (follows the official procedure)
+       1. Pots are set from historical voting data.
+       2. Pre-qualified countries are drawn first: which semi-final they vote and broadcast in.
+       3. Remaining countries are drawn one by one, pot by pot, into one of four outcomes:
+          SF1 first half, SF1 second half, SF2 first half, SF2 second half.
+          Each pot is spread evenly over both semi-finals and over the four halves.
+       4. Only the half is decided. The exact running order is set later by the producers.
+    ========================================================= */
+    let D = blankDraft();
+    let saved = {};          // everything stored in the database, by year
+    let session = null;
+    let busy = false, autoOn = false, autoTimer = 0, lastName = "";
+
+    function blankDraft() {
+      return { year: new Date().getFullYear(), city: "", potN: 5, countries: [], assign: {}, pots: [[], [], [], [], []], preAll: [], history: [], bigSemi: Math.round(Math.random()), halfBig: [Math.round(Math.random()), Math.round(Math.random())], preBig: Math.round(Math.random()), manual: null, relaxed: false };
+    }
+
+    const potsNE = () => D.pots.map((p, i) => ({ i, p })).filter((x) => x.p.length);
+    const nSemi = () => D.pots.reduce((s, p) => s + p.length, 0);
+    function baseCaps() {
+      const n = nSemi();
+      const sz = [0, 0];
+      sz[D.bigSemi] = Math.ceil(n / 2); sz[1 - D.bigSemi] = Math.floor(n / 2);
+      const out = [0, 0, 0, 0];
+      for (let semi = 0; semi < 2; semi++) {
+        const total = sz[semi];
+        const bigHalf = Array.isArray(D.halfBig) ? (Number(D.halfBig[semi]) === 1 ? 1 : 0) : 0;
+        out[semi * 2 + bigHalf] = Math.ceil(total / 2);
+        out[semi * 2 + 1 - bigHalf] = Math.floor(total / 2);
+      }
+      return out;
+    }
+    function preCaps() {
+      const n = D.preAll.length, c = [0, 0];
+      c[D.preBig] = Math.ceil(n / 2); c[1 - D.preBig] = Math.floor(n / 2);
+      return c;
+    }
+
+    // can the rest of the draw still be completed? (counts only: countries in a pot are interchangeable)
+    function feasible(sizes, pi, left, inP, caps, limits) {
+      const memo = new Map();
+      function go(pi, left, inP, caps) {
+        while (pi < sizes.length && left === 0) { pi++; left = pi < sizes.length ? sizes[pi] : 0; inP = [0, 0, 0, 0]; }
+        if (pi >= sizes.length) return true;
+        const k = pi + "|" + left + "|" + inP.join() + "|" + caps.join();
+        if (memo.has(k)) return memo.get(k);
+        const n = sizes[pi], q = Math.ceil(n / 4), h = Math.ceil(n / 2);
+        let ok = false;
+        for (let b = 0; b < 4 && !ok; b++) {
+          if (caps[b] < 1) continue;
+          if (limits) {
+            if (inP[b] >= q) continue;
+            const semi = b < 2 ? inP[0] + inP[1] : inP[2] + inP[3];
+            if (semi >= h) continue;
+          }
+          const c2 = caps.slice(); c2[b]--;
+          const i2 = inP.slice(); i2[b]++;
+          ok = go(pi, left - 1, i2, c2);
+        }
+        memo.set(k, ok);
+        return ok;
+      }
+      return go(pi, left, inP, caps);
+    }
+
+    // where the draw stands, worked out from the history
+    function stateOf() {
+      const drawn = new Set(D.history.map((h) => key(h.n)));
+      const preLeft = D.preAll.filter((n) => !drawn.has(key(n)));
+      const preCount = [0, 0];
+      D.history.filter((h) => h.k === "pre").forEach((h) => preCount[h.t]++);
+      const caps = baseCaps();
+      D.history.filter((h) => h.k === "pot").forEach((h) => caps[h.t]--);
+      const list = potsNE();
+      let cur = null;
+      for (const x of list) { if (x.p.some((n) => !drawn.has(key(n)))) { cur = x; break; } }
+      const inPot = [0, 0, 0, 0];
+      let left = [];
+      if (cur) {
+        left = cur.p.filter((n) => !drawn.has(key(n)));
+        D.history.filter((h) => h.k === "pot" && h.p === cur.i).forEach((h) => inPot[h.t]++);
+      }
+      const phase = preLeft.length ? "pre" : cur ? "pot" : "done";
+      return { phase, preLeft, preCount, caps, cur, left, inPot, list };
+    }
+
+    // decide the next draw (does not change anything yet)
+    function nextDraw() {
+      const st = stateOf();
+      if (st.phase === "pre") {
+        const name = pick(st.preLeft);
+        const pc = preCaps();
+        const opts = [0, 1].filter((s) => st.preCount[s] < pc[s]);
+        if (!opts.length) throw new Error("No semi-final slot remains for a pre-qualified country. Review the saved draw and restart it.");
+        return { n: name, k: "pre", p: -1, t: pick(opts) };
+      }
+      if (st.phase === "pot") {
+        const name = pick(st.left);
+        const sizes = st.list.map((x) => x.p.length);
+        const pi = st.list.findIndex((x) => x.i === st.cur.i);
+        const n = st.cur.p.length, q = Math.ceil(n / 4), h = Math.ceil(n / 2);
+        const opts = [0, 1, 2, 3].filter((b) => {
+          if (st.caps[b] < 1) return false;
+          if (!D.relaxed) {
+            if (st.inPot[b] >= q) return false;
+            const semi = b < 2 ? st.inPot[0] + st.inPot[1] : st.inPot[2] + st.inPot[3];
+            if (semi >= h) return false;
+          }
+          const c2 = st.caps.slice(); c2[b]--;
+          const i2 = st.inPot.slice(); i2[b]++;
+          return feasible(sizes, pi, st.left.length - 1, i2, c2, !D.relaxed);
+        });
+        if (!opts.length) throw new Error("No valid destination remains. The pot sizes or saved draw data are inconsistent. Review the pots and restart the draw.");
+        return { n: name, k: "pot", p: st.cur.i, t: pick(opts) };
+      }
+      return null;
+    }
+
+    function resultOf() {
+      const e = { city: D.city, pots: D.pots, pre: { sf1: [], sf2: [] }, sf1: { first: [], second: [] }, sf2: { first: [], second: [] }, order: [] };
+      if (D.manual) { Object.assign(e, { pre: D.manual.pre, sf1: D.manual.sf1, sf2: D.manual.sf2 }); return e; }
+      const buckets = [e.sf1.first, e.sf1.second, e.sf2.first, e.sf2.second];
+      D.history.forEach((h) => {
+        if (h.k === "pre") (h.t === 0 ? e.pre.sf1 : e.pre.sf2).push(h.n);
+        else buckets[h.t].push(h.n);
+        e.order.push(h.n);
+      });
+      return e;
+    }
+    const totalOf = (e) => e.pre.sf1.length + e.pre.sf2.length + e.sf1.first.length + e.sf1.second.length + e.sf2.first.length + e.sf2.second.length;
+    const potOf = (e, name) => e.pots.findIndex((p) => p.some((x) => key(x) === key(name)));
+
+    /* ---------- drawing: shown to the screen ---------- */
+    function describe(h) {
+      if (h.k === "pre") return { cls: h.t === 0 ? "s1" : "s2", text: "Votes in Semi-Final " + (h.t + 1) };
+      return { cls: h.t < 2 ? "s1" : "s2", text: BUCKET_NAMES[h.t].replace("Semi-Final ", "SF").replace(" · ", " · ") };
+    }
+
+    function setReveal(html, cls) { const r = $("reveal"); r.className = "reveal " + (cls || ""); r.textContent = ""; if (html) r.append(html); }
+
+    function revealResult(h) {
+      const box = document.createDocumentFragment();
+      box.append(flagImg(h.n, ""));
+      const nm = document.createElement("div"); nm.className = "big"; nm.textContent = h.n;
+      const d = describe(h);
+      const to = document.createElement("div"); to.className = "to " + d.cls;
+      to.textContent = h.k === "pre" ? d.text : "→ " + BUCKET_NAMES[h.t];
+      box.append(nm, to);
+      setReveal(box, "pop");
+    }
+
+    async function drawOne(animate) {
+      if (busy) return false;
+      if (D.manual) { note("Typed results are in use. Press Reset to run the live draw.", true); return false; }
+      let h;
+      try { h = nextDraw(); } catch (e) { stopAuto(); note(e.message, true); return false; }
+      if (!h) { stopAuto(); note("The draw is complete."); return false; }
+      busy = true;
+      if (animate) {
+        const st = stateOf();
+        const pool = st.phase === "pre" ? st.preLeft : st.left;
+        const frames = Math.min(14, 6 + pool.length);
+        for (let i = 0; i < frames; i++) {
+          const nm = document.createElement("div"); nm.className = "big"; nm.textContent = pool[(i * 7 + i) % pool.length];
+          const wrap = document.createDocumentFragment(); wrap.append(nm);
+          setReveal(wrap, "spin");
+          await new Promise((r) => setTimeout(r, 70 + i * 6));
+        }
+      }
+      D.history.push(h);
+      lastName = h.n;
+      busy = false;
+      if (animate) revealResult(h);
+      renderLive();
+      queueSave();
+      return true;
+    }
+
+    function stopAuto() { autoOn = false; clearTimeout(autoTimer); $("auto").setAttribute("aria-pressed", "false"); $("auto").textContent = "▶ Auto draw"; }
+    function runAuto() {
+      if (!autoOn) return;
+      drawOne(true).then((ok) => { if (ok && autoOn) autoTimer = setTimeout(runAuto, 1100); else stopAuto(); });
+    }
+
+    $("drawNext").addEventListener("click", () => { stopAuto(); drawOne(true); });
+    $("auto").addEventListener("click", () => {
+      if (autoOn) return stopAuto();
+      autoOn = true; $("auto").setAttribute("aria-pressed", "true"); $("auto").textContent = "⏸ Pause";
+      runAuto();
+    });
+    $("drawAll").addEventListener("click", async () => {
+      stopAuto();
+      if (busy) return;
+      if (D.manual) return note("Typed results are in use. Press Reset to run the live draw.", true);
+      let guard = 0, failed = false;
+      while (guard++ < 500) {
+        let h;
+        try { h = nextDraw(); } catch (e) { note(e.message, true); failed = true; break; }
+        if (!h) break;
+        D.history.push(h); lastName = h.n;
+      }
+      if (guard >= 500) note("The draw stopped because it exceeded the safety limit.", true);
+      else if (!failed) note("Draw complete.");
+      setReveal(null); $("reveal").innerHTML = '<span class="idle">' + (failed ? "Draw paused: check the error message" : "Draw complete") + '</span>';
+      renderLive(); queueSave();
+    });
+    $("undo").addEventListener("click", () => {
+      stopAuto();
+      if (busy || !D.history.length) return;
+      const h = D.history.pop();
+      lastName = D.history.length ? D.history[D.history.length - 1].n : "";
+      $("reveal").className = "reveal"; const undone = document.createElement("span"); undone.className = "idle"; undone.textContent = "Undid " + h.n; $("reveal").replaceChildren(undone);
+      renderLive(); queueSave();
+    });
+    $("resetDraw").addEventListener("click", () => {
+      stopAuto();
+      if (busy) return;
+      if (D.history.length && !confirm("Reset the draw and start again?")) return;
+      D.history = []; D.manual = null; lastName = "";
+      D.bigSemi = Math.round(Math.random()); D.halfBig = [Math.round(Math.random()), Math.round(Math.random())]; D.preBig = Math.round(Math.random());
+      $("reveal").className = "reveal"; $("reveal").innerHTML = '<span class="idle">Press “Draw next”</span>';
+      renderLive(); queueSave();
+    });
+
+    /* ---------- render helpers ---------- */
+    function chip(e, name) {
+      const d = document.createElement("div");
+      d.className = "chip" + (key(name) === key(lastName) ? " latest" : ""); d.dataset.c = key(name);
+      d.append(flagImg(name));
+      const nm = document.createElement("span"); nm.className = "nm"; nm.textContent = name; d.append(nm);
+      const p = potOf(e, name);
+      if (p >= 0) { const b = document.createElement("span"); b.className = "pot"; b.textContent = "P" + (p + 1); b.style.background = POT_COLORS[p % POT_COLORS.length]; b.title = "Pot " + (p + 1); d.append(b); }
+      return d;
+    }
+    function box(e, title, names, cls) {
+      const h = document.createElement("section"); h.className = "half " + (cls || "");
+      const head = document.createElement("div"); head.className = "half-h";
+      const t = document.createElement("span"); t.textContent = title;
+      const c = document.createElement("span"); c.className = "count"; c.textContent = names.length;
+      head.append(t, c);
+      const list = document.createElement("div"); list.className = "list";
+      const frag = document.createDocumentFragment(); names.forEach((n) => frag.append(chip(e, n))); list.append(frag);
+      h.append(head, list);
+      return h;
+    }
+    function renderBoard(e) {
+      const wrap = document.createElement("div");
+      const semis = document.createElement("div"); semis.className = "semis";
+      [["one", "Semi-Final 1", e.sf1], ["two", "Semi-Final 2", e.sf2]].forEach(([cls, label, sf]) => {
+        const col = document.createElement("div"); col.className = "sf " + cls;
+        const head = document.createElement("div"); head.className = "sf-head";
+        head.innerHTML = "<span>" + label + "</span><small>" + (sf.first.length + sf.second.length) + " countries</small>";
+        col.append(head, box(e, "First half", sf.first), box(e, "Second half", sf.second));
+        semis.append(col);
+      });
+      wrap.append(semis);
+      const t = document.createElement("h2"); t.className = "block-title"; t.textContent = "Pre-qualified countries";
+      const n = document.createElement("p"); n.className = "block-note";
+      n.textContent = "They skip the semi-finals, but are drawn first to find out which semi-final they broadcast and vote in.";
+      const g = document.createElement("div"); g.className = "pre";
+      g.append(box(e, "Vote in Semi-Final 1", e.pre.sf1, "one"), box(e, "Vote in Semi-Final 2", e.pre.sf2, "two"));
+      wrap.append(t, n, g);
+      return wrap;
+    }
+
+    let timers = [];
+    const stopReplay = () => { timers.forEach(clearTimeout); timers = []; };
+
+    function renderResultTab() {
+      const host = $("p-result"); host.textContent = "";
+      const e = resultOf();
+      if (!totalOf(e)) { const d = document.createElement("div"); d.className = "empty"; d.textContent = "Nothing has been drawn yet."; host.append(d); return; }
+      const tools = document.createElement("div"); tools.className = "tools";
+      const tp = document.createElement("button"); tp.type = "button"; tp.className = "btn"; tp.textContent = "Hide pots";
+      tp.addEventListener("click", () => { const off = document.body.classList.toggle("no-pots"); tp.textContent = off ? "Show pots" : "Hide pots"; });
+      tools.append(tp);
+      if (e.order.length) {
+        const rp = document.createElement("button"); rp.type = "button"; rp.className = "btn main"; rp.textContent = "▶ Replay the draw";
+        rp.addEventListener("click", () => {
+          stopReplay();
+          const chips = new Map();
+          host.querySelectorAll(".chip").forEach((c) => { chips.set(c.dataset.c, c); c.classList.remove("latest"); c.classList.add("hid"); });
+          let t = 250;
+          e.order.forEach((name) => { const c = chips.get(key(name)); if (!c) return; timers.push(setTimeout(() => { c.classList.remove("hid"); c.classList.add("show"); c.scrollIntoView({ block: "nearest", behavior: "smooth" }); }, t)); t += 420; });
+          timers.push(setTimeout(() => chips.forEach((c) => { c.classList.remove("hid"); c.classList.add("show"); }), t + 200));
+        });
+        tools.append(rp);
+      }
+      host.append(tools, renderBoard(e));
+    }
+
+
+    function renderHowTab() {
+      $("p-how").innerHTML = `
+        <div class="how">
+        <details class="cardd" open>
+          <summary><span class="ico">?</span>Why the draw exists</summary>
+          <div class="body"><ul class="why">
+            <li><b>Less bloc voting</b>Semi-finalists are sorted into pots using historical voting patterns, so countries with strong mutual voting ties are split across the two semi-finals instead of being grouped together.</li>
+            <li><b>Early planning</b>Organisers and delegations get an early framework for rehearsals, stage planning and travel before exact performance slots are decided.</li>
+            <li><b>Suspense</b>Four buckets (Semi-Final 1 or 2, first or second half) shape the first expectations about who competes against whom.</li>
+          </ul></div>
+        </details>
+        <details class="cardd" open>
+          <summary><span class="ico">4</span>How the draw works</summary>
+          <div class="body"><ol class="steps">
+            <li><b>Pot allocation</b>The semi-finalists are divided into pots, usually five pots of six or seven countries depending on how many entries there are, using historical voting data.</li>
+            <li><b>Pre-qualified countries first</b>The automatic qualifiers (the Big Five and the host broadcaster, depending on the year's line-up) are drawn to find out which semi-final they broadcast and vote in.</li>
+            <li><b>Semi-final and half</b>The remaining countries are drawn one by one from their pots into one of four outcomes: Semi-Final 1 first or second half, or Semi-Final 2 first or second half.</li>
+            <li><b>Running order comes later</b>Since 2013 the draw only decides the half. The show producers set the exact song order afterwards to balance pacing, staging and variety.</li>
+          </ol></div>
+        </details></div>`;
+    }
+
+    function renderLive() {
+      const st = stateOf();
+      const e = resultOf();
+      const nPre = D.preAll.length, nPot = nSemi();
+      const donePre = D.history.filter((h) => h.k === "pre").length, donePot = D.history.filter((h) => h.k === "pot").length;
+      const steps = [
+        { n: "1", t: "Pots", s: potsNE().length + " pots", on: false, done: nPot > 0 },
+        { n: "2", t: "Pre-qualified", s: donePre + " / " + nPre, on: st.phase === "pre" && !D.manual, done: nPre > 0 && donePre === nPre },
+        { n: "3", t: "Semi-finalists", s: donePot + " / " + nPot, on: st.phase === "pot" && !D.manual, done: nPot > 0 && donePot === nPot },
+        { n: "4", t: "Running order", s: "Set by producers", on: false, done: false }
+      ];
+      $("stepper").innerHTML = steps.map((s) => '<div class="step' + (s.on ? " on" : "") + (s.done ? " done" : "") + '"><b>' + (s.done ? "✓" : s.n) + "</b>" + s.t + "<small>" + s.s + "</small></div>").join("");
+
+      renderBowls(st);
+      const bowl = $("inbowl"); bowl.textContent = "";
+      let pool = [];
+      if (D.manual) { $("phase").textContent = "Typed results"; $("bowlTitle").textContent = "The real draw was entered by hand"; }
+      else if (st.phase === "pre") { $("phase").textContent = "Step 2 · drawn first"; $("bowlTitle").textContent = "Pre-qualified countries: which semi-final do they vote in?"; pool = st.preLeft; }
+      else if (st.phase === "pot") { const idx = st.list.findIndex((x) => x.i === st.cur.i) + 1; $("phase").textContent = "Step 3 · pot " + idx + " of " + st.list.length; $("bowlTitle").textContent = "Drawing from Pot " + (st.cur.i + 1) + ": " + st.left.length + " left in the bowl"; pool = st.left; }
+      else { $("phase").textContent = "Complete"; $("bowlTitle").textContent = nPot || nPre ? "Every country has been drawn" : "Add the pots in Setup first"; }
+      pool.forEach((n) => { const m = document.createElement("span"); m.className = "mini"; m.append(flagImg(n, "mf")); m.lastChild.style.cssText = "width:20px;height:14px;object-fit:contain;border-radius:2px"; m.append(n); bowl.append(m); });
+
+      $("drawNext").disabled = st.phase === "done" || Boolean(D.manual);
+      $("drawAll").disabled = $("drawNext").disabled;
+      $("undo").disabled = !D.history.length;
+
+      const board = $("liveBoard"); board.textContent = "";
+      if (totalOf(e)) board.append(renderBoard(e));
+
+      const log = $("log"); log.textContent = "";
+      const items = D.history.map((h, i) => ({ h, i })).reverse();
+      items.forEach(({ h, i }) => {
+        const li = document.createElement("li");
+        const n = document.createElement("span"); n.className = "n"; n.textContent = i + 1;
+        const nm = document.createElement("span"); nm.textContent = h.n;
+        const d = describe(h);
+        const to = document.createElement("span"); to.className = "to " + d.cls; to.textContent = d.text;
+        li.append(n, flagImg(h.n, ""), nm, to);
+        li.querySelector("img").style.cssText = "width:26px;height:18px;object-fit:contain;border-radius:3px";
+        log.append(li);
+      });
+      if (!items.length) { const li = document.createElement("li"); li.textContent = "No draws yet."; log.append(li); }
+      renderSummary();
+    }
+
+    function renderBowls(st) {
+      const host = $("bowls"); host.textContent = "";
+      const done = new Map(); D.history.forEach((h) => done.set(key(h.n), h));
+      const short = ["SF1 · 1st half", "SF1 · 2nd half", "SF2 · 1st half", "SF2 · 2nd half"];
+      const card = (title, color, names, cur) => {
+        if (!names.length) return;
+        const c = document.createElement("div"); c.className = "bowlc" + (cur ? " cur" : "");
+        const left = names.filter((n) => !done.has(key(n))).length;
+        const h = document.createElement("div"); h.className = "bh"; h.style.background = color;
+        h.innerHTML = "<span>" + title + "</span><span>" + left + " / " + names.length + "</span>";
+        const b = document.createElement("div"); b.className = "bb";
+        names.forEach((n) => {
+          const m = document.createElement("div"); const d = done.get(key(n));
+          m.className = "m2" + (d ? " done" : "") + (d && ((d.k === "pre" && d.t === 1) || (d.k === "pot" && d.t >= 2)) ? " s2" : "");
+          const img = flagImg(n, ""); img.style.cssText = "width:22px;height:15px;object-fit:contain;border-radius:2px";
+          const sp = document.createElement("span"); sp.textContent = n;
+          m.append(img, sp);
+          if (d) { const em = document.createElement("em"); em.textContent = d.k === "pre" ? "votes SF" + (d.t + 1) : short[d.t]; m.append(em); }
+          b.append(m);
+        });
+        c.append(h, b); host.append(c);
+      };
+      card("★ Pre-qualified", "#ffd54a", D.preAll, st.phase === "pre" && !D.manual);
+      D.pots.forEach((p, i) => card("Pot " + (i + 1), POT_COLORS[i % POT_COLORS.length], p, st.phase === "pot" && st.cur && st.cur.i === i));
+    }
+
+    function renderSummary() {
+      const sizes = potsNE().map((x) => x.p.length);
+      const n = nSemi();
+      const c = baseCaps();
+      const el = $("summary");
+      if (!n) { el.innerHTML = "Enter the pots to see how the draw will be split."; return; }
+      let warn = "";
+      D.relaxed = false;
+      if (!feasible(sizes, 0, sizes[0], [0, 0, 0, 0], c, true)) { warn = '<div class="warn">These pot sizes cannot satisfy the strict balancing rules. The draw is blocked until the pot sizes or assignments are changed.</div>'; }
+      const dup = [].concat(...D.pots, D.preAll).map(key).filter((x, i, a) => a.indexOf(x) !== i);
+      if (dup.length) warn += '<div class="warn">Listed twice: ' + [...new Set(dup)].map((x) => x.replace(/</g, "&lt;")).join(", ") + "</div>";
+      el.innerHTML = "<b>" + n + "</b> semi-finalists in <b>" + sizes.length + "</b> pots (" + sizes.join(", ") + ") plus <b>" + D.preAll.length + "</b> pre-qualified.<br>" +
+        "Semi-Final 1: <b>" + (c[0] + c[1]) + "</b> (" + c[0] + " + " + c[1] + ") · Semi-Final 2: <b>" + (c[2] + c[3]) + "</b> (" + c[2] + " + " + c[3] + ")" + warn;
+    }
+
+    /* ---------- tabs ---------- */
+    let tab = "setup";
+    function show(name) {
+      tab = name;
+      stopReplay();
+      ["setup", "live", "result", "how"].forEach((t) => { $("p-" + t).hidden = t !== name; });
+      document.querySelectorAll("#tabs button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.tab === name)));
+      if (name === "live") renderLive();
+      if (name === "result") renderResultTab();
+      if (name === "how") renderHowTab();
+    }
+    $("tabs").addEventListener("click", (ev) => { const b = ev.target.closest("[data-tab]"); if (b) show(b.dataset.tab); });
+
+    /* ---------- page 1: countries (from the participants page) -> pots ---------- */
+    let PEOPLE = {};
+    let hidePlaced = false, filterText = "";
+
+    function parsePeople(data) {
+      const out = {};
+      Object.keys(data || {}).forEach((y) => {
+        if (!Number.isInteger(Number(y))) return;
+        const v = data[y];
+        const raw = Array.isArray(v) ? v : v && v.entries;
+        const list = Array.isArray(raw) ? raw : (raw && typeof raw === "object" ? Object.values(raw) : []);
+        const seen = new Set();
+        out[y] = list.filter((e) => e && e.country).map((e) => {
+          const country = String(e.country).trim();
+          const rawFinal = e.inFinal;
+          const inFinal = rawFinal === undefined ? true : !(rawFinal === false || rawFinal === 0 || String(rawFinal).toLowerCase() === "false" || String(rawFinal) === "0");
+          return { country, semi: String(e.semi || "").trim(), inFinal };
+        }).filter((e) => { const k = key(e.country); if (!e.country || seen.has(k)) return false; seen.add(k); return true; });
+      });
+      return out;
+    }
+    async function loadPeople() {
+      try {
+        const r = await fetch(BASE + "/participants.json", { cache: "no-store" });
+        if (!r.ok) throw new Error(r.status);
+        PEOPLE = parsePeople(await r.json());
+        return true;
+      } catch (e) { PEOPLE = PEOPLE || {}; return false; }
+    }
+
+    // add the participants of the draft's year; automatic finalists start as pre-qualified
+    function fillFromPeople(d) {
+      (PEOPLE[d.year] || []).forEach((en) => {
+        const k = key(en.country);
+        if (!d.countries.some((c) => key(c) === k)) d.countries.push(en.country);
+        if (d.assign[k] === undefined && !en.semi && en.inFinal) d.assign[k] = "pre";
+      });
+    }
+    function newDraft(year) { const d = blankDraft(); d.year = Number(year); fillFromPeople(d); rebuild(d); return d; }
+
+    // pots / pre-qualified lists, worked out from the assignments
+    function rebuild(d) {
+      d = d || D;
+      d.pots = Array.from({ length: d.potN }, () => []);
+      d.preAll = [];
+      d.countries.forEach((c) => {
+        const a = d.assign[key(c)];
+        if (a === "pre") d.preAll.push(c);
+        else if (typeof a === "number" && a < d.potN) d.pots[a].push(c);
+      });
+    }
+    const unplaced = () => D.countries.filter((c) => { const a = D.assign[key(c)]; return !(a === "pre" || (typeof a === "number" && a < D.potN)); });
+
+    function renderCounts() {
+      const host = $("counts"); host.textContent = "";
+      D.pots.forEach((p, i) => {
+        const c = document.createElement("span"); c.className = "cnt";
+        c.innerHTML = '<i style="background:' + POT_COLORS[i % POT_COLORS.length] + '"></i>Pot ' + (i + 1) + " · " + p.length;
+        host.append(c);
+      });
+      const pre = document.createElement("span"); pre.className = "cnt"; pre.innerHTML = '<i style="background:#ffd54a"></i>★ Pre-qualified · ' + D.preAll.length; host.append(pre);
+      const un = unplaced().length;
+      const u = document.createElement("span"); u.className = "cnt" + (un ? " warn" : ""); u.textContent = un ? "To place · " + un : "All placed ✓"; host.append(u);
+    }
+
+    function markRow(row) {
+      const a = D.assign[row.dataset.c];
+      row.classList.toggle("empty", !(a === "pre" || (typeof a === "number" && a < D.potN)));
+      row.querySelectorAll(".pb").forEach((b) => {
+        const v = b.dataset.v === "pre" ? "pre" : Number(b.dataset.v);
+        const on = v === a;
+        b.classList.toggle("on", on);
+        b.style.background = on ? (v === "pre" ? "" : POT_COLORS[v % POT_COLORS.length]) : "";
+        b.setAttribute("aria-pressed", String(on));
+      });
+    }
+
+    function renderCountryList() {
+      const host = $("countryList"); host.textContent = "";
+      if (!D.countries.length) {
+        const d = document.createElement("div"); d.className = "empty";
+        d.textContent = PEOPLE && Object.keys(PEOPLE).length ? "No participants found for " + D.year + " yet. Add them on the participants page, then press Reload." : "Could not load the participants. Press Reload.";
+        host.append(d); return;
+      }
+      const f = filterText.toLowerCase();
+      const frag = document.createDocumentFragment();
+      D.countries.forEach((c) => {
+        const k = key(c);
+        if (f && !k.includes(f)) return;
+        if (hidePlaced && D.assign[k] !== undefined && !(typeof D.assign[k] === "number" && D.assign[k] >= D.potN)) return;
+        const row = document.createElement("div"); row.className = "crow"; row.dataset.c = k;
+        const who = document.createElement("div"); who.className = "who2";
+        const nm = document.createElement("span"); nm.textContent = c;
+        who.append(flagImg(c, ""), nm);
+        who.firstChild.style.cssText = "width:36px;height:25px;object-fit:contain;border-radius:4px";
+        const picks = document.createElement("div"); picks.className = "picks";
+        for (let i = 0; i < D.potN; i++) { const b = document.createElement("button"); b.type = "button"; b.className = "pb"; b.dataset.v = i; b.textContent = i + 1; b.title = "Pot " + (i + 1); picks.append(b); }
+        const pre = document.createElement("button"); pre.type = "button"; pre.className = "pb pre"; pre.dataset.v = "pre"; pre.textContent = "★"; pre.title = "Pre-qualified"; picks.append(pre);
+        row.append(who, picks);
+        markRow(row);
+        frag.append(row);
+      });
+      host.append(frag);
+    }
+
+    function afterPotChange() { rebuild(); renderCounts(); renderSummary(); queueSave(); }
+    function confirmRestart() {
+      if (!D.history.length) return true;
+      if (!confirm("The draw has already started. Changing the pots restarts it. Continue?")) return false;
+      D.history = []; lastName = ""; return true;
+    }
+
+    $("countryList").addEventListener("click", (ev) => {
+      const b = ev.target.closest(".pb"); if (!b) return;
+      const row = b.closest(".crow");
+      const v = b.dataset.v === "pre" ? "pre" : Number(b.dataset.v);
+      if (!confirmRestart()) return;
+      if (D.assign[row.dataset.c] === v) delete D.assign[row.dataset.c]; else D.assign[row.dataset.c] = v;
+      markRow(row);
+      afterPotChange();
+      if (hidePlaced) renderCountryList();
+    });
+    $("potAdd").addEventListener("click", () => { if (D.potN >= 8 || !confirmRestart()) return; D.potN++; $("potN").textContent = D.potN; renderCountryList(); afterPotChange(); });
+    $("potDel").addEventListener("click", () => {
+      if (D.potN <= 1 || !confirmRestart()) return;
+      D.potN--;
+      Object.keys(D.assign).forEach((k) => { if (typeof D.assign[k] === "number" && D.assign[k] >= D.potN) delete D.assign[k]; });
+      $("potN").textContent = D.potN; renderCountryList(); afterPotChange();
+    });
+    $("hidePlaced").addEventListener("click", () => { hidePlaced = !hidePlaced; $("hidePlaced").setAttribute("aria-pressed", String(hidePlaced)); renderCountryList(); });
+    $("clearPots").addEventListener("click", () => {
+      if (!confirmRestart()) return;
+      Object.keys(D.assign).forEach((k) => { if (D.assign[k] !== "pre") delete D.assign[k]; });
+      renderCountryList(); afterPotChange();
+    });
+    $("filter").addEventListener("input", () => { filterText = $("filter").value.trim(); renderCountryList(); });
+    $("reloadPeople").addEventListener("click", async () => {
+      note("Loading countries...");
+      const ok = await loadPeople();
+      fillFromPeople(D); rebuild();
+      renderCountryList(); renderCounts(); renderSummary(); renderYearSelect();
+      note(ok ? "Countries reloaded." : "Could not load the participants.", !ok);
+    });
+    $("fCity").addEventListener("input", () => { D.city = $("fCity").value.trim(); queueSave(); });
+
+    function renderYearSelect() {
+      const sel = $("fYear"); sel.textContent = "";
+      const years = new Set([...Object.keys(PEOPLE), ...Object.keys(saved), String(D.year)]);
+      [...years].sort((a, b) => b - a).forEach((y) => {
+        const o = document.createElement("option"); o.value = y; o.textContent = y + (saved[y] ? " · saved draw" : "");
+        sel.append(o);
+      });
+      sel.value = String(D.year);
+    }
+    $("fYear").addEventListener("change", () => {
+      const y = $("fYear").value;
+      D = saved[y] ? fromDoc(y, saved[y]) : newDraft(y);
+      lastName = "";
+      toForm();
+    });
+
+    function onSetupChange() { D.city = $("fCity").value.trim(); rebuild(); renderSummary(); }
+    function toForm() {
+      renderYearSelect();
+      $("fCity").value = D.city || "";
+      $("potN").textContent = D.potN;
+      rebuild();
+      renderCountryList(); renderCounts(); renderSummary(); renderSaved();
+    }
+
+    function validateDraft() {
+      rebuild();
+      const all = [...D.pots.flat(), ...D.preAll];
+      const seen = new Set();
+      const duplicates = [];
+      all.forEach((name) => { const k = key(name); if (seen.has(k)) duplicates.push(name); seen.add(k); });
+      const missing = unplaced();
+      if (!D.countries.length) return "Load the edition participants first.";
+      if (!nSemi()) return "Put the semi-finalists into pots first.";
+      if (duplicates.length) return "A country is assigned more than once: " + [...new Set(duplicates)].join(", ") + ".";
+      if (missing.length) return "Assign every participant to a pot or mark them as pre-qualified. Still unassigned: " + missing.join(", ") + ".";
+      if (all.length !== D.countries.length) return "The assignments do not match the participant list. Check the country list and try again.";
+      const sizes = potsNE().map((x) => x.p.length);
+      const candidates = [];
+      for (let bigSemi = 0; bigSemi < 2; bigSemi++) {
+        for (let h1 = 0; h1 < 2; h1++) for (let h2 = 0; h2 < 2; h2++) candidates.push({ bigSemi, halfBig: [h1, h2] });
+      }
+      candidates.sort(() => Math.random() - 0.5);
+      const valid = candidates.find((c) => {
+        D.bigSemi = c.bigSemi; D.halfBig = c.halfBig;
+        return feasible(sizes, 0, sizes[0] || 0, [0, 0, 0, 0], baseCaps(), true);
+      });
+      if (!valid) return "These pot sizes cannot satisfy the draw's balancing rules. Adjust the pot sizes or country assignments before starting.";
+      D.bigSemi = valid.bigSemi; D.halfBig = valid.halfBig;
+      return "";
+    }
+
+    $("start").addEventListener("click", () => {
+      const problem = validateDraft();
+      if (problem) return note(problem, true);
+      if (D.history.length && !confirm("This restarts the draw. Continue?")) return;
+      D.history = []; D.manual = null; lastName = "";
+      D.preBig = Math.round(Math.random());
+      $("reveal").className = "reveal"; $("reveal").innerHTML = '<span class="idle">Press “Draw next”</span>';
+      show("live"); queueSave();
+    });
+
+    /* ---------- saving (admin only) ---------- */
+    const note = (t, err) => { const m = $("msg"); m.textContent = t; m.classList.toggle("error", Boolean(err)); };
+    function toDoc() {
+      const e = resultOf();
+      return {
+        city: D.city, pots: D.pots.map((p) => p.join("\n")), preAll: D.preAll, history: D.history,
+        bigSemi: D.bigSemi, halfBig: D.halfBig, preBig: D.preBig, manual: D.manual || null,
+        result: { pre: e.pre, sf1: e.sf1, sf2: e.sf2, order: e.order }
+      };
+    }
+    function fromDoc(year, v) {
+      const g = (x) => listOf(x).map(String).filter(Boolean);
+      const m = v.manual;
+      const pots = listOf(v.pots).map((p) => String(p || "").split("\n").map((x) => x.trim()).filter(Boolean));
+      const pre = g(v.preAll);
+      const countries = [], assign = {};
+      pots.forEach((p, i) => p.forEach((c) => { if (!(key(c) in assign)) { countries.push(c); assign[key(c)] = i; } }));
+      pre.forEach((c) => { if (!(key(c) in assign)) { countries.push(c); assign[key(c)] = "pre"; } });
+      const d = {
+        year: Number(year), city: v.city ? String(v.city) : "",
+        potN: Math.max(1, pots.length || 5), countries, assign,
+        pots, preAll: pre,
+        history: listOf(v.history).filter((h) => h && h.n).map((h) => ({ n: String(h.n), k: h.k === "pre" ? "pre" : "pot", p: Number(h.p), t: Number(h.t) })),
+        bigSemi: Number(v.bigSemi) === 1 ? 1 : 0, halfBig: Array.isArray(v.halfBig) ? [Number(v.halfBig[0]) === 1 ? 1 : 0, Number(v.halfBig[1]) === 1 ? 1 : 0] : [0, 0], preBig: Number(v.preBig) === 1 ? 1 : 0,
+        manual: m ? { sf1: { first: g(m.sf1 && m.sf1.first), second: g(m.sf1 && m.sf1.second) }, sf2: { first: g(m.sf2 && m.sf2.first), second: g(m.sf2 && m.sf2.second) }, pre: { sf1: g(m.pre && m.pre.sf1), sf2: g(m.pre && m.pre.sf2) } } : null,
+        relaxed: false
+      };
+      fillFromPeople(d); rebuild(d);
+      return d;
+    }
+
+    async function getToken() {
+      if (!session) throw new Error("Sign in first.");
+      if (session.expiresAt - Date.now() > 60000) return session.idToken;
+      const r = await fetch("https://securetoken.googleapis.com/v1/token?key=" + CFG.apiKey, { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: "grant_type=refresh_token&refresh_token=" + encodeURIComponent(session.refreshToken) });
+      const d = await r.json();
+      if (!r.ok) { session = null; localStorage.removeItem(SESSION_KEY); throw new Error("Your session ended. Please sign in again."); }
+      session = { ...session, idToken: d.id_token, refreshToken: d.refresh_token, expiresAt: Date.now() + Number(d.expires_in) * 1000 };
+      localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+      return session.idToken;
+    }
+
+    async function save(quiet) {
+      if (!Number.isInteger(D.year) || D.year < 2000 || D.year > 2100) return note("Enter a valid year.", true);
+      if (!quiet) note("Saving...");
+      try {
+        const token = await getToken();
+        const r = await fetch(BASE + "/draw-data/" + D.year + ".json?auth=" + encodeURIComponent(token), { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(toDoc()) });
+        if (!r.ok) {
+          let d = ""; try { d = (await r.json()).error || ""; } catch (x) { /* ignore */ }
+          throw new Error(/permission/i.test(d) ? "Permission denied. Check the draw-data rule in Firebase." : "Could not save (error " + r.status + ").");
+        }
+        saved[D.year] = toDoc();
+        renderSaved();
+        if (!quiet) note("Saved " + D.year + ".");
+      } catch (e) { note(e.message, true); }
+    }
+    let saveTimer = 0, saveChain = Promise.resolve();
+    function queueSave() {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => { saveChain = saveChain.then(() => save(true)); }, 700);
+    }
+    $("save").addEventListener("click", () => { onSetupChange(); saveChain = saveChain.then(() => save(false)); });
+
+    function renderSaved() {
+      const host = $("saved"); host.textContent = "";
+      const years = Object.keys(saved).sort((a, b) => b - a);
+      if (!years.length) return;
+      const l = document.createElement("span"); l.style.cssText = "align-self:center;color:var(--muted);font-size:.82em"; l.textContent = "Saved:"; host.append(l);
+      years.forEach((y) => {
+        const b = document.createElement("button"); b.type = "button"; b.textContent = y;
+        b.addEventListener("click", () => { D = fromDoc(y, saved[y]); toForm(); lastName = ""; note("Loaded " + y + "."); });
+        host.append(b);
+      });
+    }
+    $("load").addEventListener("click", async () => {
+      const btn = $("load"); btn.disabled = true; note("Loading saved draws...");
+      try {
+        await loadAll(); renderYearSelect();
+        const y = String($("fYear").value);
+        if (saved[y]) { D = fromDoc(y, saved[y]); lastName = ""; toForm(); note("Loaded " + y + "."); }
+        else note("Nothing saved for " + y + " yet.", true);
+      } catch (e) { note(e.message || "Could not load saved draws.", true); }
+      finally { btn.disabled = false; }
+    });
+
+    /* ---------- the admin gate ---------- */
+    function showGate(msg, err) {
+      $("gate").hidden = false; $("app").hidden = true; $("who").hidden = true;
+      $("gateMsg").textContent = msg || ""; $("gateMsg").classList.toggle("error", Boolean(err));
+    }
+
+    async function loadAll() {
+      const token = await getToken();
+      const r = await fetch(BASE + "/draw-data.json?auth=" + encodeURIComponent(token), { cache: "no-store" });
+      if (r.status === 401 || r.status === 403) { const e = new Error("denied"); e.denied = true; throw e; }
+      if (!r.ok) throw new Error("Could not load the draw (error " + r.status + ").");
+      const raw = await r.json();
+      saved = {};
+      Object.keys(raw || {}).forEach((y) => { if (Number.isInteger(Number(y))) saved[y] = raw[y]; });
+      return true;
+    }
+
+    function showApp() {
+      $("gate").hidden = true; $("app").hidden = false;
+      $("who").hidden = false; $("whoEmail").textContent = session ? session.email : "";
+      const years = [...new Set([...Object.keys(saved), ...Object.keys(PEOPLE)])].sort((a, b) => b - a);
+      const y = years[0] || String(new Date().getFullYear());
+      D = saved[y] ? fromDoc(y, saved[y]) : newDraft(y);
+      toForm();
+      show(D.history.length ? "live" : "setup");
+    }
+
+    async function enter() {
+      if (!BASE || /YOUR-/.test(BASE)) return showGate("Not connected. Fill in status-config.js first.", true);
+      try { await loadAll(); await loadPeople(); showApp(); }
+      catch (e) {
+        if (e.denied) { session = null; try { localStorage.removeItem(SESSION_KEY); } catch (x) { /* ignore */ } return showGate("This account does not have access.", true); }
+        showGate(e.message, true);
+      }
+    }
+
+    $("login").addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      const btn = $("loginBtn"); btn.disabled = true;
+      $("gateMsg").textContent = "Signing in..."; $("gateMsg").classList.remove("error");
+      try {
+        const r = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + CFG.apiKey, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: $("email").value.trim(), password: $("pass").value, returnSecureToken: true }) });
+        const d = await r.json();
+        if (!r.ok) throw new Error("Wrong email or password.");
+        session = { email: d.email, idToken: d.idToken, refreshToken: d.refreshToken, expiresAt: Date.now() + Number(d.expiresIn) * 1000 };
+        localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+        $("pass").value = "";
+        await enter();
+      } catch (e) { showGate(e.message, true); }
+      btn.disabled = false;
+    });
+    $("signOut").addEventListener("click", () => { try { localStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ } location.reload(); });
+
+    /* ---------- start ---------- */
+    fetch(BASE + "/totals-style.json", { cache: "no-store" }).then((r) => (r.ok ? r.json() : null)).then(applyTheme).catch(() => {});
+    try { applyTheme(JSON.parse(localStorage.getItem("totalsStylePublished") || "null")); } catch (e) { /* ignore */ }
+    try { session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null"); } catch (e) { session = null; }
+    if (session) enter(); else showGate("");
+  </script>
+</body>
+</html>
